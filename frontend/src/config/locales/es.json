@@ -7,6 +7,22 @@
     "header": {
         "btn_forplayers": "Para Jugadores",
         "btn_forclubs": "Para Clubes",
-        "btn_profile": "Perfil"
+        "btn_profile": "Iniciar sesión"
+    },
+    "footer": {
+        "text": "AllCourts. Todos los derechos reservados."
+    },
+    "login": {
+        "title": "Iniciar sesión en tu cuenta",
+        "username": "Nombre de usuario",
+        "username_placeholder": "Introduce tu nombre de usuario",
+        "password": "Contraseña",
+        "password_placeholder": "Introduce tu contraseña",
+        "btn_login": "Iniciar sesión",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "subtitle": "Bienvenido de nuevo, por favor inicia sesión.",
+        "no_account": "¿No tienes una cuenta?",
+        "register": "Regístrate aquí",
+        "or": "O"
     }
 }

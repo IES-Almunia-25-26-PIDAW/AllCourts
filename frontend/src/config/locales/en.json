@@ -7,6 +7,22 @@
     "header": {
         "btn_forplayers": "For Players",
         "btn_forclubs": "For Clubs",
-        "btn_profile": "Profile"
+        "btn_profile": "Login"
+    },
+    "footer": {
+        "text": "AllCourts. All rights reserved."
+    },
+    "login": {
+        "title": "Login to Your Account",
+        "username": "Username",
+        "username_placeholder": "Enter your username",
+        "password": "Password",
+        "password_placeholder": "Enter your password",
+        "btn_login": "Login",
+        "forgot_password": "Forgot Password?",
+        "subtitle": "Welcome back, please login.",
+        "no_account": "Don't have an account?",
+        "register": "Register here",
+        "or": "Or"
     }
 }
