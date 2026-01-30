@@ -1,0 +1,350 @@
+    @use 'variables' as *;
+
+    .main {
+    width: 100%;
+    overflow-x: hidden;
+    }
+
+    .heroSection {
+    background: linear-gradient(135deg, rgba($primary-color, 0.85) 0%, rgba(darken($primary-color, 10%), 0.85) 100%), url('/fondoinfo.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 20px;
+    color: white;
+    position: relative;
+    }
+
+    .heroContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 40px;
+    }
+    }
+
+    .heroText {
+    flex: 1;
+    min-width: 300px;
+
+    h1 {
+        font-size: 3.2rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+
+        @media (max-width: 768px) {
+        font-size: 2rem;
+        }
+    }
+
+    p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        opacity: 0.95;
+    }
+    }
+
+    .heroImage {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    max-width: 350px;
+
+    img {
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain;
+    }
+    }
+
+    // Sección Steps
+    .stepsSection {
+    padding: 80px 20px;
+    background: #f8f9fa;
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 60px;
+        color: #2c3e50;
+    }
+    }
+
+    .stepsGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    }
+
+    .stepCard {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        margin: 20px 0 15px;
+        color: #2c3e50;
+    }
+
+    p {
+        color: #666;
+        line-height: 1.6;
+    }
+    }
+
+    .stepIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    
+    img {
+        border-radius: 50%;
+        padding: 10px;
+        background: linear-gradient(135deg, #0059ff, #0059ff);
+    }
+    }
+
+    // Sección Testimonios
+    .testimonialsSection {
+    padding: 80px 20px;
+    background: white;
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 60px;
+        color: #2c3e50;
+    }
+    }
+
+    .testimonialsGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    }
+
+    .testimonialCard {
+    background: #f8f9fa;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #333;
+        margin: 20px 0;
+        font-style: italic;
+    }
+    }
+
+    .stars {
+    font-size: 1.2rem;
+    color: #ffc107;
+    }
+
+    .author {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #0059ff;
+    
+    strong {
+        display: block;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    span {
+        font-size: 0.9rem;
+        color: #666;
+    }
+    }
+
+    // Sección Perfil
+    .profileSection {
+    padding: 80px 20px;
+    background: #f8f9fa;
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 60px;
+        color: #2c3e50;
+    }
+    }
+
+    .profileGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    }
+
+    .profileCard {
+    background: white;
+    padding: 35px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        color: #0059ff;
+    }
+
+    p {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+    }
+
+    // Sección FAQ
+    .faqSection {
+    padding: 80px 20px;
+    background: white;
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 60px;
+        color: #2c3e50;
+    }
+    }
+
+    .faqContainer {
+    max-width: 900px;
+    margin: 0 auto;
+    }
+
+    .faqItem {
+    background: #f8f9fa;
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #0059ff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateX(10px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        color: #0059ff;
+    }
+
+    p {
+        color: #666;
+        line-height: 1.6;
+    }
+    }
+
+    // Sección CTA
+    .ctaSection {
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #0059ff 0%, #0059ff 100%);
+    color: white;
+    text-align: center;
+
+    h2 {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+
+        @media (max-width: 768px) {
+        font-size: 2rem;
+        }
+    }
+
+    p {
+        font-size: 1.3rem;
+        margin-bottom: 50px;
+        opacity: 0.95;
+    }
+    }
+
+    .ctaButtons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    }
+
+    .primaryBtn,
+    .secondaryBtn {
+    padding: 18px 45px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    }
+
+    .primaryBtn {
+    background: white;
+    color: #2c3e50;
+
+    &:hover {
+        background: #f0f0f0;
+    }
+    }
+
+    .secondaryBtn {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    }

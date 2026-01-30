@@ -7,14 +7,12 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <ErrorBoundary>
+    <ErrorBoundary>
       <Navbar />
-      <main style={{ flex: 1 }}>
+      <main>
         <Component {...pageProps} />
       </main>
       <Footer />
-      </ErrorBoundary>
-    </div>
+    </ErrorBoundary>
   );
 }
