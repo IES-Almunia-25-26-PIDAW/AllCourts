@@ -1,0 +1,12 @@
+{
+    "404": {
+        "title": "404 - Página no encontrada",
+        "message": "La página que buscas no existe.",
+        "action": "Ir a la página principal"
+    },
+    "header": {
+        "btn_forplayers": "Para Jugadores",
+        "btn_forclubs": "Para Clubes",
+        "btn_profile": "Perfil"
+    }
+}

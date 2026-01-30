@@ -1,0 +1,12 @@
+{
+    "404": {
+        "title": "404 - Page Not Found",
+        "message": "The page you are looking for does not exist.",
+        "action": "Go to Home Page"
+    },
+    "header": {
+        "btn_forplayers": "For Players",
+        "btn_forclubs": "For Clubs",
+        "btn_profile": "Profile"
+    }
+}

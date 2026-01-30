@@ -1,0 +1,140 @@
+@use 'variables' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, $primary-color 0%, #0047cc 100%);
+  box-shadow: 0 4px 20px rgba(0, 89, 255, 0.2);
+  backdrop-filter: blur(10px);
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    h1 {
+      color: #ffffff !important;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .navButton {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    white-space: nowrap;
+
+    &:hover {
+      background: white;
+      color: $primary-color;
+      border-color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .profileButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: white;
+    color: $primary-color;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+
+    &:hover {
+      background: #f8f9fa;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .navbar {
+    .container {
+      padding: 1rem;
+      flex-wrap: wrap;
+    }
+
+    nav {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .navButton,
+    .profileButton {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    .logo {
+      h1 {
+        font-size: 1.2rem;
+      }
+    }
+
+    nav {
+      gap: 0.5rem;
+    }
+
+    .navButton,
+    .profileButton {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+  }
+}

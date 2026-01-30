@@ -1,0 +1,25 @@
+@use 'variables' as *;
+
+.footer {
+  background: linear-gradient(135deg, #003399 0%, #002266 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 -4px 20px rgba(0, 89, 255, 0.2);
+
+  p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 1rem;
+    
+    p {
+      font-size: 0.85rem;
+    }
+  }
+}
