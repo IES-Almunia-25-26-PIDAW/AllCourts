@@ -29,5 +29,10 @@
         "dropdown_label_player": "Reservar canchas",
         "dropdown_login_club": "Iniciar sesión como club",
         "dropdown_label_club": "Gestionar reservas"
+    },
+        "errorBoundary": {
+        "title": "Algo salió mal.",
+        "message": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+        "action": "Ir a la página principal"
     }
 }

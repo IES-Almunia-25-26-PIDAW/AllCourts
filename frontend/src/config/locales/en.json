@@ -29,5 +29,10 @@
         "dropdown_label_player": "Book courts",
         "dropdown_login_club": "Login as Club",
         "dropdown_label_club": "Manage bookings"
+    },
+    "errorBoundary": {
+        "title": "Something went wrong.",
+        "message": "An unexpected error has occurred. Please try again later.",
+        "action": "Go to Home Page"
     }
 }

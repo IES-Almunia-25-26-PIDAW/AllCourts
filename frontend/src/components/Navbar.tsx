@@ -2,36 +2,13 @@
 
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/Navbar.module.scss";
 import Link from "next/dist/client/link";
 
 export default function Navbar() {
     const { t, i18n } = useTranslation();
-    const [mounted, setMounted] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
-    
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-    
-    if (!mounted) {
-        return (
-            <header className={styles.navbar}>
-                <div className={styles.container}>
-                    <div className={styles.logo}>
-                        <Image src="/logoallcourts.png" alt="AllCourts Logo" width={40} height={40} />
-                        <h1>AllCourts</h1>
-                    </div>
-                    <nav className={styles.nav}>
-                        <button className={styles.navButton}>Para Jugadores</button>
-                        <button className={styles.navButton}>Para Clubes</button>
-                        <button className={styles.profileButton}>Perfil</button>
-                    </nav>
-                </div>
-            </header>
-        );
-    }
     
     return (
         <header className={styles.navbar}>
@@ -43,8 +20,12 @@ export default function Navbar() {
                 </div>
                 </Link>
                 <nav className={styles.nav}>
+                    <Link href="/infoplayer">
                     <button className={styles.navButton}>{t("header.btn_forplayers")}</button>
+                    </Link>
+                    <Link href="/infomanager">
                     <button className={styles.navButton}>{t("header.btn_forclubs")}</button>
+                    </Link>
                     <div 
                         className={styles.dropdown}
                         onMouseEnter={() => setShowDropdown(true)}

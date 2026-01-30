@@ -2,61 +2,55 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
 import styles from '@/styles/Login.module.scss';
 
 export default function Login() {
     const { t } = useTranslation();
-    const [mounted, setMounted] = useState(false);
-    
-    useEffect(() => {
-        setMounted(true);
-    }, []);
     
     return (
         <div className={styles.container}>
             <div className={styles.loginCard}>
-                <h1>{mounted ? t("login.title") : "Iniciar Sesión"}</h1>
+                <h1>{t("login.title")}</h1>
                 <p className={styles.subtitle}>
-                    {mounted ? t("login.subtitle") : "Bienvenido de nuevo a AllCourts"}
+                    {t("login.subtitle")}
                 </p>
                 
                 <form className={styles.form}>
                     <div className={styles.inputGroup}>
-                        <label>{mounted ? t("login.username") : "Usuario"}</label>
+                        <label>{t("login.username")}</label>
                         <input 
                             type="text" 
-                            placeholder={mounted ? t("login.username_placeholder") : "Ingresa tu usuario"} 
+                            placeholder={t("login.username_placeholder")} 
                         />
                     </div>
                     
                     <div className={styles.inputGroup}>
-                        <label>{mounted ? t("login.password") : "Contraseña"}</label>
+                        <label>{t("login.password")}</label>
                         <input 
                             type="password" 
-                            placeholder={mounted ? t("login.password_placeholder") : "Ingresa tu contraseña"} 
+                            placeholder={t("login.password_placeholder")} 
                         />
                     </div>
                     
                     <button type="submit" className={styles.loginButton}>
-                        {mounted ? t("login.btn_login") : "Iniciar Sesión"}
+                        {t("login.btn_login")}
                     </button>
                     
                     <div className={styles.forgotPassword}>
                         <Link href="/forgot-password">
-                            {mounted ? t("login.forgot_password") : "¿Olvidaste tu contraseña?"}
+                            {t("login.forgot_password")}
                         </Link>
                     </div>
                 </form>
                 
                 <div className={styles.divider}>
-                    <span>{mounted ? t("login.or") : "o"}</span>
+                    <span>{t("login.or")}</span>
                 </div>
                 
                 <div className={styles.registerLink}>
-                    {mounted ? t("login.no_account") : "¿No tienes cuenta?"}{' '}
+                    {t("login.no_account")}{' '}
                     <Link href="/register">
-                        {mounted ? t("login.register") : "Regístrate"}
+                        {t("login.register")}
                     </Link>
                 </div>
             </div>
