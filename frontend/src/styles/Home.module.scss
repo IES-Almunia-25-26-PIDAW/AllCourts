@@ -6,10 +6,32 @@
     width: 100%;
     background-color: transparent;
     color: white;
+    align-items: center;
+    gap: 150px;
     
     .divAzul {
         background-color: variables.$primary-color;
-        padding: 50px;
+        padding: 50px 450px 50px 450px;    
+        display: flex;
+        width: inherit;
+            gap: 150px;
+
+    }
+
+    .divBlanco {
+        background-color: white;
+        border-style: dotted;
+        border-color: black;
+        width: inherit;
+        display: flex;
+        color: black;
+        padding: 50px 450px 50px 450px;    
+        gap: 150px;
+
+    }
+
+    .contenidoFoto {
+        width: 450px;
     }
 
     h1 {
