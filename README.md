@@ -1,6 +1,7 @@
 # 🎾 AllCourts
 
-<img width="1024" height="1024" alt="logoallcourts" src="https://github.com/user-attachments/assets/0068d41c-ed0c-4064-9e5b-0978d3f22949" />
+<img width="1024" height="1024" alt="AllCourts Logo" src="https://github.com/user-attachments/assets/019d5034-5501-40a6-a84e-440ab98c8145" />
+
 
 **AllCourts** es una **aplicación web moderna e intuitiva** para **reservar y gestionar pistas deportivas**. Inspirada en **Playtomic**, combina un **frontend en Next.js con TypeScript** y un **backend en Node.js con MySQL** para ofrecer una experiencia rápida, fiable y escalable.  
 
