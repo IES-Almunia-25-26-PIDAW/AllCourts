@@ -1,0 +1,27 @@
+{
+  "name": "allcourts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "next": "16.1.6",
+    "next-i18next": "^15.4.3",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
+    "sass": "^1.97.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "typescript": "^5"
+  }
+}
