@@ -1,7 +1,7 @@
 @use 'variables' as *;
 
 .footer {
-  background: linear-gradient(135deg, #003399 0%, #002266 100%);
+  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
   color: white;
   padding: 1.5rem 2rem;
   text-align: center;

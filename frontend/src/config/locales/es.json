@@ -13,7 +13,8 @@
         "text": "AllCourts. Todos los derechos reservados."
     },
     "login": {
-        "title": "Iniciar sesión en tu cuenta",
+        "title": "Iniciar sesión en tu cuenta de jugador",
+        "title_club": "Iniciar sesión en tu cuenta de club",
         "username": "Nombre de usuario",
         "username_placeholder": "Introduce tu nombre de usuario",
         "password": "Contraseña",
@@ -23,6 +24,10 @@
         "subtitle": "Bienvenido de nuevo, por favor inicia sesión.",
         "no_account": "¿No tienes una cuenta?",
         "register": "Regístrate aquí",
-        "or": "O"
+        "or": "O",
+        "dropdown_login_player": "Iniciar sesión como jugador",
+        "dropdown_label_player": "Reservar canchas",
+        "dropdown_login_club": "Iniciar sesión como club",
+        "dropdown_label_club": "Gestionar reservas"
     }
 }

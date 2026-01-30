@@ -14,6 +14,7 @@
     },
     "login": {
         "title": "Login to Your Account",
+        "title_club": "Login to Your Club Account",
         "username": "Username",
         "username_placeholder": "Enter your username",
         "password": "Password",
@@ -23,6 +24,10 @@
         "subtitle": "Welcome back, please login.",
         "no_account": "Don't have an account?",
         "register": "Register here",
-        "or": "Or"
+        "or": "Or",
+        "dropdown_login_player": "Login as Player",
+        "dropdown_label_player": "Book courts",
+        "dropdown_login_club": "Login as Club",
+        "dropdown_label_club": "Manage bookings"
     }
 }

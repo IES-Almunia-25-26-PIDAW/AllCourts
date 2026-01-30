@@ -57,8 +57,8 @@ export default function Navbar() {
                                     <div className={styles.dropdownItem}>
                                         <span>👤</span>
                                         <div>
-                                            <strong>Iniciar como Jugador</strong>
-                                            <p>Reserva pistas deportivas</p>
+                                            <strong>{t("login.dropdown_login_player")}</strong>
+                                            <p>{t("login.dropdown_label_player")}</p>
                                         </div>
                                     </div>
                                 </Link>
@@ -66,8 +66,8 @@ export default function Navbar() {
                                     <div className={styles.dropdownItem}>
                                         <span>🏢</span>
                                         <div>
-                                            <strong>Iniciar como Gestor</strong>
-                                            <p>Gestiona tu club deportivo</p>
+                                            <strong>{t("login.dropdown_login_club")}</strong>
+                                            <p>{t("login.dropdown_label_club")}</p>
                                         </div>
                                     </div>
                                 </Link>
