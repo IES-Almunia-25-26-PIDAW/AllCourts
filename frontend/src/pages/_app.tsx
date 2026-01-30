@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
-      <main style={{ flex: 1, paddingTop: '80px' }}>
+      <main style={{ flex: 1 }}>
         <Component {...pageProps} />
       </main>
       <Footer />

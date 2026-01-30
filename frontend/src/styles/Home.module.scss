@@ -1,0 +1,22 @@
+@use './variables';
+
+.divPrincipal {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: transparent;
+    color: white;
+    
+    .divAzul {
+        background-color: variables.$primary-color;
+        padding: 50px;
+    }
+
+    h1 {
+        font-size: 50px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+}
