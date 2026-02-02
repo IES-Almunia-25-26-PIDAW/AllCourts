@@ -96,7 +96,7 @@ allcourts/
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/allcourts.git
+git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
 cd allcourts
 ```
 
@@ -221,59 +221,12 @@ npm run lint     # Ejecutar linter
 
 ---
 
-## 🛠 Próximas Características
-
-- [ ] Sistema de valoraciones y reseñas
-- [ ] Notificaciones en tiempo real (WebSockets)
-- [ ] Integración con pasarelas de pago (Stripe/PayPal)
-- [ ] Sistema de torneos y competiciones
-- [ ] Chat entre usuarios
-- [ ] Búsqueda avanzada con filtros
-- [ ] Aplicación móvil nativa
-- [ ] Sistema de fidelización y descuentos
-
----
-
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
----
-
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
 ---
 
-## 👥 Autores
-
-- **Tu Nombre** - *Desarrollo inicial* - [tu-usuario](https://github.com/tu-usuario)
-
----
-
-## 📞 Contacto
-
-¿Preguntas o sugerencias? No dudes en contactar:
-
-- **Email:** tu-email@ejemplo.com
-- **GitHub:** [tu-usuario](https://github.com/tu-usuario)
-
----
-
-## 🙏 Agradecimientos
-
-- Inspirado en **Playtomic**
-- Comunidad de desarrolladores de Next.js y Node.js
-- Todos los contribuidores del proyecto
-
----
 
 <div align="center">
   Hecho con ❤️ por el equipo de AllCourts
