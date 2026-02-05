@@ -35,11 +35,12 @@
 
     h1 {
         font-size: 3.2rem;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         font-weight: 700;
+        line-height: 1.2;
 
         @media (max-width: 768px) {
-        font-size: 2rem;
+        font-size: 2.2rem;
         }
     }
 
@@ -60,7 +61,7 @@
 
     img {
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
         width: 100% !important;
         height: auto !important;
         object-fit: contain;
@@ -74,7 +75,7 @@
 
     h2 {
         text-align: center;
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         margin-bottom: 60px;
         color: #2c3e50;
     }
@@ -90,26 +91,27 @@
 
     .stepCard {
     background: white;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 50px 35px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-12px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     }
 
     h3 {
-        font-size: 1.5rem;
-        margin: 20px 0 15px;
+        font-size: 1.6rem;
+        margin: 25px 0 15px;
         color: #2c3e50;
     }
 
     p {
         color: #666;
-        line-height: 1.6;
+        line-height: 1.7;
+        font-size: 1rem;
     }
     }
 
@@ -133,7 +135,7 @@
 
     h2 {
         text-align: center;
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         margin-bottom: 60px;
         color: #2c3e50;
     }
@@ -149,9 +151,9 @@
 
     .testimonialCard {
     background: #f8f9fa;
-    padding: 40px 30px;
+    padding: 40px 35px;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
 
@@ -161,7 +163,7 @@
     }
 
     p {
-        font-size: 1rem;
+        font-size: 1.05rem;
         line-height: 1.7;
         color: #333;
         margin: 20px 0;
@@ -170,24 +172,24 @@
     }
 
     .stars {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #ffc107;
     }
 
     .author {
-    margin-top: 20px;
+    margin-top: 25px;
     padding-top: 20px;
     border-top: 2px solid #0059ff;
     
     strong {
         display: block;
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         color: #2c3e50;
         margin-bottom: 5px;
     }
 
     span {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         color: #666;
     }
     }
@@ -199,7 +201,7 @@
 
     h2 {
         text-align: center;
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         margin-bottom: 60px;
         color: #2c3e50;
     }
@@ -215,15 +217,15 @@
 
     .profileCard {
     background: white;
-    padding: 35px 25px;
+    padding: 35px 28px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
 
     &:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        transform: translateX(8px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
     }
 
     h3 {
@@ -246,7 +248,7 @@
 
     h2 {
         text-align: center;
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         margin-bottom: 60px;
         color: #2c3e50;
     }
@@ -259,48 +261,50 @@
 
     .faqItem {
     background: #f8f9fa;
-    padding: 30px;
+    padding: 35px;
     margin-bottom: 20px;
     border-radius: 12px;
     border-left: 4px solid #0059ff;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
     &:hover {
         transform: translateX(10px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     h3 {
-        font-size: 1.3rem;
+        font-size: 1.35rem;
         margin-bottom: 15px;
         color: #0059ff;
     }
 
     p {
         color: #666;
-        line-height: 1.6;
+        line-height: 1.7;
+        font-size: 1rem;
     }
     }
 
     // Sección CTA
     .ctaSection {
     padding: 100px 20px;
-    background: linear-gradient(135deg, #0059ff 0%, #0059ff 100%);
+    background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
     color: white;
     text-align: center;
 
     h2 {
-        font-size: 2.8rem;
+        font-size: 3rem;
         margin-bottom: 20px;
         font-weight: 700;
 
         @media (max-width: 768px) {
-        font-size: 2rem;
+        font-size: 2.2rem;
         }
     }
 
     p {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         margin-bottom: 50px;
         opacity: 0.95;
     }
@@ -316,26 +320,26 @@
     .primaryBtn,
     .secondaryBtn {
     padding: 18px 45px;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 600;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 
     &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
     }
     }
 
     .primaryBtn {
-    background: white;
-    color: #2c3e50;
+    background: $primary-color;
+    color: white;
 
     &:hover {
-        background: #f0f0f0;
+        background: darken($primary-color, 10%);
     }
     }
 
@@ -345,6 +349,6 @@
     border: 2px solid white;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.15);
     }
     }

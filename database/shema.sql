@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS courts (
     city VARCHAR(100),
     price_hour DECIMAL(6,2) NOT NULL,
     surface_type ENUM('tierra', 'cesped', 'dura'),
+    sport VARCHAR(50),
     image_url VARCHAR(255),
     opening_time TIME,
     closing_time TIME,
