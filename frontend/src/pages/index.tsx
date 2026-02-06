@@ -71,7 +71,7 @@ export default function Home() {
             Es el lugar donde jugadores, clubes deportivos y entrenadores se reúnen para compartir 
             la pasión por el deporte. Más que una aplicación, es una comunidad construida alrededor 
             del amor por el juego.
-          </p>
+          </p>  
         </div>
       </section>
 

@@ -20,6 +20,9 @@ export default function Navbar() {
                 </div>
                 </Link>
                 <nav className={styles.nav}>
+                    <button className={styles.navButton} onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'es' : 'en')}>
+                        {i18n.language === 'en' ? 'ES' : 'EN'}
+                    </button>
                     <Link href="/infoplayer">
                     <button className={styles.navButton}>{t("header.btn_forplayers")}</button>
                     </Link>

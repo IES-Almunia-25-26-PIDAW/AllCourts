@@ -11,12 +11,12 @@ export default function Infoplayer() {
         {/* SECCIÓN INTRODUCCIÓN */}
         <section className={styles.heroSection}>
             <div className={styles.heroContent}>
+                <div className={styles.heroImage}>
+                    <Image src="/infoplayer1.webp" alt="AllCourts Logo" width={400} height={400} />
+                </div>
                 <div className={styles.heroText}>
                     <h1>{t('infoplayer.introtitle')}</h1>
                     <p>{t('infoplayer.introtext')}</p>
-                </div>
-                <div className={styles.heroImage}>
-                    <Image src="/infoplayer1.webp" alt="AllCourts Logo" width={400} height={400} />
                 </div>
             </div>
         </section>
