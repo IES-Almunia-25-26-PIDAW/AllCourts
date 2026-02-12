@@ -164,5 +164,68 @@
         "ctatitle": "Ready to digitize your club?",
         "ctatext": "Join hundreds of clubs that already trust AllCourts. Try it free for 14 days.",
         "cta1btn": "View Plans"
+    },
+    "home":{
+        "title": "Find courts and players near you",
+        "subtitle": "Book sports courts anywhere. Connect whenever you want, wherever you want.",
+        "searchbar": "Address, club, city...",
+
+        "intro_title": "What is AllCourts?",
+        "intro_text": "All Courts is the leader platform to book sports courts and connect with other players. We will help you to find the perfect courts, connect with other athletes and focus enjoy the game.",
+        "intro_text2":"Is the place where players, sport clubs and trainers meets to share the passion for sport. Is more than an application, it's a community built around a love of sport.",
+        
+        "sports_menu_title": "Book for any sport",
+        "sports_menu_text":"Find the perfect court for your favourite sport",
+        "football_button_title":"Football",
+        "football_button_text":"Courts 5, 7 y 11",
+        "basketball_button_title":"Basketball",
+        "basketball_button_text":"Indoor and outdoor courts",
+        "tenis_button_title":"Tenis and Padel",
+        "tenis_button_text":"Solo and doubles",
+        "voleiball_button_title":"Volleyball",
+        "voleiball_button_text":"Indoor and beach",
+
+        "players_title":"AllCourts for players",
+        "players_subtitle_1":"Find",
+        "players_text_1":"Find sport courts near you, look up for real time availability and find the perfect place for your next match",
+        "players_subtitle_2":"Book up",
+        "players_text_2":"Find your court in seconds with our easy and intuitive system. Pay securely and receive instant information",
+        "players_subtitle_3":"Join the community",
+        "players_text_3":"Connect with other players, join open matches and be part of the bigger and most active sport community",
+        
+        "feats_title":"Why AllCourts?",
+        "feats_subtitle_1":"Instant book up",
+        "feats_text_1":"Book up your court in seconds. Without calls, whithout wait. Instant confirmation.",
+        "feats_subtitle_2":"Secure pay",
+        "feats_text_2":"Secure and reliable payment methods. Your data will be always protected",
+        "feats_subtitle_3":"Near courts",
+        "feats_text_3":"Find easily courts near your location with real time availability.",
+        "feats_subtitle_4":"Notifications",
+        xxxxx
+        "feats_text_4":"Recibe recordatorios de tus reservas y ofertas exclusivas de tus clubes favoritos. Receive ",
+        "feats_subtitle_5":"Historial completo",
+        "feats_text_5":"Consulta todas tus reservas anteriores y gestiona las próximas desde un solo lugar.",
+        "feats_subtitle_6":"Valoraciones reales",
+        "feats_text_6":"Lee opiniones de otros jugadores y ayuda a la comunidad con tus reseñas.",
+        
+        "manager_title":"AllCourts para gestores",
+        "manager_text":"Gestiona tu club deportivo desde un solo lugar. Recibe reservas online, administra tus clientes, crea actividades y aumenta la ocupación de tus canchas.",
+        "manager_button":"Más información",
+        
+        "reviews_title":"Testimonios que inspiran",
+        "review_title_1":"¡La mejor app!",
+        "review_name_1":"Carlos M.",
+        "review_text_1":"Con AllCourts tengo una gran selección de canchas y es super fácil reservar, solo tres pasos y puedo hacerlo en cualquier momento",
+        "review_title_2":"¡Increíble!",
+        "review_name_2":"Laura G.",
+        "review_text_2":"Ha sido mi mejor descubrimiento. Es rápido y el pago es seguro. ¡Me encanta encontrar canchas disponibles en mi zona!",
+        "review_title_3":"¡Rápido y fácil!",
+        "review_name_3":"Miguel A.",
+        "review_text_3":"Una app para encontrar y reservar canchas disponibles cerca en cualquier momento. Imprescindible para equipos y jugadores. ¡Muy recomendable!",
+        
+        "cta_title":"¿Listo para jugar?",
+        "cta_text":"Únete a miles de jugadores que ya disfrutan de AllCourts",
+        "signup_button":"Registrate gratis",
+        "explore_button":"Explorar canchas"
     }
 }

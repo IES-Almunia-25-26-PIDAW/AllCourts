@@ -164,5 +164,67 @@
     "ctatitle": "¿Listo para digitalizar tu club?",
     "ctatext": "Únete a cientos de clubes que ya confían en AllCourts. Prueba gratis durante 14 días.",
     "cta1btn": "Ver Planes"
+    },
+    "home":{
+        "title": "Encuentra canchas y jugadores cerca de ti",
+        "subtitle": "Reserva canchas deportivas en cualquier lugar. Conecta cuando quieras, donde quieras",
+        "searchbar": "Dirección, club, ciudad...",
+
+        "intro_title": "¿Qué es AllCourts?",
+        "intro_text": "All Courts es la plataforma líder para reservar canchas deportivas y conectar jugadores. Te ayudamos a encontrar la cancha perfecta, conectar con otros deportistas y enfocarte en disfrutar tu juego.",
+        "intro_text2":"Es el lugar donde jugadores, clubes deportivos y entrenadores se reúnen para compartir la pasión por el deporte. Más que una aplicación, es una comunidad construida alrededor del amor por el deporte.",
+        
+        "sports_menu_title": "Reserva para cualquier deporte",
+        "sports_menu_text":"Encuentra la cancha perfecta para tu deporte favorito",
+        "football_button_title":"Fútbol",
+        "football_button_text":"Canchas 5, 7 y 11",
+        "basketball_button_title":"Baloncesto",
+        "basketball_button_text":"Pistas cubiertas y al aire libre",
+        "tenis_button_title":"Tenis y Pádel",
+        "tenis_button_text":"Individuales y dobles",
+        "voleiball_button_title":"Voleibol",
+        "voleiball_button_text":"Indoor y playa",
+
+        "players_title":"AllCourts para jugadores",
+        "players_subtitle_1":"Encuentra",
+        "players_text_1":"Descubre canchas deportivas cerca de ti, revisa disponibilidad en tiempo real y encuentra el lugar perfecto para tu próximo partido.",
+        "players_subtitle_2":"Reserva",
+        "players_text_2":"Reserva tu cancha en segundos con nuestro sistema fácil e intuitivo. Paga de forma segura y recibe confirmación instantánea.",
+        "players_subtitle_3":"Únete a la comunidad",
+        "players_text_3":"Conecta con otros jugadores, únete a partidos abiertos y sé parte de la comunidad deportiva más grande y activa.",
+        
+        "feats_title":"¿Por qué elegir AllCourts?",
+        "feats_subtitle_1":"Reserva instantánea",
+        "feats_text_1":"Reserva tu cancha en segundos. Sin llamadas, sin esperas. Confirmación inmediata.",
+        "feats_subtitle_2":"Pago seguro",
+        "feats_text_2":"Métodos de pago seguros y confiables. Tus datos siempre protegidos.",
+        "feats_subtitle_3":"Canchas cercanas",
+        "feats_text_3":"Encuentra fácilmente canchas cerca de tu ubicación con disponibilidad en tiempo real.",
+        "feats_subtitle_4":"Notificaciones",
+        "feats_text_4":"Recibe recordatorios de tus reservas y ofertas exclusivas de tus clubes favoritos.",
+        "feats_subtitle_5":"Historial completo",
+        "feats_text_5":"Consulta todas tus reservas anteriores y gestiona las próximas desde un solo lugar.",
+        "feats_subtitle_6":"Valoraciones reales",
+        "feats_text_6":"Lee opiniones de otros jugadores y ayuda a la comunidad con tus reseñas.",
+        
+        "manager_title":"AllCourts para gestores",
+        "manager_text":"Gestiona tu club deportivo desde un solo lugar. Recibe reservas online, administra tus clientes, crea actividades y aumenta la ocupación de tus canchas.",
+        "manager_button":"Más información",
+        
+        "reviews_title":"Testimonios que inspiran",
+        "review_title_1":"¡La mejor app!",
+        "review_name_1":"Carlos M.",
+        "review_text_1":"Con AllCourts tengo una gran selección de canchas y es super fácil reservar, solo tres pasos y puedo hacerlo en cualquier momento",
+        "review_title_2":"¡Increíble!",
+        "review_name_2":"Laura G.",
+        "review_text_2":"Ha sido mi mejor descubrimiento. Es rápido y el pago es seguro. ¡Me encanta encontrar canchas disponibles en mi zona!",
+        "review_title_3":"¡Rápido y fácil!",
+        "review_name_3":"Miguel A.",
+        "review_text_3":"Una app para encontrar y reservar canchas disponibles cerca en cualquier momento. Imprescindible para equipos y jugadores. ¡Muy recomendable!",
+        
+        "cta_title":"¿Listo para jugar?",
+        "cta_text":"Únete a miles de jugadores que ya disfrutan de AllCourts",
+        "signup_button":"Registrate gratis",
+        "explore_button":"Explorar canchas"
     }
 }
