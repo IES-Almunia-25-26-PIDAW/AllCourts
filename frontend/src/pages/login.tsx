@@ -1,11 +1,19 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import styles from '@/styles/Login.module.scss';
 
 export default function Login() {
     const { t } = useTranslation();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
     
     return (
         <div className={styles.container}>
