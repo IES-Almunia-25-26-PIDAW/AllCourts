@@ -1,25 +1,90 @@
 @use 'variables' as *;
 
 .footer {
-  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
-  color: white;
-  padding: 1.5rem 2rem;
-  text-align: center;
-  box-shadow: 0 -4px 20px rgba(0, 89, 255, 0.2);
+  background-color: #ffffff;
+  border-top: 1px solid #e8e8e8;
+  padding: 5rem 2rem 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 
-  p {
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.95rem;
-    margin: 0;
+/* ── Top: 3 columns ── */
+.footerTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 4rem;
+  max-width: 1100px;
+  margin: 0 auto 2.5rem;
+}
+
+.logoCol {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  img {
+    width: 110px;
+    height: auto;
+    object-fit: contain;
   }
 }
 
+.logoText {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1a1a2e;
+}
+
+.linksCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.colTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.25rem;
+}
+
+.link {
+  font-size: 14px;
+  color: #6b6b80;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #1a1a2e;
+  }
+}
+
+/* ── Bottom: copyright ── */
+.footerBottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-top: 1px solid #e8e8e8;
+  padding: 1.25rem 0;
+}
+
+.copyright {
+  font-size: 14px;
+  color: #6b6b80;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
+  .footerTop {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
   .footer {
-    padding: 1rem;
-    
-    p {
-      font-size: 0.85rem;
-    }
+    padding: 2rem 1.25rem 0;
   }
 }
