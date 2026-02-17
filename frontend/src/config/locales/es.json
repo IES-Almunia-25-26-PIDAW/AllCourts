@@ -10,7 +10,14 @@
         "btn_profile": "Iniciar sesión"
     },
     "footer": {
-        "text": "AllCourts. Todos los derechos reservados."
+        "text": "AllCourts. Todos los derechos reservados.",
+        "column1_title": "AllCourts",
+        "column1_link1": "Pistas",
+        "column1_link2": "Registrarse",
+        "column1_link3": "Iniciar sesión",
+        "column2_title": "Legal",
+        "column2_link1": "Política de Cookies",
+        "column2_link2": "Política de Privacidad"
     },
     "login": {
         "title": "Iniciar sesión en tu cuenta de jugador",

@@ -10,7 +10,14 @@
         "btn_profile": "Login"
     },
     "footer": {
-        "text": "AllCourts. All rights reserved."
+        "text": "AllCourts. All rights reserved.",
+        "column1_title": "AllCourts",
+        "column1_link1": "Courts",
+        "column1_link2": "Resgister",
+        "column1_link3": "Log in",
+        "column2_title": "Legal",
+        "column2_link1": "Cookies Policy",
+        "column2_link2": "Privacy Policy"
     },
     "login": {
         "title": "Login to Your Account",
@@ -169,11 +176,9 @@
         "title": "Find courts and players near you",
         "subtitle": "Book sports courts anywhere. Connect whenever you want, wherever you want.",
         "searchbar": "Address, club, city...",
-
         "intro_title": "What is AllCourts?",
         "intro_text": "All Courts is the leader platform to book sports courts and connect with other players. We will help you to find the perfect courts, connect with other athletes and focus enjoy the game.",
         "intro_text2":"Is the place where players, sport clubs and trainers meets to share the passion for sport. Is more than an application, it's a community built around a love of sport.",
-        
         "sports_menu_title": "Book for any sport",
         "sports_menu_text":"Find the perfect court for your favourite sport",
         "football_button_title":"Football",
@@ -184,7 +189,6 @@
         "tenis_button_text":"Solo and doubles",
         "voleiball_button_title":"Volleyball",
         "voleiball_button_text":"Indoor and beach",
-
         "players_title":"AllCourts for players",
         "players_subtitle_1":"Find",
         "players_text_1":"Find sport courts near you, look up for real time availability and find the perfect place for your next match",
@@ -192,7 +196,6 @@
         "players_text_2":"Find your court in seconds with our easy and intuitive system. Pay securely and receive instant information",
         "players_subtitle_3":"Join the community",
         "players_text_3":"Connect with other players, join open matches and be part of the bigger and most active sport community",
-        
         "feats_title":"Why AllCourts?",
         "feats_subtitle_1":"Instant book up",
         "feats_text_1":"Book up your court in seconds. Without calls, whithout wait. Instant confirmation.",
@@ -206,11 +209,9 @@
         "feats_text_5":"Check all your previous reservations and manage manage upcoming ones from one place.",
         "feats_subtitle_6":"Real valorations",
         "feats_text_6":"Read other player's opinion and help the community with your reviews.",
-        
         "manager_title":"AllCourts for managers",
         "manager_text":"Manage your favourite club from one place. Receive online reservations, manage your customers, create activities, and increase the occupancy of your courts.",
         "manager_button":"More information",
-        
         "reviews_title":"Testimonies that inspires",
         "review_title_1":"The best app!",
         "review_name_1":"Charles M.",
@@ -221,7 +222,6 @@
         "review_title_3":"Quick and easy!",
         "review_name_3":"Michael A.",
         "review_text_3":"An app to find and book up available courts near me in any moment. It's essential for teams and players. I recommend it a lot!",
-        
         "cta_title":"Ready to play?",
         "cta_text":"Join thousands players that already enjoy AllCourts",
         "signup_button":"Sign up for free",

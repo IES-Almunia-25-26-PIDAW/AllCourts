@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import styles from "@/styles/Navbar.module.scss";
+import styles from "./Navbar.module.scss";
 import Link from "next/dist/client/link";
 
 export default function Navbar() {

@@ -1,6 +1,4 @@
-"use client";
-
-import styles from "@/styles/Footer.module.scss";
+import styles from "./Footer.module.scss";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 
@@ -16,16 +14,16 @@ export default function Footer() {
                 </div>
 
                 <div className={styles.linksCol}>
-                    <p className={styles.colTitle}>AllCourts</p>
-                    <a href="" className={styles.link}>Pistas</a>
-                    <a href="/register" className={styles.link}>Registrarse</a>
-                    <a href="/login" className={styles.link}>Iniciar Sesión</a>
+                    <p className={styles.colTitle}>{t("footer.column1_title")}</p>
+                    <a href="/courts" className={styles.link}>{t("footer.column1_link1")}</a>
+                    <a href="/register" className={styles.link}>{t("footer.column1_link2")}</a>
+                    <a href="/login" className={styles.link}>{t("footer.column1_link3")}</a>
                 </div>
 
                 <div className={styles.linksCol}>
-                    <p className={styles.colTitle}>Legal</p>
-                    <a href="" className={styles.link}>Política de privacidad</a>
-                    <a href="" className={styles.link}>Política de cookies</a>
+                    <p className={styles.colTitle}>{t("footer.column2_title")}</p>
+                    <a href="/privacy-policy" className={styles.link}>{t("footer.column2_link1")}</a>
+                    <a href="/cookies-policy" className={styles.link}>{t("footer.column2_link2")}</a>
                 </div>
             </div>
 

@@ -1,13 +1,10 @@
-    @use 'variables' as *;
-
-    .navbar {
-
+.navbar {
     position: sticky;
     left: 0;
     top: 0;
     right: 0;
     width: 100%;
-    background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+    background: linear-gradient(135deg, #0059ff 0%, darken(#0059ff, 10%) 100%);
     padding: 1rem 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 999;
@@ -71,7 +68,7 @@
 
     .profileButton {
     background: white;
-    color: $primary-color;
+    color: #0059ff;
     border: none;
     padding: 0.6rem 1.5rem;
     border-radius: 8px;
@@ -87,7 +84,6 @@
     }
     }
 
-    // Dropdown styles
     .dropdown {
     position: relative;
     display: inline-block;
