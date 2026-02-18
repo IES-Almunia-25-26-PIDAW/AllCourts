@@ -1,12 +1,10 @@
-@use './variables' as *;
-
 .main {
   width: 100%;
   overflow-x: hidden;
 }
 
 .heroSection {
-  background: linear-gradient(135deg, rgba($primary-color, 0.85) 0%, rgba(darken($primary-color, 10%), 0.85) 100%), url('/fondoinfo.webp');
+  background: linear-gradient(135deg, rgba(#0059ff, 0.85) 0%, rgba(darken(#0059ff, 10%), 0.85) 100%), url('/fondoinfo.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -251,7 +249,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-top: 4px solid $primary-color;
+  border-top: 4px solid #0059ff;
 
   &:hover {
     transform: translateY(-12px);
@@ -274,7 +272,7 @@
 .stepNumber {
   width: 60px;
   height: 60px;
-  background: $primary-color;
+  background: #0059ff;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -287,7 +285,7 @@
 
 .featuresSection {
   padding: 80px 20px;
-  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+  background: linear-gradient(135deg, #0059ff 0%, darken(#0059ff, 10%) 100%);
   color: white;
 }
 
@@ -346,19 +344,19 @@
 .learnMoreBtn {
   display: inline-block;
   padding: 18px 45px;
-  background: $primary-color;
+  background: #0059ff;
   color: white;
   font-size: 1.15rem;
   font-weight: 600;
   border-radius: 12px;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba($primary-color, 0.3);
+  box-shadow: 0 4px 15px rgba(#0059ff, 0.3);
 
   &:hover {
-    background: darken($primary-color, 10%);
+    background: darken(#0059ff, 10%);
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba($primary-color, 0.4);
+    box-shadow: 0 8px 25px rgba(#0059ff, 0.4);
   }
 }
 
@@ -388,7 +386,7 @@
 
   h4 {
     font-size: 1.4rem;
-    color: $primary-color;
+    color: #0059ff;
     margin-bottom: 10px;
   }
 }
@@ -409,7 +407,7 @@
 
 .ctaSection {
   padding: 100px 20px;
-  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+  background: linear-gradient(135deg, #0059ff 0%, darken(#0059ff, 10%) 100%);
   color: white;
   text-align: center;
 }
@@ -458,7 +456,7 @@
 
 .primaryBtn {
   background: white;
-  color: $primary-color;
+  color: #0059ff;
 
   &:hover {
     background: #f0f0f0;
