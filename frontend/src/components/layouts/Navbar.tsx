@@ -1,19 +1,12 @@
-"use client";
-
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./Navbar.module.scss";
 import Link from "next/dist/client/link";
 
 export default function Navbar() {
     const { t, i18n } = useTranslation();
     const [showDropdown, setShowDropdown] = useState(false);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     const toggleLanguage = () => {
         const newLang = i18n.language.startsWith('en') ? 'es' : 'en';
@@ -31,19 +24,14 @@ export default function Navbar() {
                 </Link>
                 
                 <nav className={styles.nav}>
-                    {!mounted ? (
-                        <div style={{ visibility: 'hidden', display: 'flex', gap: '10px' }}>
-                            <button className={styles.navButton}>...</button>
-                        </div>
-                    ) : (
                         <>
                             <button className={styles.navButton} onClick={toggleLanguage}>
                                 {i18n.language.startsWith('en') ? 'ES' : 'EN'}
                             </button>
-                            <Link href="/infoplayer">
+                            <Link href="/info/player">
                                 <button className={styles.navButton}>{t("header.btn_forplayers")}</button>
                             </Link>
-                            <Link href="/infomanager">
+                            <Link href="/info/manager">
                                 <button className={styles.navButton}>{t("header.btn_forclubs")}</button>
                             </Link>
                             
@@ -55,7 +43,7 @@ export default function Navbar() {
                                 <button className={styles.profileButton}>{t("header.btn_profile")}</button>
                                 {showDropdown && (
                                     <div className={styles.dropdownMenu}>
-                                        <Link href="/login">
+                                        <Link href="/player/login">
                                             <div className={styles.dropdownItem}>
                                                 <span>👤</span>
                                                 <div>
@@ -77,7 +65,6 @@ export default function Navbar() {
                                 )}
                             </div>
                         </>
-                    )}
                 </nav>
             </div>
         </header>

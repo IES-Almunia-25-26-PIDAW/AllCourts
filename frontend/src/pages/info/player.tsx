@@ -1,20 +1,10 @@
-import { useState, useEffect } from 'react';
-import styles from '@/styles/Infoplayer.module.scss';
+import styles from './Player.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 export default function Infoplayer() {
     const { t } = useTranslation();
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) {
-        return null; 
-    }
 
     return (
         <>

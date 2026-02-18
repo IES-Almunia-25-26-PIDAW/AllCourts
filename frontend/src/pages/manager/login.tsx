@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import styles from '@/styles/Login.module.scss';
+import styles from './Login.module.scss';
 
 export default function LoginManager() {
     const { t } = useTranslation();

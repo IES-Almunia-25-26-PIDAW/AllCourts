@@ -1,12 +1,10 @@
-    @use 'variables' as *;
-
-    .main {
+.main {
     width: 100%;
     overflow-x: hidden;
     }
 
     .heroSection {
-    background: linear-gradient(135deg, rgba($primary-color, 0.85) 0%, rgba(darken($primary-color, 10%), 0.85) 100%), url('/fondoinfo.webp');
+    background: linear-gradient(135deg, rgba(#0059ff, 0.85) 0%, rgba(darken(#0059ff, 10%), 0.85) 100%), url('/fondoinfo.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -68,10 +66,9 @@
     }
     }
 
-    // Sección Steps
-    .stepsSection {
+    .benefitsSection {
     padding: 80px 20px;
-    background: #f8f9fa;
+    background: white;
 
     h2 {
         text-align: center;
@@ -81,7 +78,7 @@
     }
     }
 
-    .stepsGrid {
+    .benefitsGrid {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
@@ -89,13 +86,14 @@
     gap: 40px;
     }
 
-    .stepCard {
-    background: white;
+    .benefitCard {
+    background: #f8f9fa;
     padding: 50px 35px;
     border-radius: 16px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 4px solid #0059ff;
 
     &:hover {
         transform: translateY(-12px);
@@ -115,23 +113,217 @@
     }
     }
 
-    .stepIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    .benefitIcon {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    }
+
+    .dashboardSection {
+    padding: 80px 20px;
+    background: #f8f9fa;
+    }
+
+    .dashboardContent {
+    max-width: 1200px;
     margin: 0 auto;
-    
-    img {
-        border-radius: 50%;
-        padding: 10px;
-        background: linear-gradient(135deg, #0059ff, #0059ff);
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
     }
     }
 
-    // Sección Testimonios
-    .testimonialsSection {
+    .dashboardImage {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+
+    img {
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border: 3px solid #0059ff;
+    }
+    }
+
+    .dashboardText {
+    flex: 1;
+    min-width: 300px;
+
+    h2 {
+        font-size: 2.6rem;
+        margin-bottom: 30px;
+        color: #2c3e50;
+    }
+    }
+
+    .featureList {
+    list-style: none;
+    padding: 0;
+
+    li {
+        padding: 18px 0;
+        border-bottom: 1px solid #ddd;
+        font-size: 1rem;
+        line-height: 1.7;
+
+        &:last-child {
+        border-bottom: none;
+        }
+
+        strong {
+        color: #0059ff;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 1.15rem;
+        }
+    }
+    }
+
+    .pricingSection {
     padding: 80px 20px;
     background: white;
+
+    h2 {
+        text-align: center;
+        font-size: 2.8rem;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+    }
+
+    .pricingSubtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 60px;
+    }
+
+    .pricingGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    }
+
+    .pricingCard {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e0e0e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    text-align: center;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    &.featured {
+        border: 3px solid #0059ff;
+        transform: scale(1.05);
+        
+        &:hover {
+        transform: scale(1.05) translateY(-10px);
+        }
+    }
+
+    h3 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+    }
+
+    .planBadge {
+    background: #0059ff;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    }
+
+    .price {
+    margin: 30px 0;
+
+    .amount {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #0059ff;
+    }
+
+    .period {
+        font-size: 1.2rem;
+        color: #666;
+    }
+    }
+
+    .planFeatures {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+    text-align: left;
+
+    li {
+        padding: 12px 0;
+        font-size: 1rem;
+        color: #555;
+        border-bottom: 1px solid #f0f0f0;
+
+        &:last-child {
+        border-bottom: none;
+        }
+    }
+    }
+
+    .planButton,
+    .planButtonFeatured {
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    }
+
+    .planButton {
+    background: #2c3e50;
+    color: white;
+
+    &:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+    }
+    }
+
+    .planButtonFeatured {
+    background: #0059ff;
+    color: white;
+    box-shadow: 0 4px 15px rgba(#0059ff, 0.3);
+
+    &:hover {
+        background: darken(#0059ff, 10%);
+        transform: translateY(-2px);
+    }
+    }
+
+    .testimonialsSection {
+    padding: 80px 20px;
+    background: #f8f9fa;
 
     h2 {
         text-align: center;
@@ -150,7 +342,7 @@
     }
 
     .testimonialCard {
-    background: #f8f9fa;
+    background: white;
     padding: 40px 35px;
     border-radius: 16px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -194,10 +386,9 @@
     }
     }
 
-    // Sección Perfil
-    .profileSection {
+    .featuresSection {
     padding: 80px 20px;
-    background: #f8f9fa;
+    background: white;
 
     h2 {
         text-align: center;
@@ -207,7 +398,7 @@
     }
     }
 
-    .profileGrid {
+    .featuresGrid {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
@@ -215,13 +406,13 @@
     gap: 30px;
     }
 
-    .profileCard {
-    background: white;
+    .featureCard {
+    background: #f8f9fa;
     padding: 35px 28px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
+    border-left: 4px solid #0059ff;
 
     &:hover {
         transform: translateX(8px);
@@ -231,7 +422,7 @@
     h3 {
         font-size: 1.4rem;
         margin-bottom: 15px;
-        color: #0059ff;
+        color: #2c3e50;
     }
 
     p {
@@ -241,10 +432,9 @@
     }
     }
 
-    // Sección FAQ
     .faqSection {
     padding: 80px 20px;
-    background: white;
+    background: #f8f9fa;
 
     h2 {
         text-align: center;
@@ -260,7 +450,7 @@
     }
 
     .faqItem {
-    background: #f8f9fa;
+    background: white;
     padding: 35px;
     margin-bottom: 20px;
     border-radius: 12px;
@@ -286,10 +476,9 @@
     }
     }
 
-    // Sección CTA
     .ctaSection {
     padding: 100px 20px;
-    background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+    background: linear-gradient(135deg, #0059ff 0%, darken(#0059ff, 10%) 100%);
     color: white;
     text-align: center;
 
@@ -335,11 +524,11 @@
     }
 
     .primaryBtn {
-    background: $primary-color;
+    background: #0059ff;
     color: white;
 
     &:hover {
-        background: darken($primary-color, 10%);
+        background: darken(#0059ff, 10%);
     }
     }
 

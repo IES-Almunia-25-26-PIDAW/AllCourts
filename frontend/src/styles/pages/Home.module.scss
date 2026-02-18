@@ -5,7 +5,6 @@
   overflow-x: hidden;
 }
 
-// Hero Section
 .heroSection {
   background: linear-gradient(135deg, rgba($primary-color, 0.85) 0%, rgba(darken($primary-color, 10%), 0.85) 100%), url('/fondoinfo.webp');
   background-size: cover;
@@ -150,14 +149,12 @@
   }
 }
 
-// Container
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-// Section Title
 .sectionTitle {
   text-align: center;
   font-size: 2.8rem;
@@ -169,7 +166,6 @@
   }
 }
 
-// About Section
 .aboutSection {
   padding: 80px 20px;
   background: white;
@@ -186,7 +182,6 @@
   margin-right: auto;
 }
 
-// Popular Courts Section
 .popularSection {
   padding: 80px 20px;
   background: #f8f9fa;
@@ -237,7 +232,6 @@
   margin-bottom: 15px;
 }
 
-// For Players Section
 .playersSection {
   padding: 80px 20px;
   background: white;
@@ -291,7 +285,6 @@
   margin: 0 auto;
 }
 
-// Features Section
 .featuresSection {
   padding: 80px 20px;
   background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
@@ -336,7 +329,6 @@
   margin-bottom: 10px;
 }
 
-// Managers Section
 .managersSection {
   padding: 80px 20px;
   background: #f8f9fa;
@@ -370,7 +362,6 @@
   }
 }
 
-// Testimonials Section
 .testimonialsSection {
   padding: 80px 20px;
   background: white;
@@ -416,7 +407,6 @@
   font-style: italic;
 }
 
-// CTA Section
 .ctaSection {
   padding: 100px 20px;
   background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);

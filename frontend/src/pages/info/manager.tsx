@@ -1,18 +1,10 @@
-import { useState, useEffect } from 'react';
-import styles from '@/styles/Infomanager.module.scss';
+import styles from './Manager.module.scss';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import Link from "next/dist/client/link";
 
 export default function Infomanager() {
     const { t } = useTranslation();
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) return null;
 
     return (
         <>

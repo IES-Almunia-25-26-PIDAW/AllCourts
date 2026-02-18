@@ -37,7 +37,30 @@
         "dropdown_login_club": "Iniciar sesión como club",
         "dropdown_label_club": "Gestionar reservas"
     },
-        "errorBoundary": {
+    "register": {
+        "title": "Crear cuenta",
+        "subtitle": "Completa el formulario para registrarte.",
+        "option_player": "Jugador",
+        "option_club": "Club",
+        "form_name": "Nombre",
+        "form_name_placeholder": "Introduce tu nombre",
+        "form_lastname": "Apellidos",
+        "form_lastname_placeholder": "Introduce tus apellidos",
+        "form_email": "Correo electrónico",
+        "form_email_placeholder": "Introduce tu correo electrónico",
+        "form_username": "Nombre de usuario",
+        "form_username_placeholder": "Elige un nombre de usuario",
+        "form_password": "Contraseña",
+        "form_password_placeholder": "Crea una contraseña",
+        "form_confirm_password": "Confirmar contraseña",
+        "form_confirm_password_placeholder": "Repite tu contraseña",
+        "btn_register": "Registrarse",
+        "or": "O",
+        "login_link": "¿Ya tienes una cuenta?",
+        "login_link_player": "Inicia sesión aquí como jugador",
+        "login_link_club": "Inicia sesión aquí como club"
+    },
+    "errorBoundary": {
         "title": "Algo salió mal.",
         "message": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.",
         "action": "Ir a la página principal"

@@ -1,23 +1,14 @@
-import { useState, useEffect} from 'react';
+import { useState} from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from "@/styles/Home.module.scss";
+import styles from "@/styles/pages/Home.module.scss";
 import { useTranslation } from 'react-i18next';
 
 export default function Home() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true)
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
