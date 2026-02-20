@@ -1,6 +1,8 @@
 import styles from "./Footer.module.scss";
 import { useTranslation } from "react-i18next";
 
+const currentYear = new Date().getFullYear();
+
 export default function Footer() {
     const { t } = useTranslation();
 
@@ -27,7 +29,7 @@ export default function Footer() {
             </div>
 
             <div className={styles.footerBottom}>
-                <p className={styles.copyright}>&copy; {new Date().getFullYear()} {t("footer.text")}</p>
+                <p className={styles.copyright}>&copy; {currentYear} {t("footer.text")}</p>
             </div>
         </footer>
     );

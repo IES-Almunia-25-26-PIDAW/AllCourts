@@ -1,17 +1,28 @@
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Navbar.module.scss";
 import Link from "next/dist/client/link";
 
 export default function Navbar() {
     const { t, i18n } = useTranslation();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [langLabel, setLangLabel] = useState<string | null>(null);
 
     const toggleLanguage = () => {
         const newLang = i18n.language.startsWith('en') ? 'es' : 'en';
         i18n.changeLanguage(newLang);
+        if (typeof window !== 'undefined') {
+            try {
+                localStorage.setItem('i18nextLng', newLang);
+            } catch {}
+            document.cookie = `i18nextLng=${newLang};path=/`;
+        }
     };
+
+    useEffect(() => {
+        setLangLabel(i18n.language.startsWith('en') ? 'ES' : 'EN');
+    }, [i18n.language]);
 
     return (
         <header className={styles.navbar}>
@@ -26,7 +37,7 @@ export default function Navbar() {
                 <nav className={styles.nav}>
                         <>
                             <button className={styles.navButton} onClick={toggleLanguage}>
-                                {i18n.language.startsWith('en') ? 'ES' : 'EN'}
+                                {langLabel ?? ''}
                             </button>
                             <Link href="/info/player">
                                 <button className={styles.navButton}>{t("header.btn_forplayers")}</button>
