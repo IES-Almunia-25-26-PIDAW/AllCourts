@@ -4,6 +4,11 @@
         "message": "La página que buscas no existe.",
         "action": "Ir a la página principal"
     },
+    "500": {
+        "title": "500 - Error interno del servidor",
+        "message": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+        "action": "Ir a la página principal"
+    },
     "header": {
         "btn_forplayers": "Para Jugadores",
         "btn_forclubs": "Para Clubes",
