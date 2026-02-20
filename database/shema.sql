@@ -1,4 +1,3 @@
--- Crear base de datos
 CREATE DATABASE IF NOT EXISTS allcourts_db;
 USE allcourts_db;
 
@@ -26,7 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- =========================
 CREATE TABLE IF NOT EXISTS managers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL UNIQUE,
     subscription_active BOOLEAN DEFAULT FALSE,
     subscription_start DATE,
     subscription_end DATE,
@@ -34,23 +33,36 @@ CREATE TABLE IF NOT EXISTS managers (
 );
 
 -- =========================
--- Tabla COURTS
+-- Tabla CLUBS
 -- =========================
-CREATE TABLE IF NOT EXISTS courts (
+CREATE TABLE IF NOT EXISTS clubs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     manager_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     city VARCHAR(100),
+    logo_url VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (manager_id) REFERENCES managers(id) ON DELETE CASCADE
+);
+
+-- =========================
+-- Tabla COURTS
+-- =========================
+CREATE TABLE IF NOT EXISTS courts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    club_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
     price_hour DECIMAL(6,2) NOT NULL,
-    surface_type ENUM('tierra', 'cesped', 'dura'),
+    surface_type ENUM('tierra_batida', 'cesped_natural', 'cesped_artificial', 'dura', 'arena', 'parque') NOT NULL,
     sport VARCHAR(50),
     image_url VARCHAR(255),
     opening_time TIME,
     closing_time TIME,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (manager_id) REFERENCES managers(id) ON DELETE CASCADE
+    FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE
 );
 
 -- =========================
@@ -67,9 +79,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
     cancel_reason VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    UNIQUE (court_id, date, start_time, end_time),
-
+    UNIQUE (court_id, date, start_time),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (court_id) REFERENCES courts(id) ON DELETE CASCADE
 );
@@ -79,9 +89,9 @@ CREATE TABLE IF NOT EXISTS bookings (
 -- =========================
 CREATE TABLE IF NOT EXISTS payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    booking_id INT NOT NULL,
+    booking_id INT NOT NULL UNIQUE,
     amount DECIMAL(6,2) NOT NULL,
-    payment_date DATE NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('success', 'failed', 'pending') DEFAULT 'pending',
     method VARCHAR(30),
     FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
