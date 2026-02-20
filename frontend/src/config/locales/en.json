@@ -254,5 +254,15 @@
         "cta_text":"Join thousands players that already enjoy AllCourts",
         "signup_button":"Sign up for free",
         "explore_button":"Explore courts"
+    },
+    "cookies": {
+        "title": "",
+        "initial_text": "",
+        "update_date": "",
+        "cookie_type": "",
+        "":""
+    },
+    "privacy": {
+
     }
 }

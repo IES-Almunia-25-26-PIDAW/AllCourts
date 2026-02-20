@@ -261,5 +261,66 @@
         "cta_text":"Únete a miles de jugadores que ya disfrutan de AllCourts",
         "signup_button":"Registrate gratis",
         "explore_button":"Explorar canchas"
+    },
+    "cookies": {
+        "title": "Política de Cookies",
+        "initial_text": "Te explicamos qué cookies usamos, para qué sirve cada una y cómo puedes gestionarlas o desactivarlas fácilmente.",
+        "update_date": "Actualizado: Enero 2026",
+        
+        "intro_title": "¿Qué son las cookies?",
+        "intro_text": "Las cookies son pequeños archivos de texto que los sitios web almacenan en tu navegador cuando los visitas. Sirven para que el sitio funcione correctamente, recuerde tus preferencias y nos ayude a entender cómo se usa la plataforma.",
+        "intro_text2": "Las cookies no contienen virus, no acceden a la información de tu disco duro y no recopilan más datos de los que indicas expresamente.",
+        "consent_text": "Consentimiento: Al continuar navegando, aceptas las cookies técnicas necesarias para el funcionamiento del sitio. Para el resto, te pediremos tu consentimiento explícito a través del banner de cookies.",
+        
+        "type_title": "Tipos de cookies",
+        
+        "type_subtitle1": "Por duración",
+        "duration_subtitle1": "De sesión",
+        "duration_text1": "Temporales. Se eliminan automáticamente al cerrar el navegador",
+        "duration_subtitle2": "Persistentes",
+        "duraion_text2": "Permanecen en tu dispositivo un tiempo determinado para recordar tus preferencias",
+        
+        "type_subtitle2": "Por origen",
+        "origin_subtitle1": "Propias",
+        "origin_text1": "Creadas y gestionadas directamente por nuestra plataforma",
+        "origin_subtitle2": "De terceros",
+        "origin_text2": "Instaladas por proveedores externos como Google o Meta",
+        
+        "why_title": "Para qué las usamos",
+        "why_subtitle1": "Técnicas / Esenciales",
+        "why_text1": "Permiten la navegación y funciones básicas: iniciar sesión, hacer reservar. Sin ellas el servicio no funciona. No requieren consentimiento",
+        "why_subtitle2": "Analítica",
+        "why_text2": "Recogen datos anónimos sobre cómo se usa la plataforma. Nos ayudan a detectar errores y mejorar la experiencia",
+        "why_subtitle3": "Funcionalidad",
+        "why_text3": "Recuerdan tus preferencias: idioma, región, configuración de interfaz",
+        "why_subtitle4": "Marketing",
+        "why_text4": "Permiten mostrarte contenido relevante y medir la eficacia de nuestras campañas",
+        
+        "use_title": "Cookies que utilizamos",
+        
+        "use_subtitle1": "Cookies propias",
+            "use1_header1": "COOKIE",
+                "header1_text1": "session_id",
+                "header1_text2": "crsf_token",
+                "header1_text3": "user_prefs",
+                "header1_text4": "cookie_consent",
+            "use1_header2": "DURACIÓN",
+                "header2_text1": "Sesión",
+                "header2_text2": "Sesión",
+                "header2_text3": "1 año",
+                "header2_text4": "1 año",
+            "use1_header3": "TIPO",
+                "header3_text1": "Esencial",
+                "header3_text2": "Esencial",
+                "header3_text3": "Funcionalidad",
+                "header3_text4": "Esencial",
+            "use1_header4": "DESCRIPCIÓN",
+                "header4_text1": "Mantiene la sesión del usuario activa durante la navegación",
+                "header4_text2": "",
+                "header4_text3": "",
+                "header4_text4": ""
+    },
+    "privacy": {
+
     }
 }
