@@ -366,7 +366,13 @@
     "thirdparty_card3_title": "Publicidad comportamental en general",
     "thirdparty_card3_text": "Puedes gestionar las preferencias de múltiples anunciantes en youronlinechoices.eu",
 
-    "changes_title": ""
+    "changes_title": "Cambios en esta política",
+    "changes_text": "Podemos actualizar esta política cuando añadamos o eliminemos cookies, o cuando cambie la normativa aplicable. Te avisaremos de cambios relevantes mediante un aviso en la plataforma o solicitando de nuevo tu consentimiento si fuera necesario",
+
+    "contact_title": "Contacto",
+    "contact_subtitle": "¿Tienes dudas sobre las cookies?",
+    "contact_button": "Contáctanos",
+    "contact_text": "Respondemos en menos de 48 horas hábiles."
   },
   "privacy": {}
 }
