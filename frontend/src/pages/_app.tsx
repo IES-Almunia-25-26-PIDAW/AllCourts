@@ -3,8 +3,8 @@ import "@/config/i18n";
 import type { AppProps } from "next/app";
 import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import LanguageDetector from "@/components/LanguageDetector";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
+import LanguageDetector from "@/components/ui/LanguageDetector";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
