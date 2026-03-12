@@ -1,0 +1,166 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const Manager = require("../models/Manager");
+
+const SALT_ROUNDS = 10;
+const JWT_SECRET = process.env.JWT_SECRET || "changeme"; //! Cambiar y añadir .env
+const JWT_EXPIRES_IN = "7d";
+
+/**
+ * @module authController
+ * Controlador de autenticación.
+ * Gestiona el registro, login, verificación de email y perfil del usuario autenticado.
+ *
+ * Rutas esperadas:
+ *   POST   /auth/register         → register
+ *   POST   /auth/login            → login
+ *   GET    /auth/me               → me          (requiere authMiddleware)
+ *   GET    /auth/verify/:token    → verifyEmail
+ */
+const authController = {
+    /**
+     * Registra un nuevo usuario (player o manager).
+     * - Verifica que el email y el username no estén ya en uso.
+     * - Hashea la contraseña antes de guardarla.
+     * - Si el rol es "manager", crea también el registro en la tabla managers.
+     * - Devuelve un JWT listo para usar.
+     *
+     * Body: { name, username, email, password, role, phone?, avatar_url? }
+     * Response 201: { message, token }
+     */
+    register: async (req, res, next) => {
+        try {
+            const { name, username, email, password, role, phone, avatar_url } =
+                req.body;
+
+            // Comprobar duplicados antes de insertar
+            const [byEmail] = await User.getByEmail(email);
+            if (byEmail.length > 0)
+                return res.status(409).json({ message: "Email already in use" });
+
+            const [byUsername] = await User.getByUsername(username);
+            if (byUsername.length > 0)
+                return res.status(409).json({ message: "Username already taken" });
+
+            // Hashear contraseña (nunca se guarda en texto plano)
+            const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+            const userRole = role === "manager" ? "manager" : "player";
+
+            const [result] = await User.create({
+                name,
+                username,
+                email,
+                password: hashedPassword,
+                role: userRole,
+                phone: phone || null,
+                avatar_url: avatar_url || null,
+            });
+
+            const userId = result.insertId;
+
+            // Si se registra como manager, crear también su fila en managers
+            if (userRole === "manager") {
+                await Manager.create({
+                    user_id: userId,
+                    subscription_active: false,
+                    subscription_start: null,
+                    subscription_end: null,
+                });
+            }
+
+            // Generar token JWT con id y rol para uso en peticiones protegidas
+            const token = jwt.sign({ id: userId, role: userRole }, JWT_SECRET, {
+                expiresIn: JWT_EXPIRES_IN,
+            });
+
+            res.status(201).json({ message: "User registered successfully", token });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /**
+     * Autentica un usuario con email y contraseña.
+     * - Compara la contraseña con el hash guardado en BD.
+     * - Actualiza el campo last_login.
+     * - Devuelve el JWT y los datos del usuario (sin contraseña ni tokens sensibles).
+     *
+     * Body: { email, password }
+     * Response 200: { token, user }
+     * Response 401: credenciales inválidas
+     */
+    login: async (req, res, next) => {
+        try {
+            const { email, password } = req.body;
+
+            // Buscar usuario por email (esta query devuelve todos los campos, incluido password)
+            const [rows] = await User.getByEmail(email);
+            if (rows.length === 0)
+                return res.status(401).json({ message: "Invalid credentials" });
+
+            const user = rows[0];
+
+            // Comparar contraseña plana con el hash almacenado
+            const match = await bcrypt.compare(password, user.password);
+            if (!match)
+                return res.status(401).json({ message: "Invalid credentials" });
+
+            // Actualizar timestamp de último acceso
+            await User.updateLastLogin(user.id);
+
+            const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
+                expiresIn: JWT_EXPIRES_IN,
+            });
+
+            // Excluir campos sensibles de la respuesta
+            const { password: _pw, verification_token: _vt, ...safeUser } = user;
+            res.json({ token, user: safeUser });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /**
+     * Devuelve el perfil del usuario actualmente autenticado.
+     * Requiere que el authMiddleware haya inyectado req.user con el id del token.
+     *
+     * Response 200: datos del usuario (sin contraseña)
+     * Response 404: usuario no encontrado
+     */
+    me: async (req, res, next) => {
+        try {
+            const [rows] = await User.getById(req.user.id);
+            if (rows.length === 0)
+                return res.status(404).json({ message: "User not found" });
+            res.json(rows[0]);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    /**
+     * Verifica el email de un usuario usando el token enviado por correo.
+     * El modelo comprueba que el token exista y no haya caducado (token_expires_at > NOW()).
+     * Si es válido, marca is_verified = TRUE y limpia el token.
+     *
+     * Params: token (en la URL)
+     * Response 200: verificación exitosa
+     * Response 400: token inválido o expirado
+     */
+    verifyEmail: async (req, res, next) => {
+        try {
+            const { token } = req.params;
+            const [result] = await User.verifyUser(token);
+            if (result.affectedRows === 0)
+                return res
+                    .status(400)
+                    .json({ message: "Invalid or expired verification token" });
+            res.json({ message: "Email verified successfully" });
+        } catch (err) {
+            next(err);
+        }
+    },
+};
+
+module.exports = authController;
