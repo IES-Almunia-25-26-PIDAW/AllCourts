@@ -62,8 +62,7 @@
     "btn_register": "Registrarse",
     "or": "O",
     "login_link": "¿Ya tienes una cuenta?",
-    "login_link_player": "Inicia sesión aquí como jugador",
-    "login_link_club": "Inicia sesión aquí como club"
+    "login_link2": "Inicia sesión aquí"
   },
   "errorBoundary": {
     "title": "Algo salió mal.",

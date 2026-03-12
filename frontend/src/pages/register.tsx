@@ -97,11 +97,7 @@ export default function Register() {
                 <div className={styles.loginLink}>
                     {t("register.login_link")}{' '}
                     <Link href="/login">
-                        {t("register.login_link_player")}
-                    </Link>
-                    {' '}o{' '}
-                    <Link href="/manager/login">
-                        {t("register.login_link_club")}
+                        {t("register.login_link2")}
                     </Link>
                 </div>
             </div>

@@ -6,7 +6,6 @@ import Link from "next/dist/client/link";
 
 export default function Navbar() {
     const { t, i18n } = useTranslation();
-    const [showDropdown, setShowDropdown] = useState(false);
     const [langLabel, setLangLabel] = useState<string | null>(null);
 
     const toggleLanguage = () => {
@@ -45,36 +44,9 @@ export default function Navbar() {
                             <Link href="/info/manager">
                                 <button className={styles.navButton}>{t("header.btn_forclubs")}</button>
                             </Link>
-                            
-                            <div 
-                                className={styles.dropdown}
-                                onMouseEnter={() => setShowDropdown(true)}
-                                onMouseLeave={() => setShowDropdown(false)}
-                            >
+                            <Link href="/login">
                                 <button className={styles.profileButton}>{t("header.btn_profile")}</button>
-                                {showDropdown && (
-                                    <div className={styles.dropdownMenu}>
-                                        <Link href="/player/login">
-                                            <div className={styles.dropdownItem}>
-                                                <span>👤</span>
-                                                <div>
-                                                    <strong>{t("login.dropdown_login_player")}</strong>
-                                                    <p>{t("login.dropdown_label_player")}</p>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link href="/manager/login">
-                                            <div className={styles.dropdownItem}>
-                                                <span>🏢</span>
-                                                <div>
-                                                    <strong>{t("login.dropdown_login_club")}</strong>
-                                                    <p>{t("login.dropdown_label_club")}</p>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                )}
-                            </div>
+                            </Link>
                         </>
                 </nav>
             </div>
