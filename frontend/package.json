@@ -18,7 +18,7 @@
     "react-dom": "19.2.3",
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
-    "sass": "^1.97.3"
+    "sass": "^1.98.0"
   },
   "devDependencies": {
     "@types/node": "^20",
