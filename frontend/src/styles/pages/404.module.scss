@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .container {
     display: flex;
     flex-direction: column;
@@ -40,7 +42,7 @@
         transition: all 0.3s ease;
 
         &:hover {
-            background-color: darken(#0059ff, 10%);
+            background-color: color.scale(#0059ff, $lightness: -10%);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(#0059ff, 0.3);
         }

@@ -1,4 +1,6 @@
-    .courtCard {
+@use "sass:color";
+
+.courtCard {
     background: white;
     border-radius: 12px;
     overflow: hidden;
@@ -12,17 +14,17 @@
         transform: translateY(-4px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
-    }
+}
 
-    .cardLink {
+.cardLink {
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
     height: 100%;
-    }
+}
 
-    .imageContainer {
+.imageContainer {
     position: relative;
     width: 100%;
     height: 220px;
@@ -32,18 +34,18 @@
     @media (max-width: 768px) {
         height: 200px;
     }
-    }
+}
 
-    .image {
+.image {
     object-fit: cover;
     transition: transform 0.3s ease;
 
     .courtCard:hover & {
         transform: scale(1.05);
     }
-    }
+}
 
-    .priceTag {
+.priceTag {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -54,17 +56,17 @@
     font-weight: 600;
     font-size: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
+}
 
-    .cardContent {
+.cardContent {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
     flex: 1;
-    }
+}
 
-    .courtName {
+.courtName {
     font-size: 20px;
     font-weight: 700;
     color: black;
@@ -74,34 +76,34 @@
     @media (max-width: 768px) {
         font-size: 18px;
     }
-    }
+}
 
-    .infoRow {
+.infoRow {
     display: flex;
     align-items: center;
     gap: 8px;
     color: #666;
     font-size: 14px;
-    }
+}
 
-    .icon {
+.icon {
     color: #0059ff;
     flex-shrink: 0;
-    }
+}
 
-    .infoText {
+.infoText {
     line-height: 1.4;
-    }
+}
 
-    .description {
+.description {
     font-size: 14px;
     color: #666;
     line-height: 1.6;
     margin: 4px 0 0 0;
     flex: 1;
-    }
+}
 
-    .cardFooter {
+.cardFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -114,9 +116,9 @@
         flex-direction: column;
         align-items: stretch;
     }
-    }
+}
 
-    .address {
+.address {
     font-size: 13px;
     color: #666;
     flex: 1;
@@ -124,9 +126,9 @@
     @media (max-width: 768px) {
         text-align: center;
     }
-    }
+}
 
-    .bookButton {
+.bookButton {
     background: #0059ff;
     color: white;
     border: none;
@@ -139,10 +141,10 @@
     white-space: nowrap;
 
     &:hover {
-        background: darken(#0059ff, 10%);
+        background: color.scale(#0059ff, $lightness: -10%);
     }
 
     @media (max-width: 768px) {
         width: 100%;
     }
-    }
+}
