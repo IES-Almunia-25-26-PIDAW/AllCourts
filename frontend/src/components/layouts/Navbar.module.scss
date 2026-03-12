@@ -1,10 +1,12 @@
+@use "sass:color";
+
 .navbar {
     position: sticky;
     left: 0;
     top: 0;
     right: 0;
     width: 100%;
-    background: linear-gradient(135deg, #0059ff 0%, darken(#0059ff, 10%) 100%);
+    background: linear-gradient(135deg, #0059ff 0%, #0047cc 100%);
     padding: 1rem 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 999;
