@@ -436,10 +436,10 @@
     "share_li3": "Herramientas de analítica (ej. Google Analytics), bajo tu consentimiento previo.",
     "share_li4": "Gestores de instalaciones deportivas, únicamente los datos necesarios para tu reserva.",
     "share_li5": "Autoridades públicas, cuando exista una obligación legal",
-    "share_box": "<strong>Transferencias</strong> internacionales: Si algún proveedor fuera del Espacio Económico Europeo, la transferencia estará amparada por decisiones de adecuación de la Comisión Europea o Cláusulas Contractuales Tipo",
+    "share_box": "Transferencias internacionales: Si algún proveedor fuera del Espacio Económico Europeo, la transferencia estará amparada por decisiones de adecuación de la Comisión Europea o Cláusulas Contractuales Tipo",
 
     "rights_title": "Tus derechos",
-    "rights_text1": "El RGPD te reconoce los siguientes derechos sobre tus datos. Puedes ejercerlos escribiendo a <strong>privacidad@allcourts.com</strong>. Responderemos en un máximo de 30 días.",
+    "rights_text1": "El RGPD te reconoce los siguientes derechos sobre tus datos. Puedes ejercerlos escribiendo a privacy@allcourts.com. Responderemos en un máximo de 30 días.",
     "rights_box1_emoji": "👁️",
     "rights_box1_title": "Acceso",
     "rights_box1_text": "Saber qué datos tenemos sobre ti",
@@ -469,9 +469,14 @@
     "security_li5": "Plan de respuesta ante brechas con notificación a la AEPD en menos de 72 horas si procede.",
 
     "minor_title": "Menores de edad",
+    "minor_text": "Nuestro servicio está dirigido a personas mayores de 14 años. Si detectas que un menor nos ha facilitado datos sin autorización de su tutor legal, contáctanos en privacy@allcourts.com para proceder a su eliminación inmediata.",
 
     "changes_title": "Cambios en esta política",
+    "changes_text": "Podemos actualizar esta política para reflejar cambios en el servicio o en la legislación. Si los cambios son relevantes, te lo notificaremos por email o mediante un aviso en la plataforma antes de que entren en vigor.",
 
-    "contact": "Contacto"
+    "contact_title": "Contacto",
+    "contact_header": "¿Tienes alguna pregunta?",
+    "contact_text": "Nuestro equipo de privacidad responde en menos de 48 horas hábiles",
+    "contact_button": "Contáctanos"
   }
 }
