@@ -1,11 +1,23 @@
+//#region MODULES
 import Link from "next/link";
 import { useState } from "react";
 import styles from "@/styles/pages/Login.module.scss";
 import { useTranslation } from "react-i18next";
+//#endregion
 
+/**
+ * @page Login
+ * Página de inicio de sesión con selector de rol (jugador o club).
+ *
+ * State:
+ *   role → rol activo en el toggle ('player' | 'club'), por defecto 'player'
+ */
 export default function Login() {
+  //#region VARIABLES
   const { t } = useTranslation();
+  // Controla qué tipo de usuario está intentando iniciar sesión
   const [role, setRole] = useState<"player" | "club">("player");
+  //#endregion
 
   return (
     <div className={styles.container}>

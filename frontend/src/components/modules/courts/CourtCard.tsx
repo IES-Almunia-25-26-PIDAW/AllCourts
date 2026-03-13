@@ -28,6 +28,7 @@ interface CourtCardProps {
 //#endregion
 
 const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
+  //#region VARIABLES
   const entryPrice =
     court.min_unit_min <= 60
       ? court.price_60
@@ -41,7 +42,8 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
       : court.min_unit_min <= 90
         ? "90 min"
         : "120 min";
-
+  //#endregion
+  
   return (
     <div className={styles.courtCard}>
       <div className={styles.cardLink}>

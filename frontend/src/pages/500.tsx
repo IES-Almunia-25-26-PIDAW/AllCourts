@@ -1,9 +1,19 @@
+//#region MODULES
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import styles from '@/styles/pages/404.module.scss';
+//#endregion
 
+/**
+ * @page Custom500
+ * Página de error 500 personalizada que Next.js muestra cuando
+ * ocurre un error interno en el servidor.
+ * Muestra un mensaje traducido y un enlace para volver al inicio.
+ */
 export default function Custom500() {
+    //#region VARIABLES
     const { t } = useTranslation();
+    //#endregion
 
     return (
         <div className={styles.container}>
