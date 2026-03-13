@@ -3,9 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Manager = require("../models/Manager");
 
-const SALT_ROUNDS = 10;
-const JWT_SECRET = process.env.JWT_SECRET || "changeme"; //! Cambiar y añadir .env
-const JWT_EXPIRES_IN = "7d";
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS) || 10;
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 /**
  * @module authController
