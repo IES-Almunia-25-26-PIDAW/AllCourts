@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const User = require("../models/User");
 const Manager = require("../models/Manager");
+const { sendVerificationEmail } = require("../services/emailService");
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS) || 10;
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -59,6 +61,12 @@ const authController = {
 
             const userId = result.insertId;
 
+            // Generar token de verificación y enviarlo por email
+            const verificationToken = crypto.randomBytes(32).toString("hex");
+            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            await User.setVerificationToken(userId, verificationToken, expiresAt);
+            await sendVerificationEmail(email, verificationToken);
+
             // Si se registra como manager, crear también su fila en managers
             if (userRole === "manager") {
                 await Manager.create({
@@ -106,16 +114,25 @@ const authController = {
             if (!match)
                 return res.status(401).json({ message: "Invalid credentials" });
 
+            if (!user.is_verified)
+                return res.status(403).json({ message: "Please verify your email before logging in" });
+
             // Actualizar timestamp de último acceso
             await User.updateLastLogin(user.id);
 
-            const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
-                expiresIn: JWT_EXPIRES_IN,
-            });
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    role: user.role,
+                    name: user.name,
+                    email: user.email,
+                    username: user.username,
+                },
+                JWT_SECRET,
+                { expiresIn: JWT_EXPIRES_IN }
+            );
 
-            // Excluir campos sensibles de la respuesta
-            const { password: _pw, verification_token: _vt, ...safeUser } = user;
-            res.json({ token, user: safeUser });
+            res.json({ token });
         } catch (err) {
             next(err);
         }
