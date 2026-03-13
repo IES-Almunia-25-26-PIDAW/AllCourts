@@ -1,13 +1,31 @@
+//#region MODULES
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Court, SURFACE_LABELS, SPORT_LABELS } from "@/types/court";
 import { formatPrice } from "@/utils/formatters";
 import styles from "./CourtCard.module.scss";
+//#endregion
 
+/**
+ * @component CourtCard
+ * Tarjeta visual que representa una pista en el listado.
+ * Muestra la imagen, deporte, precio de entrada, tipo de superficie,
+ * descripción recortada, tabla de precios por duración y botón de reserva.
+ *
+ * Props:
+ *   court → objeto Court con todos los datos de la pista (type court.ts) (imagen, nombre, descripción, precios, etc.)
+ *
+ * Lógica de precio de entrada:
+ *   Se muestra el precio correspondiente a la duración mínima reservable.
+ *   Si min_unit_min ≤ 60 → price_60 / Si ≤ 90 → price_90 / Si no → price_120
+ */
+
+//#region TYPES
 interface CourtCardProps {
   court: Court;
 }
+//#endregion
 
 const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
   const entryPrice =
