@@ -102,8 +102,8 @@ cd allcourts
 
 ### 2. Configurar la base de datos
 ```bash
-# Crear la base de datos en MySQL
-mysql -u root -p < database/schema.sql
+# Opcional: crear la base de datos manualmente (si no existe)
+# CREATE DATABASE allcourts_db;
 ```
 
 ### 3. Configurar el Backend
@@ -111,13 +111,11 @@ mysql -u root -p < database/schema.sql
 cd backend
 npm install
 
-# Crear archivo .env con las variables de entorno
-# DB_HOST=localhost
-# DB_USER=tu_usuario
-# DB_PASSWORD=tu_contraseña
-# DB_NAME=allcourts
-# JWT_SECRET=tu_secreto_jwt
-# PORT=5000
+# Crear archivo .env a partir de backend/.env.example
+# y ajustar valores reales de tu entorno
+
+# Ejecutar migraciones
+npm run migrate:up
 
 npm run dev
 ```
@@ -209,6 +207,10 @@ Los usuarios pueden cambiar el idioma desde la interfaz.
 ```bash
 npm run dev      # Iniciar servidor en modo desarrollo
 npm start        # Iniciar servidor en producción
+npm run migrate:up      # Aplicar migraciones pendientes
+npm run migrate:down    # Revertir la ultima migracion
+npm run migrate:status  # Ver estado de migraciones
+npm run migrate:create -- nombre_migracion  # Crear nueva migracion
 ```
 
 ### Frontend
