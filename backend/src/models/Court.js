@@ -1,5 +1,21 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module Court
+ * Modelo de datos para la gestión de pistas deportivas.
+ * Encapsula las operaciones SQL sobre la tabla `courts`.
+ *
+ * Cada método devuelve una Promise de `pool.execute()`,
+ * que se gestiona mediante `await`.
+ *
+ * Relaciones:
+ *   courts → clubs  (c.club_id = cl.id)
+ *
+ * Precios almacenados por duración: price_60, price_90, price_120 (en minutos).
+ * `min_unit_min` define el mínimo de reserva en minutos (por defecto 30).
+ */
 const Court = {
   create: (court) => {
     const sql = `INSERT INTO courts

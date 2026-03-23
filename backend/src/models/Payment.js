@@ -1,5 +1,22 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module Payment
+ * Modelo de datos para la gestión de pagos.
+ * Encapsula las operaciones SQL sobre la tabla `payments`.
+ *
+ * Cada método devuelve una Promise de `pool.execute()`,
+ * que se gestiona mediante `await`.
+ *
+ * Relaciones:
+ *   payments → bookings  (p.booking_id  = b.id)
+ *   bookings → users     (b.user_id     = u.id)
+ *   bookings → courts    (b.court_id    = c.id)
+ *   courts   → clubs     (c.club_id     = cl.id)
+ *   clubs    → managers  (cl.manager_id = m.id)
+ */
 const Payment = {
   create: (payment) => {
     const sql = `INSERT INTO payments 

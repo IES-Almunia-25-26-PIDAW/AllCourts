@@ -1,5 +1,17 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module User
+ * Modelo de datos para la gestión de usuarios.
+ * Encapsula las operaciones SQL sobre la tabla `users`.
+ *
+ * Cada método devuelve una Promise de `pool.execute()`.
+ *
+ * `getByEmail` y `getByUsername` devuelven todos los campos incluido `password`
+ * y `verification_token` — usar solo internamente, nunca exponer en respuestas.
+ */
 const User = {
   create: (user) => {
     const sql = `INSERT INTO users 

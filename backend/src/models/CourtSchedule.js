@@ -1,5 +1,22 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module CourtSchedule
+ * Modelo de datos para la gestión de horarios de pistas.
+ * Encapsula las operaciones SQL sobre la tabla `court_schedules`.
+ *
+ * Cada método devuelve una Promise de `pool.execute()`,
+ * que se gestiona mediante `await`.
+ *
+ * Relaciones:
+ *   court_schedules → courts  (court_id = c.id)
+ *
+ * `day_of_week` sigue la convención del proyecto: 0 = domingo … 6 = sábado.
+ * `upsert` es la operación principal para definir horarios — evita
+ * duplicados por (court_id, day_of_week) usando ON DUPLICATE KEY UPDATE.
+ */
 const CourtSchedule = {
   create: (schedule) => {
     const sql = `INSERT INTO court_schedules

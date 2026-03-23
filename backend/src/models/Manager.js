@@ -1,5 +1,23 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module Manager
+ * Modelo de datos para la gestión de managers de clubes.
+ * Encapsula las operaciones SQL sobre la tabla `managers`.
+ *
+ * Cada método devuelve una Promise de `pool.execute()`,
+ * que se gestiona mediante `await`.
+ *
+ * Relaciones:
+ *   managers → users   (m.user_id    = u.id)
+ *   managers → clubs   (cl.manager_id = m.id)
+ *   clubs    → courts  (c.club_id    = cl.id)
+ *
+ * `getStats` agrega pistas, reservas e ingresos totales del manager
+ * mediante LEFT JOINs para no excluir managers sin actividad.
+ */
 const Manager = {
   create: (manager) => {
     const sql = `INSERT INTO managers 
