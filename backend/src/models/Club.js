@@ -1,5 +1,19 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module Club
+ * Modelo de datos para la gestión de clubes deportivos.
+ * Encapsula las operaciones SQL sobre la tabla `clubs`.
+ *
+ * Cada método devuelve una Promise de `pool.execute()`, 
+ * que se gestiona mediante `await`.
+ *
+ * Relaciones:
+ *   clubs → managers  (cl.manager_id = m.id)
+ *   managers → users  (m.user_id     = u.id)
+ */
 const Club = {
   create: (club) => {
     const sql = `INSERT INTO clubs

@@ -1,5 +1,22 @@
+//#region MODULES
 const { pool } = require("../config/db");
+//#endregion
 
+/**
+ * @module Booking
+ * Modelo de datos para la gestión de reservas de pistas.
+ * Encapsula todas las operaciones SQL sobre la tabla `bookings`,
+ * actuando como capa de acceso a datos (DAL) entre la lógica de negocio
+ * y la base de datos MySQL.
+ *
+ * Cada método devuelve una Promise resuelta por `pool.execute()`,
+ * que se gestiona mediante `await`.
+ *
+ * Relaciones:
+ *   bookings → users    (b.user_id  = u.id)
+ *   bookings → courts   (b.court_id = c.id)
+ *   courts   → clubs    (c.club_id  = cl.id)
+ */
 const Booking = {
   create: (booking) => {
     const sql = `INSERT INTO bookings 
