@@ -129,7 +129,35 @@ npm install
 npm run dev
 ```
 
-### 5. Acceder a la aplicación
+### 5. Despliegue con Docker
+Si quieres levantar todo el stack con Docker, usa docker-compose desde la raíz del proyecto:
+
+```bash
+git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
+cd AllCourts
+docker compose up --build -d
+```
+
+Esto crea y levanta los siguientes servicios:
+- `db`: MySQL 8.4
+- `backend`: API en Node/Express en el puerto `5000`
+- `frontend`: Next.js en el puerto `3000`
+
+Verifica el estado con:
+
+```bash
+docker compose ps
+```
+
+Para detener y eliminar los contenedores, redes y volúmenes creados:
+
+```bash
+docker compose down
+```
+
+> Nota: el backend en `docker-compose.yml` ya define las variables de entorno necesarias para la base de datos y JWT en modo producción.
+
+### 6. Acceder a la aplicación
 - **Frontend:** http://localhost:3000
 - **Backend API:** http://localhost:5000
 
