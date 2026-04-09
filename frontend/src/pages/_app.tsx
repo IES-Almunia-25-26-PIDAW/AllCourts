@@ -2,10 +2,14 @@
 import "@/styles/globals.scss";
 import "@/config/i18n";
 import type { AppProps } from "next/app";
+import { useEffect } from "react";
+import { Provider } from "react-redux";
 import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import LanguageDetector from "@/components/ui/LanguageDetector";
+import store from "@/store";
+import { hydrateAuth, clearAuth } from "@/store/slices/authSlice";
 //#endregion
 
 /**
@@ -25,14 +29,39 @@ import LanguageDetector from "@/components/ui/LanguageDetector";
  *     Footer           → pie de página global
  */
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    const token = window.localStorage.getItem("allcourts_token");
+    const user = window.localStorage.getItem("allcourts_user");
+
+    if (!token || !user) {
+      store.dispatch(clearAuth());
+      return;
+    }
+
+    try {
+      store.dispatch(
+        hydrateAuth({
+          token,
+          user: JSON.parse(user),
+        })
+      );
+    } catch {
+      window.localStorage.removeItem("allcourts_token");
+      window.localStorage.removeItem("allcourts_user");
+      store.dispatch(clearAuth());
+    }
+  }, []);
+
   return (
-    <ErrorBoundary>
-      <LanguageDetector />
-      <Navbar />
-      <main>
-        <Component {...pageProps} />
-      </main>
-      <Footer />
-    </ErrorBoundary>
+    <Provider store={store}>
+      <ErrorBoundary>
+        <LanguageDetector />
+        <Navbar />
+        <main>
+          <Component {...pageProps} />
+        </main>
+        <Footer />
+      </ErrorBoundary>
+    </Provider>
   );
 }

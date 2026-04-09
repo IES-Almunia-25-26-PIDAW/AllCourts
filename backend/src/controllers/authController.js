@@ -5,9 +5,9 @@ const User = require("../models/User");
 const Manager = require("../models/Manager");
 const { sendVerificationEmail } = require("../services/emailService");
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS) || 10;
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
 /**
  * @module authController
