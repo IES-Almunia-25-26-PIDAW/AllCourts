@@ -38,6 +38,9 @@ services:
       JWT_SECRET: change_me_in_production
       JWT_EXPIRES_IN: 7d
       SALT_ROUNDS: 10
+      MAIL_USER: changeme@gmail.com
+      MAIL_PASS: change_me_in_production
+      APP_URL: http://localhost:3000
     command: >
       sh -c "
       npx db-migrate up --env production --config ./src/db/database.json --migrations-dir ./src/db/migrations
