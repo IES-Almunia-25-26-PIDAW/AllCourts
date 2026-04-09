@@ -172,9 +172,19 @@ environment:
   MAIL_USER: changeme@gmail.com
   MAIL_PASS: change_me_in_production
   APP_URL: http://localhost:3000/
+  CORS_ORIGINAL: http://localhost:3000
 ```
 
 Si necesitas probar el envío de correos, sustituye `MAIL_USER` y `MAIL_PASS` por credenciales válidas de prueba. Para desarrollo local, `APP_URL` debe apuntar al frontend.
+
+#### Variables de entorno del frontend
+El frontend usa una variable pública para saber a qué URL debe hacer las peticiones al backend:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
+
+Si trabajas con Docker, esta URL debe apuntar al backend publicado en tu entorno local. Si trabajas sin Docker, puedes usar la misma dirección siempre que el backend esté arrancado en `localhost:5000`.
 
 ### 6. Acceder a la aplicación
 - **Frontend:** http://localhost:3000
