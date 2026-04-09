@@ -155,7 +155,26 @@ Para detener y eliminar los contenedores, redes y volúmenes creados:
 docker compose down
 ```
 
-> Nota: el backend en `docker-compose.yml` ya define las variables de entorno necesarias para la base de datos y JWT en modo producción.
+#### Variables de entorno del backend en Docker
+El servicio `backend` utiliza estas variables de entorno. Los valores de abajo son solo de ejemplo y deben adaptarse a tu entorno:
+
+```yaml
+environment:
+  PORT: 5000
+  DB_HOST: db
+  DB_PORT: 3306
+  DB_USER: allcourts
+  DB_PASSWORD: allcourts
+  DB_NAME: allcourts_db
+  JWT_SECRET: change_me_in_production
+  JWT_EXPIRES_IN: 7d
+  SALT_ROUNDS: 10
+  MAIL_USER: changeme@gmail.com
+  MAIL_PASS: change_me_in_production
+  APP_URL: http://localhost:3000/
+```
+
+Si necesitas probar el envío de correos, sustituye `MAIL_USER` y `MAIL_PASS` por credenciales válidas de prueba. Para desarrollo local, `APP_URL` debe apuntar al frontend.
 
 ### 6. Acceder a la aplicación
 - **Frontend:** http://localhost:3000
