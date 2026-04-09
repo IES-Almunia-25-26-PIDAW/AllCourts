@@ -1,5 +1,6 @@
 const Booking = require("../models/Booking");
 const Court = require("../models/Court");
+const CourtSchedule = require("../models/CourtSchedule");
 
 /**
  * @module bookingController
@@ -56,10 +57,37 @@ const bookingController = {
             const { court_id, date, start_time, end_time, duration_min } = req.body;
             const user_id = req.user.id; // Viene del JWT decodificado por authMiddleware
 
+            const requestedDate = new Date(`${date}T12:00:00`);
+            const dayOfWeek = requestedDate.getDay();
+
             // Paso 1: comprobar que la pista existe y obtener sus precios
             const [courts] = await Court.getById(court_id);
             if (courts.length === 0)
                 return res.status(404).json({ message: "Court not found" });
+
+            // Paso 1.1: comprobar que la pista tiene horario para ese día y que está abierta
+            const [scheduleRows] = await CourtSchedule.getByCourtAndDay(
+                court_id,
+                dayOfWeek
+            );
+            if (scheduleRows.length === 0) {
+                return res
+                    .status(409)
+                    .json({ message: "Court schedule is required for this day" });
+            }
+
+            const schedule = scheduleRows[0];
+            if (schedule.is_closed) {
+                return res
+                    .status(409)
+                    .json({ message: "Court is closed on the requested day" });
+            }
+
+            if (start_time < schedule.opening_time || end_time > schedule.closing_time) {
+                return res
+                    .status(409)
+                    .json({ message: "Requested time is outside court opening hours" });
+            }
 
             // Paso 2: verificar que no hay solapamiento con otras reservas no canceladas
             const [conflicts] = await Booking.checkAvailability(

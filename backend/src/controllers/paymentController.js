@@ -35,7 +35,7 @@ const paymentController = {
                 booking_id,
                 amount,
                 payment_date: payment_date || null, // Si no se indica, la BD usa CURRENT_TIMESTAMP
-                status,
+                status: status || "success",
                 method,
             });
             res.status(201).json({
