@@ -1,6 +1,5 @@
 //#region MODULES
 const express = require("express");
-const router = express.Router();
 const authController = require("../controllers/authController");
 const authMiddleware = require("../middlewares/authMiddleware");
 //#endregion
@@ -14,6 +13,8 @@ const authMiddleware = require("../middlewares/authMiddleware");
  * GET   /auth/me              → Perfil del usuario autenticado (requiere token)
  * GET   /auth/verify/:token   → Verificación de email
  */
+const router = express.Router();
+
 router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.get("/me", authMiddleware, authController.me);
