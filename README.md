@@ -41,7 +41,7 @@
 - **Estado:** Redux Toolkit para gestión de estado global
 - **Estilos:** SCSS/CSS Modules
 - **Internacionalización:** i18next para soporte multiidioma
-- **API Client:** Axios para comunicación con el backend
+- **API Client:** helpers `fetch` tipados para comunicación con el backend
 
 ### Backend
 
@@ -129,6 +129,12 @@ npm run dev
 
 El proyecto incluye una migración de datos de ejemplo para que puedas probar el flujo desde el primer arranque. Al levantar la base de datos tendrás un club demo y varias pistas cargadas.
 
+El flujo principal de navegación del frontend es:
+
+```text
+/clubs -> /clubs/:id -> /courts/court -> /courts/:id
+```
+
 ### 4. Configurar el Frontend
 
 ```bash
@@ -210,6 +216,10 @@ El recorrido principal de la interfaz es:
 ```text
 /clubs -> /clubs/:id -> /courts/court -> /courts/:id
 ```
+
+### Datos de ejemplo
+
+Para desarrollo local se incluye una migración de seed con un club demo, un manager y varias pistas. Si la interfaz te aparece vacía, normalmente significa que no se han ejecutado las migraciones o que la base de datos no contiene todavía esa seed.
 
 ---
 
