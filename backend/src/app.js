@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-	const FRONTEND_URL = process.env.FRONTEND_URL;
+	const FRONTEND_URL = process.env.CORS_ORIGINAL || process.env.FRONTEND_URL;
 	res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
 	res.setHeader("Access-Control-Allow-Credentials", "true");
 	res.setHeader(
