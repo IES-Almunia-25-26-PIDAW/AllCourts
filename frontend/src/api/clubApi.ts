@@ -1,6 +1,6 @@
 import type { Club } from "@/types/club";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Client API para consultar clubes desde el backend.
