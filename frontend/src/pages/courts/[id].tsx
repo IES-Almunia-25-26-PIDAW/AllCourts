@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getCourtById } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import type { CourtWithClub } from "@/types/court";
+import styles from "./CourtDetail.module.scss";
 
+//#region DOCUMENTATION
 /**
- * Detalle de pista.
- * Vuelve al club de origen para mantener el flujo club -> club[id] -> court -> court[id].
+ * @page CourtDetail
+ * Vista de detalle de una pista.
+ * Mantiene el retorno al club de origen para respetar el flujo club -> club[id] -> court -> court[id].
+ *
+ * Secciones:
+ *   Hero       → imagen principal, nombre, club y superficie
+ *   PriceCard  → precios por duración y nota de siguiente paso
+ *   BackLink   → navegación de retorno al club
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function CourtDetailPage() {
   const router = useRouter();
   const [court, setCourt] = useState<CourtWithClub | null>(null);
@@ -48,21 +60,17 @@ export default function CourtDetailPage() {
 
   if (loading) {
     return (
-      <main
-        style={{ maxWidth: "1100px", margin: "0 auto", padding: "32px 20px" }}
-      >
-        <p>Cargando pista...</p>
+      <main className={styles.page}>
+        <p className={styles.status}>Cargando pista...</p>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main
-        style={{ maxWidth: "1100px", margin: "0 auto", padding: "32px 20px" }}
-      >
-        <p style={{ color: "#c62828" }}>{error}</p>
-        <Link href={backHref} style={{ color: "#0d5efd" }}>
+      <main className={styles.page}>
+        <p className={styles.errorText}>{error}</p>
+        <Link href={backHref} className={styles.backLink}>
           Volver al club
         </Link>
       </main>
@@ -71,11 +79,9 @@ export default function CourtDetailPage() {
 
   if (!court) {
     return (
-      <main
-        style={{ maxWidth: "1100px", margin: "0 auto", padding: "32px 20px" }}
-      >
+      <main className={styles.page}>
         <p>No se encontró la pista.</p>
-        <Link href={backHref} style={{ color: "#0d5efd" }}>
+        <Link href={backHref} className={styles.backLink}>
           Volver al club
         </Link>
       </main>
@@ -85,137 +91,70 @@ export default function CourtDetailPage() {
   const coverImage = court.image_url || "/logoallcourts.png";
 
   return (
-    <main
-      style={{
-        maxWidth: "1100px",
-        margin: "0 auto",
-        padding: "32px 20px 64px",
-      }}
-    >
-      <Link
-        href={backHref}
-        style={{ color: "#0d5efd", textDecoration: "none" }}
-      >
+    <main className={styles.page}>
+      <Link href={backHref} className={styles.backLink}>
         ← Volver al club
       </Link>
 
-      <section
-        style={{
-          marginTop: "20px",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: "24px",
-          alignItems: "start",
-        }}
-      >
-        <div
-          style={{
-            minHeight: "320px",
-            borderRadius: "20px",
-            backgroundImage: `url(${coverImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            boxShadow: "0 16px 40px rgba(0, 0, 0, 0.08)",
-          }}
-        />
+      <section className={styles.hero}>
+        <div className={styles.heroImage}>
+          <Image
+            src={coverImage}
+            alt={court.name}
+            fill
+            className={styles.heroImageMedia}
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
 
         <div>
-          <p style={{ margin: 0, color: "#0d5efd", fontWeight: 700 }}>
-            {SPORT_LABELS[court.sport]}
-          </p>
+          <p className={styles.sportTag}>{SPORT_LABELS[court.sport]}</p>
 
-          <h1 style={{ margin: "10px 0 8px", fontSize: "2rem" }}>
-            {court.name}
-          </h1>
+          <h1 className={styles.title}>{court.name}</h1>
 
-          <p style={{ margin: "0 0 14px", color: "#666", fontSize: "1rem" }}>
+          <p className={styles.meta}>
             {court.club_name ? court.club_name : "Club sin nombre"}
             {court.city ? ` · ${court.city}` : ""}
           </p>
 
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-              marginBottom: "18px",
-            }}
-          >
-            <span
-              style={{
-                background: "#f2f4f7",
-                padding: "8px 12px",
-                borderRadius: "999px",
-              }}
-            >
+          <div className={styles.chips}>
+            <span className={styles.chip}>
               Superficie: {SURFACE_LABELS[court.surface_type]}
             </span>
-            <span
-              style={{
-                background: "#f2f4f7",
-                padding: "8px 12px",
-                borderRadius: "999px",
-              }}
-            >
+            <span className={styles.chip}>
               Dirección: {court.address || "No disponible"}
             </span>
           </div>
 
-          <p style={{ lineHeight: 1.7, color: "#444" }}>
+          <p className={styles.description}>
             {court.description || "Sin descripción disponible."}
           </p>
 
-          <div
-            style={{
-              marginTop: "24px",
-              padding: "18px",
-              borderRadius: "18px",
-              border: "1px solid #e7e7e7",
-              background: "#fff",
-            }}
-          >
-            <h2 style={{ margin: "0 0 14px", fontSize: "1.2rem" }}>Precios</h2>
+          <div className={styles.priceCard}>
+            <h2 className={styles.priceTitle}>Precios</h2>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-                gap: "12px",
-              }}
-            >
-              <div
-                style={{
-                  background: "#f8f8f8",
-                  borderRadius: "12px",
-                  padding: "12px",
-                }}
-              >
-                <p style={{ margin: 0, color: "#666" }}>60 min</p>
-                <strong>{formatPrice(Number(court.price_60))}</strong>
+            <div className={styles.priceGrid}>
+              <div className={styles.priceItem}>
+                <p className={styles.priceLabel}>60 min</p>
+                <strong className={styles.priceValue}>
+                  {formatPrice(Number(court.price_60))}
+                </strong>
               </div>
-              <div
-                style={{
-                  background: "#f8f8f8",
-                  borderRadius: "12px",
-                  padding: "12px",
-                }}
-              >
-                <p style={{ margin: 0, color: "#666" }}>90 min</p>
-                <strong>{formatPrice(Number(court.price_90))}</strong>
+              <div className={styles.priceItem}>
+                <p className={styles.priceLabel}>90 min</p>
+                <strong className={styles.priceValue}>
+                  {formatPrice(Number(court.price_90))}
+                </strong>
               </div>
-              <div
-                style={{
-                  background: "#f8f8f8",
-                  borderRadius: "12px",
-                  padding: "12px",
-                }}
-              >
-                <p style={{ margin: 0, color: "#666" }}>120 min</p>
-                <strong>{formatPrice(Number(court.price_120))}</strong>
+              <div className={styles.priceItem}>
+                <p className={styles.priceLabel}>120 min</p>
+                <strong className={styles.priceValue}>
+                  {formatPrice(Number(court.price_120))}
+                </strong>
               </div>
             </div>
 
-            <p style={{ marginTop: "14px", color: "#666" }}>
+            <p className={styles.note}>
               La reserva se conectará en el siguiente paso.
             </p>
           </div>
@@ -224,3 +163,4 @@ export default function CourtDetailPage() {
     </main>
   );
 }
+//#endregion

@@ -127,7 +127,7 @@ export default function Home() {
 
       <section className={styles.featuresSection}>
         <div className={styles.container}>
-          <h2 className={styles.sectionTitle} style={{ color: "white" }}>
+          <h2 className={`${styles.sectionTitle} ${styles.sectionTitleLight}`}>
             {t("home.feats_title")}
           </h2>
           <div className={styles.benefitsGrid}>

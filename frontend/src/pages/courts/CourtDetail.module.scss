@@ -1,0 +1,121 @@
+//#region MODULES
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  color: #2c3e50;
+}
+
+.backLink {
+  color: #0059ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.status {
+  color: #666;
+}
+
+.errorText {
+  color: #c62828;
+}
+
+.hero {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.heroImage {
+  position: relative;
+  min-height: 320px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.heroImageMedia {
+  object-fit: cover;
+}
+
+.sportTag {
+  margin: 0;
+  color: #0059ff;
+  font-weight: 700;
+}
+
+.title {
+  margin: 10px 0 8px;
+  font-size: 2.4rem;
+  line-height: 1.15;
+}
+
+.meta {
+  margin: 0 0 14px;
+  color: #666;
+  font-size: 1rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.chip {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #444;
+}
+
+.description {
+  line-height: 1.7;
+  color: #444;
+  font-size: 1rem;
+}
+
+.priceCard {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid #e7e7e7;
+  background: #fff;
+}
+
+.priceTitle {
+  margin: 0 0 14px;
+  font-size: 1.2rem;
+}
+
+.priceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.priceItem {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid #e7e7e7;
+}
+
+.priceLabel {
+  margin: 0;
+  color: #666;
+}
+
+.priceValue {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.note {
+  margin-top: 14px;
+  color: #666;
+}
+//#endregion

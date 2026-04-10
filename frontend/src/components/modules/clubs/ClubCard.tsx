@@ -11,9 +11,15 @@ import styles from "./ClubCard.module.scss";
  * Muestra el logo, ciudad, nombre, descripción recortada, dirección
  * y el número de pistas disponibles.
  *
- * Props:
- *   club        → objeto Club con los datos del club (type club.ts) (logo, nombre, descripción, etc.)
+ * Propiedades:
+ *   club        → objeto con los datos del club (logo, nombre, descripción, etc.)
  *   courtCount  → número de pistas del club (opcional, no se muestra si no se pasa)
+ *   href        → ruta de navegación al detalle del club
+ *
+ * Comportamiento:
+ *   - Recorta la descripción para mantener la tarjeta compacta.
+ *   - Reutiliza next/image para optimizar la imagen del club.
+ *   - Navega al detalle completo al pulsar sobre la tarjeta.
  */
 
 //#region TYPES
@@ -24,6 +30,7 @@ interface ClubCardProps {
 }
 //#endregion
 
+//#region FUNCTIONS
 const ClubCard = ({ club, href, courtCount }: ClubCardProps) => {
   const coverImage = club.logo_url || "/logoallcourts.png";
   const description = club.description || "Sin descripción disponible.";
@@ -67,5 +74,6 @@ const ClubCard = ({ club, href, courtCount }: ClubCardProps) => {
     </Link>
   );
 };
+//#endregion
 
 export default ClubCard;
