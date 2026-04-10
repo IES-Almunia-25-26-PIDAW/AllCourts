@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import styles from "@/styles/pages/Profile.module.scss";
 import { clearAuth, setAuth } from "@/store/slices/authSlice";
 import { logout as logoutRequest } from "@/api/authApi";
+import { updateUser, updateUserForm } from "@/api/userApi";
 
 export default function ProfilePage() {
   const user = useSelector((state: any) => state.auth.user);
@@ -56,17 +57,28 @@ export default function ProfilePage() {
     if (!user) return;
     setSaving(true);
     setSaveMessage(null);
-
     try {
-      const updatedUser = {
-        ...user,
-        name: name.trim() || user.name,
-        username: username.trim() || user.username,
-        avatar_url: avatarPreview ?? user.avatar_url,
-      };
+      let serverUser: any = null;
 
-      dispatch(setAuth(updatedUser));
-      try { window.localStorage.setItem("allcourts_user", JSON.stringify(updatedUser)); } catch {}
+      if (avatarFile) {
+        const fd = new FormData();
+        fd.append("name", name.trim() || user.name);
+        fd.append("username", username.trim() || user.username);
+        if (user?.phone) fd.append("phone", user.phone);
+        fd.append("avatar", avatarFile);
+        serverUser = await updateUserForm(user.id, fd);
+      } else {
+        const payload = {
+          name: name.trim() || user.name,
+          username: username.trim() || user.username,
+          avatar_url: avatarPreview ?? user.avatar_url,
+        };
+        await updateUser(user.id, payload);
+        serverUser = { ...user, ...payload };
+      }
+
+      dispatch(setAuth(serverUser));
+      try { window.localStorage.setItem("allcourts_user", JSON.stringify(serverUser)); } catch {}
       setSaveMessage("Guardado");
     } catch (err) {
       setSaveMessage("Error al guardar");
