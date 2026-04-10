@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getClubs, type ClubWithManager } from "@/api/clubApi";
+import { getClubs } from "@/api/clubApi";
+import type { ClubWithManager } from "@/types/club";
 
 /**
  * Pantalla principal de clubes.

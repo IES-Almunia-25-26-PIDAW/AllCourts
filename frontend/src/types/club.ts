@@ -9,6 +9,11 @@ export interface Club {
   created_at?: string;
 }
 
+export interface ClubWithManager extends Club {
+  manager_name?: string;
+  manager_email?: string;
+}
+
 export interface CreateClubDTO {
   manager_id: number;
   name: string;
