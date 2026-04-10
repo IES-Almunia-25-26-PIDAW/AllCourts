@@ -17,7 +17,7 @@
   "footer": {
     "text": "AllCourts. All rights reserved.",
     "column1_title": "AllCourts",
-    "column1_link1": "Courts",
+    "column1_link1": "Clubs",
     "column1_link2": "Register",
     "column1_link3": "Log in",
     "column2_title": "Legal",
@@ -260,7 +260,7 @@
     "cta_title": "Ready to play?",
     "cta_text": "Join thousands players that already enjoy AllCourts",
     "signup_button": "Sign up for free",
-    "explore_button": "Explore courts"
+    "explore_button": "Explore clubs"
   },
   "cookies": {
     "title": "Cookie Policy",

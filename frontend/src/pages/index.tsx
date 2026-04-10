@@ -218,7 +218,7 @@ export default function Home() {
             <Link href="/register" className={styles.primaryBtn}>
               {t("home.signup_button")}
             </Link>
-            <Link href="/courts/court" className={styles.secondaryBtn}>
+            <Link href="/clubs" className={styles.secondaryBtn}>
               {t("home.explore_button")}
             </Link>
           </div>
