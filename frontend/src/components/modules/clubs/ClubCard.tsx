@@ -46,11 +46,15 @@ const ClubCard = ({ club, href, courtCount }: ClubCardProps) => {
           <p className={styles.name}>{club.name}</p>
 
           <p className={styles.desc}>
-            {description.length > 90 ? `${description.slice(0, 90)}...` : description}
+            {description.length > 90
+              ? `${description.slice(0, 90)}...`
+              : description}
           </p>
 
           <div className={styles.footer}>
-            <span className={styles.address}>{club.address || "Sin dirección"}</span>
+            <span className={styles.address}>
+              {club.address || "Sin dirección"}
+            </span>
 
             {courtCount !== undefined && (
               <span className={styles.count}>

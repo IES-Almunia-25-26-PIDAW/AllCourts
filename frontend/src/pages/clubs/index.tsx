@@ -105,11 +105,7 @@ export default function ClubsPage() {
         <section style={gridStyle}>
           {filteredClubs.map((club) => {
             return (
-              <ClubCard
-                key={club.id}
-                club={club}
-                href={`/clubs/${club.id}`}
-              />
+              <ClubCard key={club.id} club={club} href={`/clubs/${club.id}`} />
             );
           })}
         </section>
