@@ -5,21 +5,30 @@ import styles from "@/styles/pages/Home.module.scss";
 import { useTranslation } from "react-i18next";
 //#endregion
 
+//#region DOCUMENTATION
 /**
  * @page Home
  * Página de inicio y landing principal de la aplicación.
  * Compuesta por secciones estáticas totalmente traducidas vía i18n.
  *
  * Secciones:
- *   Hero        → título, subtítulo y buscador de pistas
- *   About       → descripción de qué es AllCourts
- *   Sports      → deportes disponibles en la plataforma
- *   Players     → pasos para reservar como jugador
- *   Features    → ventajas y funcionalidades destacadas
- *   Managers    → llamada a la acción para gestores de clubs
+ *   Hero         → título, subtítulo y buscador de pistas
+ *   About        → descripción de qué es AllCourts
+ *   Sports       → deportes disponibles en la plataforma
+ *   Players      → pasos para reservar como jugador
+ *   Features     → ventajas y funcionalidades destacadas
+ *   Managers     → llamada a la acción para gestores de clubs
  *   Testimonials → reseñas de usuarios
- *   CTA         → botones finales de registro y exploración
+ *   CTA          → botones finales de registro y exploración
+ *
+ * Comportamiento:
+ *   - Lee toda la copy desde i18n para mantener la página sin texto hardcodeado.
+ *   - Reutiliza secciones visuales consistentes con el resto de la landing.
+ *   - Mantiene el flujo de registro y exploración como acciones principales.
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function Home() {
   //#region VARIABLES
   const { t, i18n } = useTranslation();
@@ -227,3 +236,4 @@ export default function Home() {
     </main>
   );
 }
+//#endregion

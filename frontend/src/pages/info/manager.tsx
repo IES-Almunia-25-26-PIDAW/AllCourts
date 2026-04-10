@@ -2,9 +2,10 @@
 import styles from "./Manager.module.scss";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
-import Link from "next/dist/client/link";
+import Link from "next/link";
 //#endregion
 
+//#region DOCUMENTATION
 /**
  * @page Infomanager
  * Landing informativa dirigida a gestores de clubs.
@@ -12,15 +13,23 @@ import Link from "next/dist/client/link";
  * suscripción y FAQ para convencer al gestor de registrarse.
  *
  * Secciones:
- *   Hero          → título e imagen introductoria
- *   Benefits      → tres beneficios clave para el gestor
- *   Dashboard     → funcionalidades del panel de control
- *   Pricing       → tres planes de suscripción (29€ / 79€ / 199€)
- *   Testimonials  → reseñas de gestores reales
- *   Features      → características adicionales de la plataforma
- *   FAQ           → preguntas frecuentes
- *   CTA           → botón con scroll suave a la sección de planes
+ *   Hero         → título e imagen introductoria
+ *   Benefits     → tres beneficios clave para el gestor
+ *   Dashboard    → funcionalidades del panel de control
+ *   Pricing      → tres planes de suscripción (29€ / 79€ / 199€)
+ *   Testimonials → reseñas de gestores reales
+ *   Features     → características adicionales de la plataforma
+ *   FAQ          → preguntas frecuentes
+ *   CTA          → botón con scroll suave a la sección de planes
+ *
+ * Comportamiento:
+ *   - Combina copy traducida con imágenes de producto para vender el panel.
+ *   - Destaca el plan recomendado mediante una tarjeta featured.
+ *   - Mantiene la navegación hacia login de gestores desde cada plan.
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function Infomanager() {
   //#region VARIABLES
   const { t } = useTranslation();
@@ -291,3 +300,4 @@ export default function Infomanager() {
     </>
   );
 }
+//#endregion
