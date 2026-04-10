@@ -63,16 +63,33 @@ const userController = {
      */
     update: async (req, res, next) => {
         try {
-            const { name, username, phone, avatar_url } = req.body;
-            const [result] = await User.update(req.params.id, {
-                name,
-                username,
-                phone,
+            // soporta multipart (avatar en req.file) o JSON en req.body
+            const { name, username, phone } = req.body;
+            const file = req.file;
+
+            const [existing] = await User.getById(req.params.id);
+            if (existing.length === 0)
+                return res.status(404).json({ message: "User not found" });
+            const current = existing[0];
+
+            const host = req.get("host");
+            const protocol = req.protocol || "http";
+            const baseUrl = `${protocol}://${host}`;
+            const avatar_url = file ? `${baseUrl}/uploads/avatars/${file.filename}` : (req.body.avatar_url || current.avatar_url);
+
+            const newData = {
+                name: typeof name !== 'undefined' ? name : current.name,
+                username: typeof username !== 'undefined' ? username : current.username,
+                phone: typeof phone !== 'undefined' ? phone : current.phone,
                 avatar_url,
-            });
+            };
+
+            const [result] = await User.update(req.params.id, newData);
             if (result.affectedRows === 0)
                 return res.status(404).json({ message: "User not found" });
-            res.json({ message: "User updated successfully" });
+
+            const [rows] = await User.getById(req.params.id);
+            res.json(rows[0]);
         } catch (err) {
             next(err);
         }

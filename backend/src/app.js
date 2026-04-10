@@ -2,6 +2,7 @@ require("./config/env");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const clubRoutes = require("./routes/clubRoutes");
@@ -16,6 +17,9 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Servir archivos subidos (avatars) estático desde /uploads
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use((req, res, next) => {
 	const FRONTEND_URL = process.env.CORS_ORIGINAL || process.env.FRONTEND_URL;
