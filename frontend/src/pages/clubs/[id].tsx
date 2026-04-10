@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import ClubCard from "@/components/modules/clubs/ClubCard";
 import { getClubById } from "@/api/clubApi";
 import { getCourtsByClubId } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
@@ -97,97 +98,71 @@ export default function ClubDetailPage() {
     );
   }
 
-  const coverImage = club.logo_url || "/logoallcourts.png";
-
   return (
     <main className={styles.page}>
       <Link href="/clubs" className={styles.backLink}>
         ← Volver a clubes
       </Link>
 
-      <section className={styles.hero}>
-        <div className={styles.heroImage}>
-          <Image
-            src={coverImage}
-            alt={club.name}
-            fill
-            className={styles.heroImageMedia}
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
+      <section className={styles.detailSection}>
+        <ClubCard club={club} courtCount={courts.length} variant="detail" />
+      </section>
 
-        <div>
-          <p className={styles.sectionTag}>Club</p>
+      <section className={styles.infoCard}>
+        <h2 className={styles.infoCardTitle}>Pistas del club</h2>
 
-          <h1 className={styles.title}>{club.name}</h1>
+        <Link href="/courts" className={styles.allCourtsLink}>
+          Ver todas las pistas
+        </Link>
 
-          <p className={styles.meta}>
-            {club.city || "Ciudad no disponible"}
-            {club.address ? ` · ${club.address}` : ""}
+        {courts.length === 0 ? (
+          <p className={styles.emptyState}>
+            Este club todavía no tiene pistas cargadas.
           </p>
+        ) : (
+          <div className={styles.courtsGrid}>
+            {courts.map((court) => {
+              const coverCourtImage = court.image_url || "/logoallcourts.png";
 
-          <p className={styles.description}>
-            {club.description || "Sin descripción disponible."}
-          </p>
+              return (
+                <article key={court.id} className={styles.courtCard}>
+                  <div className={styles.courtImage}>
+                    <Image
+                      src={coverCourtImage}
+                      alt={court.name}
+                      fill
+                      className={styles.courtImageMedia}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
 
-          <div className={styles.infoCard}>
-            <h2 className={styles.infoCardTitle}>Pistas del club</h2>
+                  <div className={styles.courtBody}>
+                    <p className={styles.courtName}>{court.name}</p>
 
-            <Link href="/courts/court" className={styles.allCourtsLink}>
-              Ver todas las pistas
-            </Link>
+                    <p className={styles.courtSport}>
+                      {SPORT_LABELS[court.sport]}
+                    </p>
 
-            {courts.length === 0 ? (
-              <p className={styles.emptyState}>
-                Este club todavía no tiene pistas cargadas.
-              </p>
-            ) : (
-              <div className={styles.courtsGrid}>
-                {courts.map((court) => {
-                  const coverCourtImage =
-                    court.image_url || "/logoallcourts.png";
+                    <p className={styles.courtSurface}>
+                      {SURFACE_LABELS[court.surface_type]}
+                    </p>
 
-                  return (
-                    <article key={court.id} className={styles.courtCard}>
-                      <div className={styles.courtImage}>
-                        <Image
-                          src={coverCourtImage}
-                          alt={court.name}
-                          fill
-                          className={styles.courtImageMedia}
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                        />
-                      </div>
+                    <p className={styles.courtPrice}>
+                      Desde {formatPrice(Number(court.price_60))}
+                    </p>
 
-                      <div className={styles.courtBody}>
-                        <p className={styles.courtName}>{court.name}</p>
-
-                        <p className={styles.courtSport}>
-                          {SPORT_LABELS[court.sport]}
-                        </p>
-
-                        <p className={styles.courtSurface}>
-                          {SURFACE_LABELS[court.surface_type]}
-                        </p>
-
-                        <p className={styles.courtPrice}>
-                          Desde {formatPrice(Number(court.price_60))}
-                        </p>
-
-                        <Link
-                          href={`/courts/${court.id}`}
-                          className={styles.courtLink}
-                        >
-                          Ver pista
-                        </Link>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
+                    <Link
+                      href={`/courts/${court.id}`}
+                      className={styles.courtLink}
+                    >
+                      Ver pista
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
-        </div>
+        )}
       </section>
     </main>
   );

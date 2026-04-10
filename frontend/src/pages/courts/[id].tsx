@@ -107,7 +107,7 @@ export default function CourtDetailPage() {
           />
         </div>
 
-        <div>
+        <div className={styles.heroCopy}>
           <p className={styles.sportTag}>{SPORT_LABELS[court.sport]}</p>
 
           <h1 className={styles.title}>{court.name}</h1>

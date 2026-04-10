@@ -53,8 +53,8 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
   //#endregion
 
   return (
-    <div className={styles.courtCard}>
-      <div className={styles.cardLink}>
+    <Link href={`/courts/${court.id}`} className={styles.cardLink}>
+      <article className={styles.courtCard}>
         <div className={styles.imageContainer}>
           <Image
             src={court.image_url}
@@ -101,10 +101,10 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
             </div>
           </div>
 
-          <button className={styles.bookBtn}>Reservar</button>
+          <span className={styles.bookBtn}>Reservar</span>
         </div>
-      </div>
-    </div>
+      </article>
+    </Link>
   );
 };
 //#endregion
