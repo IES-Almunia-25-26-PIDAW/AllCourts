@@ -2,6 +2,10 @@ import type { Club } from "@/types/club";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
+/**
+ * Client API para consultar clubes desde el backend.
+ * Se usa en el listado de clubes y en la pantalla de detalle.
+ */
 export type ClubWithManager = Club & {
   manager_name?: string;
   manager_email?: string;

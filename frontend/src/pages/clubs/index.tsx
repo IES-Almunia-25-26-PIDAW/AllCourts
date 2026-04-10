@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { getClubs, type ClubWithManager } from "@/api/clubApi";
 
+/**
+ * Pantalla principal de clubes.
+ * Permite buscar clubes y entrar al detalle de cada uno.
+ */
 export default function ClubsPage() {
   const [clubs, setClubs] = useState<ClubWithManager[]>([]);
   const [loading, setLoading] = useState(true);

@@ -5,6 +5,10 @@ import { getCourtById, type CourtWithClub } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 
+/**
+ * Detalle de pista.
+ * Vuelve al club de origen para mantener el flujo club -> club[id] -> court -> court[id].
+ */
 export default function CourtDetailPage() {
   const router = useRouter();
   const [court, setCourt] = useState<CourtWithClub | null>(null);

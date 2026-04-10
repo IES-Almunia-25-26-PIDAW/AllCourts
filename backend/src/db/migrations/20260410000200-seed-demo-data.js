@@ -1,4 +1,5 @@
 //! DATOS DE PRUEBA
+// Inserta un club demo y varias pistas para que el entorno arranque con contenido visible.
 
 "use strict";
 

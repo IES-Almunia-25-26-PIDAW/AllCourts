@@ -6,6 +6,10 @@ import { getCourtsByClubId, type CourtWithClub } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 
+/**
+ * Detalle de un club.
+ * Muestra la información del club y sus pistas asociadas.
+ */
 export default function ClubDetailPage() {
   const router = useRouter();
   const [club, setClub] = useState<ClubWithManager | null>(null);

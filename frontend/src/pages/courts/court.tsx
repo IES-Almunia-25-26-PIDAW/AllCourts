@@ -4,6 +4,10 @@ import { getCourts, type CourtWithClub } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 
+/**
+ * Listado general de pistas.
+ * Sirve como vista de exploración una vez el usuario entra desde un club.
+ */
 export default function CourtPage() {
   const [courts, setCourts] = useState<CourtWithClub[]>([]);
   const [loading, setLoading] = useState(true);

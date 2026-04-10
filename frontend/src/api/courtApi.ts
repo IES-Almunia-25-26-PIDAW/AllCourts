@@ -2,6 +2,10 @@ import type { Court } from "@/types/court";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
+/**
+ * Client API para consultar pistas desde el backend.
+ * Incluye listado general, listado por club y detalle individual.
+ */
 export type CourtWithClub = Court & {
   club_name?: string;
   address?: string;
