@@ -28,7 +28,14 @@ export function middleware(req: NextRequest) {
 
   const publicPaths = ["/login", "/register"];
 
-  const privatePrefixes = ["/profile", "/player", "/manager", "/booking"];
+  const privatePrefixes = [
+    "/profile",
+    "/player",
+    "/manager",
+    "/booking",
+    "/clubs",
+    "/courts",
+  ];
 
   const isPublic = publicPaths.includes(pathname);
   const isPrivate = privatePrefixes.some(
@@ -61,5 +68,9 @@ export const config = {
     "/booking/:path*",
     "/login",
     "/register",
+    "/clubs",
+    "/clubs/:path*",
+    "/courts",
+    "/courts/:path*",
   ],
 };

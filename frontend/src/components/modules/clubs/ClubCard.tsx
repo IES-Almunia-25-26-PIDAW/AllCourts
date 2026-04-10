@@ -25,52 +25,80 @@ import styles from "./ClubCard.module.scss";
 //#region TYPES
 interface ClubCardProps {
   club: ClubWithManager;
-  href: string;
+  href?: string;
   courtCount?: number;
+  variant?: "default" | "detail";
 }
 //#endregion
 
 //#region FUNCTIONS
-const ClubCard = ({ club, href, courtCount }: ClubCardProps) => {
-  const coverImage = club.logo_url || "/logoallcourts.png";
+const ClubCard = ({
+  club,
+  href,
+  courtCount,
+  variant = "default",
+}: ClubCardProps) => {
+  const coverImage =
+    variant === "detail"
+      ? "/logoallcourts.png"
+      : club.logo_url || "/logoallcourts.png";
   const description = club.description || "Sin descripción disponible.";
+  const CardContent = (
+    <div
+      className={`${styles.clubCard} ${variant === "detail" ? styles.detailCard : ""}`}
+    >
+      <div
+        className={`${styles.imageContainer} ${variant === "detail" ? styles.detailImageContainer : ""}`}
+      >
+        <Image
+          src={coverImage}
+          alt={club.name}
+          fill
+          className={styles.image}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        {variant === "detail" ? (
+          <span className={styles.detailBadge}>DETAIL</span>
+        ) : (
+          <span className={styles.cityBadge}>{club.city || "Sin ciudad"}</span>
+        )}
+      </div>
+
+      <div className={styles.body}>
+        {variant === "detail" ? (
+          <p className={styles.detailLabel}>Club detail</p>
+        ) : null}
+
+        <p className={styles.name}>{club.name}</p>
+
+        <p className={styles.desc}>
+          {description.length > 90
+            ? `${description.slice(0, 90)}...`
+            : description}
+        </p>
+
+        <div className={styles.footer}>
+          <span className={styles.address}>
+            {club.address || "Sin dirección"}
+          </span>
+
+          {courtCount !== undefined && (
+            <span className={styles.count}>
+              {courtCount} {courtCount === 1 ? "pista" : "pistas"}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  if (!href) {
+    return CardContent;
+  }
 
   return (
     <Link href={href} className={styles.cardLink}>
-      <div className={styles.clubCard}>
-        <div className={styles.imageContainer}>
-          <Image
-            src={coverImage}
-            alt={club.name}
-            fill
-            className={styles.image}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-          <span className={styles.cityBadge}>{club.city || "Sin ciudad"}</span>
-        </div>
-
-        <div className={styles.body}>
-          <p className={styles.name}>{club.name}</p>
-
-          <p className={styles.desc}>
-            {description.length > 90
-              ? `${description.slice(0, 90)}...`
-              : description}
-          </p>
-
-          <div className={styles.footer}>
-            <span className={styles.address}>
-              {club.address || "Sin dirección"}
-            </span>
-
-            {courtCount !== undefined && (
-              <span className={styles.count}>
-                {courtCount} {courtCount === 1 ? "pista" : "pistas"}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
+      {CardContent}
     </Link>
   );
 };
