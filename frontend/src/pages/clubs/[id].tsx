@@ -1,10 +1,11 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getClubById, type ClubWithManager } from "@/api/clubApi";
+import { getClubById } from "@/api/clubApi";
 import { getCourtsByClubId, type CourtWithClub } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
+import type { ClubWithManager } from "@/types/club";
 
 /**
  * Detalle de un club.

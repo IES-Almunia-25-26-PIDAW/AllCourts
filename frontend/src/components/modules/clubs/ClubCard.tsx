@@ -1,8 +1,7 @@
 //#region MODULES
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Club } from "@/types/club";
+import type { ClubWithManager } from "@/types/club";
 import styles from "./ClubCard.module.scss";
 //#endregion
 
@@ -19,37 +18,39 @@ import styles from "./ClubCard.module.scss";
 
 //#region TYPES
 interface ClubCardProps {
-  club: Club;
+  club: ClubWithManager;
+  href: string;
   courtCount?: number;
 }
 //#endregion
 
-const ClubCard: React.FC<ClubCardProps> = ({ club, courtCount }) => {
+const ClubCard = ({ club, href, courtCount }: ClubCardProps) => {
+  const coverImage = club.logo_url || "/logoallcourts.png";
+  const description = club.description || "Sin descripción disponible.";
+
   return (
-    <div className={styles.cardLink}>
+    <Link href={href} className={styles.cardLink}>
       <div className={styles.clubCard}>
         <div className={styles.imageContainer}>
           <Image
-            src={club.logo_url}
+            src={coverImage}
             alt={club.name}
             fill
             className={styles.image}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <span className={styles.cityBadge}>{club.city}</span>
+          <span className={styles.cityBadge}>{club.city || "Sin ciudad"}</span>
         </div>
 
         <div className={styles.body}>
           <p className={styles.name}>{club.name}</p>
 
           <p className={styles.desc}>
-            {club.description.length > 90
-              ? `${club.description.slice(0, 90)}...`
-              : club.description}
+            {description.length > 90 ? `${description.slice(0, 90)}...` : description}
           </p>
 
           <div className={styles.footer}>
-            <span className={styles.address}>{club.address}</span>
+            <span className={styles.address}>{club.address || "Sin dirección"}</span>
 
             {courtCount !== undefined && (
               <span className={styles.count}>
@@ -59,7 +60,7 @@ const ClubCard: React.FC<ClubCardProps> = ({ club, courtCount }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

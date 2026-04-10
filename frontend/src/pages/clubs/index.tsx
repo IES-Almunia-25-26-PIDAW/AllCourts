@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { getClubs, type ClubWithManager } from "@/api/clubApi";
+import ClubCard from "@/components/modules/clubs/ClubCard";
+import { getClubs } from "@/api/clubApi";
+import type { ClubWithManager } from "@/types/club";
 
 /**
  * Pantalla principal de clubes.
@@ -104,66 +104,12 @@ export default function ClubsPage() {
       {!loading && !error ? (
         <section style={gridStyle}>
           {filteredClubs.map((club) => {
-            const coverImage = club.logo_url || "/logoallcourts.png";
-
             return (
-              <article
+              <ClubCard
                 key={club.id}
-                style={{
-                  border: "1px solid #e7e7e7",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  background: "#fff",
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.05)",
-                }}
-              >
-                <div style={{ position: "relative", height: "180px" }}>
-                  <Image
-                    src={coverImage}
-                    alt={club.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-
-                <div style={{ padding: "16px" }}>
-                  <h2 style={{ margin: "0 0 6px", fontSize: "1.1rem" }}>
-                    {club.name}
-                  </h2>
-
-                  <p style={{ margin: "0 0 10px", color: "#666" }}>
-                    {club.city || "Ciudad no disponible"}
-                  </p>
-
-                  <p
-                    style={{
-                      margin: "0 0 16px",
-                      color: "#555",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {club.description || "Sin descripción disponible."}
-                  </p>
-
-                  <Link
-                    href={`/clubs/${club.id}`}
-                    style={{
-                      display: "inline-block",
-                      width: "100%",
-                      textAlign: "center",
-                      padding: "12px 14px",
-                      borderRadius: "12px",
-                      background: "#111",
-                      color: "#fff",
-                      textDecoration: "none",
-                      fontWeight: 700,
-                    }}
-                  >
-                    Ver club
-                  </Link>
-                </div>
-              </article>
+                club={club}
+                href={`/clubs/${club.id}`}
+              />
             );
           })}
         </section>
