@@ -55,6 +55,13 @@ export interface Court {
   created_at?: string;
 }
 
+export interface CourtWithClub extends Court {
+  club_name?: string;
+  address?: string;
+  city?: string;
+  logo_url?: string;
+}
+
 export interface CreateCourtDTO {
   club_id: number;
   name: string;

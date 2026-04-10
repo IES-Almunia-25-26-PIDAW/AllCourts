@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getCourtById, type CourtWithClub } from "@/api/courtApi";
+import { getCourtById } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
+import type { CourtWithClub } from "@/types/court";
 
 /**
  * Detalle de pista.

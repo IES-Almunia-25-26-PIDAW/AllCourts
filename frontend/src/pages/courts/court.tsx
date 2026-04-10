@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
-import { getCourts, type CourtWithClub } from "@/api/courtApi";
+import { getCourts } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
+import type { CourtWithClub } from "@/types/court";
 
 /**
  * Listado general de pistas.
