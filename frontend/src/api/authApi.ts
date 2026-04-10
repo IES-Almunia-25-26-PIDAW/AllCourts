@@ -1,5 +1,4 @@
 import type {
-	AuthResponse,
 	CreateUserDTO,
 	LoginCredentials,
 	User,
@@ -24,6 +23,7 @@ async function readJson<T>(response: Response): Promise<T> {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
 	const response = await fetch(`${API_URL}${path}`, {
 		...init,
+		credentials: "include",
 		headers: {
 			"Content-Type": "application/json",
 			...(init?.headers || {}),
@@ -45,33 +45,40 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 	return payload as T;
 }
 
-export async function getCurrentUser(token: string): Promise<User> {
-	return request<User>("/auth/me", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+/**
+ * Obtiene el usuario autenticado usando la cookie httpOnly.
+ * No requiere token explícito: el navegador envía la cookie automáticamente.
+ */
+export async function getCurrentUser(): Promise<User> {
+	return request<User>("/auth/me");
 }
 
+/**
+ * Inicia sesión. El backend pone la cookie httpOnly y devuelve los datos del usuario.
+ * El token JWT nunca llega al JavaScript del cliente.
+ */
 export async function login(
 	credentials: LoginCredentials
-): Promise<AuthResponse> {
-	const response = await request<{ token: string }>("/auth/login", {
+): Promise<{ user: User }> {
+	return request<{ user: User }>("/auth/login", {
 		method: "POST",
 		body: JSON.stringify(credentials),
 	});
-
-	const user = await getCurrentUser(response.token);
-
-	return {
-		token: response.token,
-		user,
-	};
 }
 
-export async function register(userData: CreateUserDTO): Promise<{ message: string; token: string }> {
-	return request<{ message: string; token: string }>("/auth/register", {
+/**
+ * Registra un nuevo usuario. No devuelve token (el usuario debe verificar su email primero).
+ */
+export async function register(userData: CreateUserDTO): Promise<{ message: string }> {
+	return request<{ message: string }>("/auth/register", {
 		method: "POST",
 		body: JSON.stringify(userData),
 	});
+}
+
+/**
+ * Cierra sesión. El backend borra la cookie httpOnly.
+ */
+export async function logout(): Promise<void> {
+	await request<{ message: string }>("/auth/logout", { method: "POST" });
 }

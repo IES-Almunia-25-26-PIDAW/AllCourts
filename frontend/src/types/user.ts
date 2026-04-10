@@ -36,7 +36,4 @@ export interface LoginCredentials {
   password: string;
 }
 
-export interface AuthResponse {
-  user: User;
-  token: string;
-}
+

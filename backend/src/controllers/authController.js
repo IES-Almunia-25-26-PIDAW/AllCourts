@@ -77,12 +77,7 @@ const authController = {
                 });
             }
 
-            // Generar token JWT con id y rol para uso en peticiones protegidas
-            const token = jwt.sign({ id: userId, role: userRole }, JWT_SECRET, {
-                expiresIn: JWT_EXPIRES_IN,
-            });
-
-            res.status(201).json({ message: "User registered successfully", token });
+            res.status(201).json({ message: "User registered successfully" });
         } catch (err) {
             next(err);
         }
@@ -132,7 +127,24 @@ const authController = {
                 { expiresIn: JWT_EXPIRES_IN }
             );
 
-            res.json({ token });
+            // Set httpOnly cookie for the token so frontends on the same origin
+            // can use cookies for auth without exposing token to JS.
+            try {
+                const maxAge = 7 * 24 * 60 * 60 * 1000; // default 7 days
+                res.cookie("allcourts_token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "lax",
+                    maxAge,
+                    path: "/",
+                });
+            } catch (e) {
+                // continue even if cookies cannot be set
+            }
+
+            // Return user data (never the raw token)
+            const { password: _pw, verification_token: _vt, token_expires_at: _te, ...safeUser } = user;
+            res.json({ user: safeUser });
         } catch (err) {
             next(err);
         }
@@ -174,6 +186,21 @@ const authController = {
                     .status(400)
                     .json({ message: "Invalid or expired verification token" });
             res.json({ message: "Email verified successfully" });
+        } catch (err) {
+            next(err);
+        }
+    },
+    logout: async (req, res, next) => {
+        try {
+            // Clear the cookie set on login
+            res.cookie("allcourts_token", "", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                maxAge: 0,
+                path: "/",
+            });
+            res.json({ message: "Logged out" });
         } catch (err) {
             next(err);
         }

@@ -34,10 +34,9 @@ export default function Login() {
     dispatch(setAuthError(null));
 
     try {
-      const auth = await loginRequest({ email, password });
-      dispatch(setAuth(auth));
-      window.localStorage.setItem("allcourts_token", auth.token);
-      window.localStorage.setItem("allcourts_user", JSON.stringify(auth.user));
+      const { user } = await loginRequest({ email, password });
+      dispatch(setAuth(user));
+      try { window.localStorage.setItem("allcourts_user", JSON.stringify(user)); } catch {}
       router.push("/player/dashboard");
     } catch (error) {
       dispatch(

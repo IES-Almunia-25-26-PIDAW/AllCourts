@@ -10,6 +10,7 @@ import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import LanguageDetector from "@/components/ui/LanguageDetector";
 import store from "@/store";
 import { hydrateAuth, clearAuth } from "@/store/slices/authSlice";
+import { getCurrentUser } from "@/api/authApi";
 //#endregion
 
 /**
@@ -27,29 +28,36 @@ import { hydrateAuth, clearAuth } from "@/store/slices/authSlice";
  *     Navbar           → barra de navegación global
  *     main             → contenido de la página activa
  *     Footer           → pie de página global
+ *
+ * Autenticación:
+ *   El token JWT se almacena en una cookie httpOnly (nunca accesible por JS).
+ *   Al cargar la app, se hidrata el estado Redux con los datos cacheados en localStorage
+ *   y se valida la sesión en background llamando a /auth/me.
  */
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    const token = window.localStorage.getItem("allcourts_token");
-    const user = window.localStorage.getItem("allcourts_user");
-
-    if (!token || !user) {
-      store.dispatch(clearAuth());
-      return;
-    }
-
+    // Paso 1: Hidratación instantánea desde localStorage (datos no sensibles)
     try {
-      store.dispatch(
-        hydrateAuth({
-          token,
-          user: JSON.parse(user),
-        })
-      );
+      const cached = window.localStorage.getItem("allcourts_user");
+      if (cached) {
+        store.dispatch(hydrateAuth(JSON.parse(cached)));
+      }
     } catch {
-      window.localStorage.removeItem("allcourts_token");
       window.localStorage.removeItem("allcourts_user");
-      store.dispatch(clearAuth());
     }
+
+    // Paso 2: Validar la sesión real contra el backend.
+    // La cookie httpOnly se envía automáticamente con credentials: "include".
+    // Si la cookie expiró o no existe, /auth/me devolverá 401 y limpiamos el estado.
+    getCurrentUser()
+      .then((user) => {
+        store.dispatch(hydrateAuth(user));
+        try { window.localStorage.setItem("allcourts_user", JSON.stringify(user)); } catch {}
+      })
+      .catch(() => {
+        try { window.localStorage.removeItem("allcourts_user"); } catch {}
+        store.dispatch(clearAuth());
+      });
   }, []);
 
   return (
