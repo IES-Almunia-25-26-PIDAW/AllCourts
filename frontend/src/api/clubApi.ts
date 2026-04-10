@@ -1,4 +1,4 @@
-import { request } from "@/api/http";
+import { request } from "./http";
 import type { ClubWithManager } from "@/types/club";
 
 /**
