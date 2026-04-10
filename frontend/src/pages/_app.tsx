@@ -13,18 +13,19 @@ import { hydrateAuth, clearAuth } from "@/store/slices/authSlice";
 import { getCurrentUser } from "@/api/authApi";
 //#endregion
 
+//#region DOCUMENTATION
 /**
  * @page App
  * Punto de entrada principal de la aplicación Next.js.
  * Envuelve todas las páginas con el layout base y los proveedores globales.
  *
- * Props:
+ * Propiedades:
  *   Component → página activa que Next.js inyecta según la ruta
  *   pageProps → props iniciales de la página (getServerSideProps, getStaticProps, etc.)
  *
  * Estructura:
  *   ErrorBoundary     → captura errores de cualquier hijo sin romper la app
- *     LanguageDetector → detecta y sincroniza el idioma del usuario 
+ *     LanguageDetector → detecta y sincroniza el idioma del usuario
  *     Navbar           → barra de navegación global
  *     main             → contenido de la página activa
  *     Footer           → pie de página global
@@ -33,7 +34,15 @@ import { getCurrentUser } from "@/api/authApi";
  *   El token JWT se almacena en una cookie httpOnly (nunca accesible por JS).
  *   Al cargar la app, se hidrata el estado Redux con los datos cacheados en localStorage
  *   y se valida la sesión en background llamando a /auth/me.
+ *
+ * Flujo de arranque:
+ *   1. Leer usuario cacheado desde localStorage para pintar la app rápido.
+ *   2. Validar la sesión real en backend con la cookie httpOnly.
+ *   3. Sincronizar Redux y localStorage si la sesión sigue siendo válida.
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // Paso 1: Hidratación instantánea desde localStorage (datos no sensibles)
@@ -52,10 +61,14 @@ export default function App({ Component, pageProps }: AppProps) {
     getCurrentUser()
       .then((user) => {
         store.dispatch(hydrateAuth(user));
-        try { window.localStorage.setItem("allcourts_user", JSON.stringify(user)); } catch {}
+        try {
+          window.localStorage.setItem("allcourts_user", JSON.stringify(user));
+        } catch {}
       })
       .catch(() => {
-        try { window.localStorage.removeItem("allcourts_user"); } catch {}
+        try {
+          window.localStorage.removeItem("allcourts_user");
+        } catch {}
         store.dispatch(clearAuth());
       });
   }, []);
@@ -73,3 +86,4 @@ export default function App({ Component, pageProps }: AppProps) {
     </Provider>
   );
 }
+//#endregion

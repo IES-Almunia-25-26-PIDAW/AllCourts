@@ -1,4 +1,5 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getClubById } from "@/api/clubApi";
@@ -7,11 +8,22 @@ import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import type { ClubWithManager } from "@/types/club";
 import type { CourtWithClub } from "@/types/court";
+import styles from "./ClubDetail.module.scss";
 
+//#region DOCUMENTATION
 /**
- * Detalle de un club.
- * Muestra la información del club y sus pistas asociadas.
+ * @page ClubDetail
+ * Vista de detalle de un club.
+ * Muestra la información principal del club, un resumen de sus pistas y acceso de vuelta al listado.
+ *
+ * Secciones:
+ *   Hero       → imagen principal, nombre, ciudad y descripción
+ *   CourtsCard  → listado de pistas relacionadas con acceso a su detalle
+ *   BackLink    → navegación de retorno al listado de clubes
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function ClubDetailPage() {
   const router = useRouter();
   const [club, setClub] = useState<ClubWithManager | null>(null);
@@ -55,32 +67,19 @@ export default function ClubDetailPage() {
     void loadClub();
   }, [router.isReady, clubId]);
 
-  const pageStyle: CSSProperties = {
-    maxWidth: "1180px",
-    margin: "0 auto",
-    padding: "32px 20px 64px",
-  };
-
-  const gridStyle: CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "20px",
-    marginTop: "24px",
-  };
-
   if (loading) {
     return (
-      <main style={pageStyle}>
-        <p>Cargando club...</p>
+      <main className={styles.page}>
+        <p className={styles.status}>Cargando club...</p>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main style={pageStyle}>
-        <p style={{ color: "#c62828" }}>{error}</p>
-        <Link href="/clubs" style={{ color: "#0d5efd" }}>
+      <main className={styles.page}>
+        <p className={styles.errorText}>{error}</p>
+        <Link href="/clubs" className={styles.backLink}>
           Volver al listado
         </Link>
       </main>
@@ -89,9 +88,9 @@ export default function ClubDetailPage() {
 
   if (!club) {
     return (
-      <main style={pageStyle}>
+      <main className={styles.page}>
         <p>No se encontró el club.</p>
-        <Link href="/clubs" style={{ color: "#0d5efd" }}>
+        <Link href="/clubs" className={styles.backLink}>
           Volver al listado
         </Link>
       </main>
@@ -101,135 +100,83 @@ export default function ClubDetailPage() {
   const coverImage = club.logo_url || "/logoallcourts.png";
 
   return (
-    <main style={pageStyle}>
-      <Link href="/clubs" style={{ color: "#0d5efd", textDecoration: "none" }}>
+    <main className={styles.page}>
+      <Link href="/clubs" className={styles.backLink}>
         ← Volver a clubes
       </Link>
 
-      <section
-        style={{
-          marginTop: "20px",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: "24px",
-          alignItems: "start",
-        }}
-      >
-        <div
-          style={{
-            minHeight: "320px",
-            borderRadius: "20px",
-            backgroundImage: `url(${coverImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            boxShadow: "0 16px 40px rgba(0, 0, 0, 0.08)",
-          }}
-        />
+      <section className={styles.hero}>
+        <div className={styles.heroImage}>
+          <Image
+            src={coverImage}
+            alt={club.name}
+            fill
+            className={styles.heroImageMedia}
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
 
         <div>
-          <p style={{ margin: 0, color: "#0d5efd", fontWeight: 700 }}>Club</p>
+          <p className={styles.sectionTag}>Club</p>
 
-          <h1 style={{ margin: "10px 0 8px", fontSize: "2rem" }}>
-            {club.name}
-          </h1>
+          <h1 className={styles.title}>{club.name}</h1>
 
-          <p style={{ margin: "0 0 14px", color: "#666", fontSize: "1rem" }}>
+          <p className={styles.meta}>
             {club.city || "Ciudad no disponible"}
             {club.address ? ` · ${club.address}` : ""}
           </p>
 
-          <p style={{ lineHeight: 1.7, color: "#444" }}>
+          <p className={styles.description}>
             {club.description || "Sin descripción disponible."}
           </p>
 
-          <div
-            style={{
-              marginTop: "24px",
-              padding: "18px",
-              borderRadius: "18px",
-              border: "1px solid #e7e7e7",
-              background: "#fff",
-            }}
-          >
-            <h2 style={{ margin: "0 0 14px", fontSize: "1.2rem" }}>
-              Pistas del club
-            </h2>
+          <div className={styles.infoCard}>
+            <h2 className={styles.infoCardTitle}>Pistas del club</h2>
 
-            <Link
-              href="/courts/court"
-              style={{
-                display: "inline-block",
-                marginBottom: "18px",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background: "#0d5efd",
-                color: "#fff",
-                textDecoration: "none",
-                fontWeight: 700,
-              }}
-            >
+            <Link href="/courts/court" className={styles.allCourtsLink}>
               Ver todas las pistas
             </Link>
 
             {courts.length === 0 ? (
-              <p style={{ color: "#666" }}>
+              <p className={styles.emptyState}>
                 Este club todavía no tiene pistas cargadas.
               </p>
             ) : (
-              <div style={gridStyle}>
+              <div className={styles.courtsGrid}>
                 {courts.map((court) => {
                   const coverCourtImage =
                     court.image_url || "/logoallcourts.png";
 
                   return (
-                    <article
-                      key={court.id}
-                      style={{
-                        border: "1px solid #e7e7e7",
-                        borderRadius: "16px",
-                        overflow: "hidden",
-                        background: "#fff",
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: "160px",
-                          backgroundImage: `url(${coverCourtImage})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      />
+                    <article key={court.id} className={styles.courtCard}>
+                      <div className={styles.courtImage}>
+                        <Image
+                          src={coverCourtImage}
+                          alt={court.name}
+                          fill
+                          className={styles.courtImageMedia}
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      </div>
 
-                      <div style={{ padding: "14px" }}>
-                        <p style={{ margin: "0 0 6px", fontWeight: 700 }}>
-                          {court.name}
-                        </p>
+                      <div className={styles.courtBody}>
+                        <p className={styles.courtName}>{court.name}</p>
 
-                        <p style={{ margin: "0 0 6px", color: "#666" }}>
+                        <p className={styles.courtSport}>
                           {SPORT_LABELS[court.sport]}
                         </p>
 
-                        <p style={{ margin: "0 0 10px", color: "#888" }}>
+                        <p className={styles.courtSurface}>
                           {SURFACE_LABELS[court.surface_type]}
                         </p>
 
-                        <p style={{ margin: "0 0 14px", color: "#444" }}>
+                        <p className={styles.courtPrice}>
                           Desde {formatPrice(Number(court.price_60))}
                         </p>
 
                         <Link
                           href={`/courts/${court.id}`}
-                          style={{
-                            display: "inline-block",
-                            width: "100%",
-                            textAlign: "center",
-                            padding: "10px 12px",
-                            borderRadius: "10px",
-                            background: "#111",
-                            color: "#fff",
-                            textDecoration: "none",
-                            fontWeight: 700,
-                          }}
+                          className={styles.courtLink}
                         >
                           Ver pista
                         </Link>
@@ -245,3 +192,4 @@ export default function ClubDetailPage() {
     </main>
   );
 }
+//#endregion

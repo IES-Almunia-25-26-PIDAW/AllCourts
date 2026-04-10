@@ -1,14 +1,30 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getCourts } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import type { CourtWithClub } from "@/types/court";
+import styles from "./CourtsPage.module.scss";
 
+//#region DOCUMENTATION
 /**
+ * @page Courts
  * Listado general de pistas.
  * Sirve como vista de exploración una vez el usuario entra desde un club.
+ *
+ * Secciones:
+ *   Hero       → título, texto introductorio y buscador
+ *   Results    → listado de pistas filtradas con tarjeta propia
+ *   Status     → estados de carga, error y vacío
+ *
+ * Comportamiento:
+ *   - Carga todas las pistas desde el backend al montar.
+ *   - Filtra por nombre, club, ciudad, deporte y superficie.
+ *   - Muestra una tarjeta resumida con precio, superficie y acceso al detalle.
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function CourtPage() {
   const [courts, setCourts] = useState<CourtWithClub[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,36 +75,18 @@ export default function CourtPage() {
     });
   }, [courts, query]);
 
-  const pageStyle: CSSProperties = {
-    maxWidth: "1180px",
-    margin: "0 auto",
-    padding: "32px 20px 64px",
-  };
-
-  const gridStyle: CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "20px",
-    marginTop: "24px",
-  };
-
   return (
-    <main style={pageStyle}>
-      <div style={{ marginBottom: "12px" }}>
-        <Link
-          href="/clubs"
-          style={{ color: "#0d5efd", textDecoration: "none" }}
-        >
+    <main className={styles.page}>
+      <div className={styles.backWrap}>
+        <Link href="/clubs" className={styles.backLink}>
           ← Volver a clubes
         </Link>
       </div>
 
-      <section style={{ marginBottom: "24px" }}>
-        <p style={{ margin: 0, color: "#0d5efd", fontWeight: 700 }}>Pistas</p>
-        <h1 style={{ margin: "8px 0 10px", fontSize: "2rem" }}>
-          Encuentra tu pista
-        </h1>
-        <p style={{ margin: 0, color: "#555", maxWidth: "700px" }}>
+      <section className={styles.section}>
+        <p className={styles.sectionTag}>Pistas</p>
+        <h1 className={styles.title}>Encuentra tu pista</h1>
+        <p className={styles.subtitle}>
           Busca por nombre, club, ciudad, deporte o superficie.
         </p>
 
@@ -97,159 +95,71 @@ export default function CourtPage() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Buscar pistas..."
-          style={{
-            marginTop: "18px",
-            width: "100%",
-            maxWidth: "520px",
-            padding: "14px 16px",
-            borderRadius: "12px",
-            border: "1px solid #d9d9d9",
-            outline: "none",
-            fontSize: "16px",
-          }}
+          className={styles.searchBox}
         />
       </section>
 
-      {loading ? <p>Cargando pistas...</p> : null}
-      {error ? <p style={{ color: "#c62828" }}>{error}</p> : null}
+      {loading ? <p className={styles.status}>Cargando pistas...</p> : null}
+      {error ? <p className={styles.errorText}>{error}</p> : null}
 
       {!loading && !error && filteredCourts.length === 0 ? (
         <p>No hay pistas que coincidan con la búsqueda.</p>
       ) : null}
 
       {!loading && !error ? (
-        <section style={gridStyle}>
+        <section className={styles.resultsGrid}>
           {filteredCourts.map((court) => {
             const coverImage = court.image_url || "/logoallcourts.png";
 
             return (
-              <article
-                key={court.id}
-                style={{
-                  border: "1px solid #e7e7e7",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  background: "#fff",
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.05)",
-                }}
-              >
-                <div
-                  style={{
-                    height: "180px",
-                    backgroundImage: `url(${coverImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "14px",
-                      left: "14px",
-                      background: "rgba(0, 0, 0, 0.55)",
-                      color: "#fff",
-                      padding: "6px 10px",
-                      borderRadius: "999px",
-                      fontSize: "12px",
-                    }}
-                  >
+              <article key={court.id} className={styles.courtCard}>
+                <div className={styles.courtImage}>
+                  <img
+                    src={coverImage}
+                    alt={court.name}
+                    className={styles.courtImageMedia}
+                  />
+
+                  <div className={styles.sportBadge}>
                     {SPORT_LABELS[court.sport]}
                   </div>
 
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "14px",
-                      right: "14px",
-                      background: "#0d5efd",
-                      color: "#fff",
-                      padding: "8px 12px",
-                      borderRadius: "999px",
-                      fontWeight: 700,
-                    }}
-                  >
+                  <div className={styles.priceBadge}>
                     {formatPrice(Number(court.price_60))}
                   </div>
                 </div>
 
-                <div style={{ padding: "16px" }}>
-                  <h2 style={{ margin: "0 0 6px", fontSize: "1.1rem" }}>
-                    {court.name}
-                  </h2>
+                <div className={styles.courtBody}>
+                  <h2 className={styles.courtName}>{court.name}</h2>
 
-                  <p style={{ margin: "0 0 10px", color: "#666" }}>
+                  <p className={styles.courtClub}>
                     {court.club_name ? court.club_name : "Club sin nombre"}
                     {court.city ? ` · ${court.city}` : ""}
                   </p>
 
-                  <p style={{ margin: "0 0 10px", color: "#888" }}>
+                  <p className={styles.courtSurface}>
                     {SURFACE_LABELS[court.surface_type]}
                   </p>
 
-                  <p
-                    style={{
-                      margin: "0 0 16px",
-                      color: "#555",
-                      lineHeight: 1.5,
-                    }}
-                  >
+                  <p className={styles.courtDescription}>
                     {court.description || "Sin descripción disponible."}
                   </p>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "8px",
-                      marginBottom: "14px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "#f2f4f7",
-                        padding: "6px 10px",
-                        borderRadius: "999px",
-                        fontSize: "12px",
-                      }}
-                    >
+                  <div className={styles.pricePills}>
+                    <span className={styles.pricePill}>
                       60 min: {formatPrice(Number(court.price_60))}
                     </span>
-                    <span
-                      style={{
-                        background: "#f2f4f7",
-                        padding: "6px 10px",
-                        borderRadius: "999px",
-                        fontSize: "12px",
-                      }}
-                    >
+                    <span className={styles.pricePill}>
                       90 min: {formatPrice(Number(court.price_90))}
                     </span>
-                    <span
-                      style={{
-                        background: "#f2f4f7",
-                        padding: "6px 10px",
-                        borderRadius: "999px",
-                        fontSize: "12px",
-                      }}
-                    >
+                    <span className={styles.pricePill}>
                       120 min: {formatPrice(Number(court.price_120))}
                     </span>
                   </div>
 
                   <Link
                     href={`/courts/${court.id}`}
-                    style={{
-                      display: "inline-block",
-                      width: "100%",
-                      textAlign: "center",
-                      padding: "12px 14px",
-                      borderRadius: "12px",
-                      background: "#111",
-                      color: "#fff",
-                      textDecoration: "none",
-                      fontWeight: 700,
-                    }}
+                    className={styles.detailLink}
                   >
                     Ver detalle
                   </Link>
@@ -262,3 +172,4 @@ export default function CourtPage() {
     </main>
   );
 }
+//#endregion

@@ -1,0 +1,63 @@
+//#region MODULES
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  color: #2c3e50;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTag {
+  margin: 0;
+  color: #0059ff;
+  font-weight: 700;
+}
+
+.title {
+  margin: 8px 0 10px;
+  font-size: 2.4rem;
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin: 0;
+  color: #555;
+  max-width: 700px;
+  font-size: 1rem;
+}
+
+.searchBox {
+  margin-top: 18px;
+  width: 100%;
+  max-width: 520px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #d9d9d9;
+  outline: none;
+  font-size: 16px;
+  background: #fff;
+
+  &:focus {
+    border-color: #0059ff;
+    box-shadow: 0 0 0 3px rgba(0, 89, 255, 0.12);
+  }
+}
+
+.status {
+  color: #666;
+}
+
+.errorText {
+  color: #c62828;
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+//#endregion

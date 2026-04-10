@@ -1,12 +1,28 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ClubCard from "@/components/modules/clubs/ClubCard";
 import { getClubs } from "@/api/clubApi";
 import type { ClubWithManager } from "@/types/club";
+import styles from "./ClubsPage.module.scss";
 
+//#region DOCUMENTATION
 /**
+ * @page Clubs
  * Pantalla principal de clubes.
  * Permite buscar clubes y entrar al detalle de cada uno.
+ *
+ * Secciones:
+ *   Hero       → título, texto introductorio y buscador
+ *   Results    → listado de clubes filtrados usando ClubCard
+ *   Status     → estados de carga, error y vacío
+ *
+ * Comportamiento:
+ *   - Carga los clubes desde el backend al montar.
+ *   - Filtra por nombre, dirección, ciudad y descripción.
+ *   - Reutiliza ClubCard para mantener la UI consistente con el resto de la app.
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function ClubsPage() {
   const [clubs, setClubs] = useState<ClubWithManager[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,27 +67,12 @@ export default function ClubsPage() {
     });
   }, [clubs, query]);
 
-  const pageStyle: CSSProperties = {
-    maxWidth: "1180px",
-    margin: "0 auto",
-    padding: "32px 20px 64px",
-  };
-
-  const gridStyle: CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "20px",
-    marginTop: "24px",
-  };
-
   return (
-    <main style={pageStyle}>
-      <section style={{ marginBottom: "24px" }}>
-        <p style={{ margin: 0, color: "#0d5efd", fontWeight: 700 }}>Clubes</p>
-        <h1 style={{ margin: "8px 0 10px", fontSize: "2rem" }}>
-          Encuentra tu club
-        </h1>
-        <p style={{ margin: 0, color: "#555", maxWidth: "700px" }}>
+    <main className={styles.page}>
+      <section className={styles.section}>
+        <p className={styles.sectionTag}>Clubes</p>
+        <h1 className={styles.title}>Encuentra tu club</h1>
+        <p className={styles.subtitle}>
           Busca por nombre, ciudad o descripción y entra al club para ver sus
           pistas.
         </p>
@@ -81,28 +82,19 @@ export default function ClubsPage() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Buscar clubes..."
-          style={{
-            marginTop: "18px",
-            width: "100%",
-            maxWidth: "520px",
-            padding: "14px 16px",
-            borderRadius: "12px",
-            border: "1px solid #d9d9d9",
-            outline: "none",
-            fontSize: "16px",
-          }}
+          className={styles.searchBox}
         />
       </section>
 
-      {loading ? <p>Cargando clubes...</p> : null}
-      {error ? <p style={{ color: "#c62828" }}>{error}</p> : null}
+      {loading ? <p className={styles.status}>Cargando clubes...</p> : null}
+      {error ? <p className={styles.errorText}>{error}</p> : null}
 
       {!loading && !error && filteredClubs.length === 0 ? (
         <p>No hay clubes que coincidan con la búsqueda.</p>
       ) : null}
 
       {!loading && !error ? (
-        <section style={gridStyle}>
+        <section className={styles.resultsGrid}>
           {filteredClubs.map((club) => {
             return (
               <ClubCard key={club.id} club={club} href={`/clubs/${club.id}`} />
@@ -113,3 +105,4 @@ export default function ClubsPage() {
     </main>
   );
 }
+//#endregion
