@@ -189,7 +189,7 @@ environment:
   JWT_EXPIRES_IN: 7d
   SALT_ROUNDS: 10
   MAIL_USER: changeme@gmail.com
-  MAIL_PASS: change_me_in_production
+  MAIL_PASS: change_me_in_production # No es la password de tu correo sino una password de aplicación
   APP_URL: http://localhost:3000/
   CORS_ORIGINAL: http://localhost:3000
 ```
@@ -304,18 +304,6 @@ La aplicación soporta múltiples idiomas:
 - 🇬🇧 Inglés
 
 Los usuarios pueden cambiar el idioma desde la interfaz.
-
----
-
-## 🧩 Cambios de este commit
-
-Este commit deja documentado y conectado el flujo principal por clubes y pistas:
-
-- [backend/src/db/migrations/20260410000200-seed-demo-data.js](backend/src/db/migrations/20260410000200-seed-demo-data.js): añade datos de ejemplo para arrancar con un club demo y varias pistas.
-- [frontend/src/api/clubApi.ts](frontend/src/api/clubApi.ts) y [frontend/src/api/courtApi.ts](frontend/src/api/courtApi.ts): centralizan las llamadas al backend para clubes y pistas.
-- [frontend/src/pages/clubs/index.tsx](frontend/src/pages/clubs/index.tsx) y [frontend/src/pages/clubs/[id].tsx](frontend/src/pages/clubs/[id].tsx): muestran el listado de clubes y el detalle de cada club con sus pistas.
-- [frontend/src/pages/courts/court.tsx](frontend/src/pages/courts/court.tsx) y [frontend/src/pages/courts/[id].tsx](frontend/src/pages/courts/[id].tsx): mantienen el listado y detalle de pistas, enlazados ahora desde el club correcto.
-- [frontend/src/pages/index.tsx](frontend/src/pages/index.tsx), [frontend/src/components/layouts/Footer.tsx](frontend/src/components/layouts/Footer.tsx) y [frontend/src/config/locales/es.json](frontend/src/config/locales/es.json) / [frontend/src/config/locales/en.json](frontend/src/config/locales/en.json): actualizan accesos y textos para reflejar el recorrido nuevo.
 
 ---
 
