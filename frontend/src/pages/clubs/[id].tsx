@@ -27,6 +27,7 @@ export default function ClubDetailPage() {
       return;
     }
 
+    // Cargamos el club y sus pistas a la vez para mantener la vista sincronizada.
     const loadClub = async () => {
       try {
         setLoading(true);
