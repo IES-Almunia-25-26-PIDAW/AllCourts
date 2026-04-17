@@ -141,10 +141,10 @@ npm run dev
 
 La forma recomendada de despliegue y prueba es con Docker Compose desde la raíz del proyecto:
 
-Antes de arrancar Docker, copia y rellena estos archivos de ejemplo:
+Antes de arrancar Docker, prepara la configuración de entorno:
 
-- `backend/.env.example` -> `backend/.env`
-- `frontend/.env.example` -> `frontend/.env`
+- Copia `backend/.env.example` a `backend/.env` y rellena sus valores.
+- Copia `frontend/.env.example` a `frontend/.env` y rellena sus valores.
 
 Esos son los valores que hay que completar antes de ejecutar el stack.
 
@@ -158,6 +158,8 @@ Esto construye las imágenes e inicia estos servicios:
 - `backend`: API en `http://localhost:5000`
 - `frontend`: aplicación web en `http://localhost:3000`
 - `mailpit`: bandeja de correo de prueba en `http://localhost:8025`
+
+La base de datos se crea sola al primer arranque con Docker. Después, el backend ejecuta las migraciones automáticamente dentro del contenedor.
 
 Antes de arrancar, revisa que existan estos archivos:
 
