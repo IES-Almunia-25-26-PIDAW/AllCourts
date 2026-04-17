@@ -1,101 +1,158 @@
-# AllCourts
+# 🎾 AllCourts
 
-Aplicación web para gestionar clubes, pistas, reservas y pagos. El proyecto está dividido en un frontend con Next.js y un backend con Node.js, MySQL y autenticación JWT.
+<img width="1024" height="1024" alt="AllCourts Logo" src="https://github.com/user-attachments/assets/019d5034-5501-40a6-a84e-440ab98c8145" />
 
-## Stack
+**AllCourts** es una **aplicación web moderna e intuitiva** para **reservar y gestionar clubes y pistas deportivas**. Inspirada en **Playtomic**, combina un **frontend en Next.js con TypeScript** y un **backend en Node.js con MySQL** para ofrecer una experiencia rápida, fiable y escalable.
 
-- Frontend: Next.js, React, TypeScript, Redux Toolkit, SCSS
-- Backend: Node.js, Express, MySQL, JWT, Nodemailer
-- Entorno de desarrollo: Docker Compose, MySQL y Mailpit
+---
 
-## Requisitos
+## ✨ Características
 
-- Docker y Docker Compose
-- Node.js 20+ si quieres ejecutar frontend o backend fuera de Docker
+### Para Jugadores
 
-## Estructura
+- 🏟 **Explorar Clubes y Pistas** – Consulta clubes, entra en cada instalación y revisa sus pistas en **tiempo real**
+- 📅 **Reservar y Cancelar** – Gestiona tus reservas de forma **rápida e intuitiva**
+- 💳 **Pagos Seguros** – Sistema de pagos integrado para completar reservas
+- ✅ **Seguimiento de Reservas** – Visualiza el historial y estado de tus reservas
+- 🌐 **Multiidioma** – Soporte para español e inglés (i18n)
+- 📱 **Diseño Responsivo** – Experiencia optimizada en **ordenador, tablet y móvil**
 
-- `backend/`: API REST, migraciones, configuración de correo y base de datos
-- `frontend/`: interfaz web
-- `database/`: scripts SQL de apoyo
-- `docker-compose.yml`: arranque completo del stack
+### Para Gestores
 
-## Variables de entorno
+- 🏢 **Panel de Gestión** – Dashboard completo para administrar pistas y reservas
+- 📊 **Estadísticas** – Visualiza métricas y rendimiento de tus instalaciones
+- ⚙️ **Gestión de Pistas** – Crea, edita y administra pistas deportivas
+- 📆 **Control de Disponibilidad** – Gestiona horarios y disponibilidad de cada pista
 
-### Backend
+---
 
-Copia `backend/.env.example` a `backend/.env` y ajusta estos valores:
-
-```env
-PORT=5000
-DB_HOST=db
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=root
-DB_NAME=allcourts_db
-SALT_ROUNDS=10
-JWT_SECRET=change_me_in_production
-JWT_EXPIRES_IN=1h
-MAIL_HOST=mailpit
-MAIL_PORT=1025
-MAIL_FROM=no-reply@allcourts.com
-APP_URL=http://localhost:3000
-CORS_ORIGINAL=http://localhost:3000
-```
+## 💻 Tecnologías
 
 ### Frontend
 
-<<<<<<< Updated upstream
-## ⚙️ Instalación y Configuración
-=======
-Copia `frontend/.env.example` a `frontend/.env` y deja:
->>>>>>> Stashed changes
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white)
+![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 
-```env
-PORT=3000
-NEXT_PUBLIC_API_URL=http://localhost:5000
+- **Framework:** Next.js 14+ (React framework con SSR/SSG)
+- **Lenguaje:** TypeScript para type-safety
+- **Estado:** Redux Toolkit para gestión de estado global
+- **Estilos:** SCSS/CSS Modules
+- **Internacionalización:** i18next para soporte multiidioma
+- **API Client:** helpers `fetch` tipados para comunicación con el backend
+
+### Backend
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+
+- **Runtime:** Node.js
+- **Framework:** Express.js para API REST
+- **Base de datos:** MySQL con Sequelize ORM
+- **Autenticación:** JWT (JSON Web Tokens)
+- **Validación:** Express-validator
+- **Seguridad:** bcrypt para encriptación, helmet para headers HTTP seguros
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+allcourts/
+├── backend/           # API REST con Node.js y Express
+│   ├── src/
+│   │   ├── config/    # Configuración de DB y variables de entorno
+│   │   ├── controllers/   # Lógica de negocio
+│   │   ├── middlewares/   # Autenticación y manejo de errores
+│   │   ├── models/        # Modelos de datos (Sequelize)
+│   │   ├── routes/        # Definición de rutas API
+│   │   └── utils/         # Utilidades
+│   └── package.json
+│
+├── frontend/          # Aplicación Next.js con TypeScript
+│   ├── src/
+│   │   ├── api/          # Servicios API
+│   │   ├── components/   # Componentes React reutilizables
+│   │   ├── config/       # Configuración i18n
+│   │   ├── pages/        # Páginas Next.js (routing)
+│   │   ├── store/        # Redux store y slices
+│   │   ├── styles/       # Estilos globales SCSS
+│   │   └── utils/        # Funciones auxiliares
+│   └── package.json
+│
+└── database/         # Scripts SQL y esquemas
+    └── schema.sql
 ```
 
-<<<<<<< Updated upstream
+---
+
+## 🚀 Instalación y Configuración
+
+### Prerrequisitos
+
 - Node.js (v16 o superior)
 - MySQL (v8.0 o superior)
-- Docker Engine
+- npm o yarn
 
-## 🚀 Pasos a seguir para el despliegue:
-=======
-## Ejecutar en local con Docker
->>>>>>> Stashed changes
-
-Desde la raíz del proyecto:
+### 1. Clonar el repositorio
 
 ```bash
-docker compose up -d --build
+git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
+cd allcourts
 ```
 
-<<<<<<< Updated upstream
-### 2. Configurar el Backend
+### 2. Configurar la base de datos
+
+```bash
+# Opcional: crear la base de datos manualmente (si no existe)
+# CREATE DATABASE allcourts_db;
+```
+
+### 3. Configurar el Backend
 
 ```bash
 cd backend
+npm install
 
-# Copiar archivo backend/.env.example a backend/.env
+# Crear archivo .env a partir de backend/.env.example
 # y ajustar valores reales de tu entorno
 
+# Ejecutar migraciones
+npm run migrate:up
+
+npm run dev
+```
+
+El proyecto incluye una migración de datos de ejemplo para que puedas probar el flujo desde el primer arranque. Al levantar la base de datos tendrás un club demo y varias pistas cargadas.
+
+El flujo principal de navegación del frontend es:
+
+```text
+/clubs -> /clubs/:id -> /courts/court -> /courts/:id
 ```
 
 ### 4. Configurar el Frontend
 
 ```bash
-cd frontend
+cd ../frontend
+npm install
 
-# Copiar archivo frontend/.env.example a frontend/.env
-# y ajustar valores reales de tu entorno
-
+# El frontend se conectará al backend en http://localhost:5000
+npm run dev
 ```
 
 ### 5. Despliegue con Docker
 
 La forma recomendada de despliegue y prueba es con docker-compose desde la raíz del proyecto:
+
+Antes de arrancar el Docker, prepara la configuración de entorno:
+
+- Copia `backend/.env.example` a `backend/.env` y rellena sus valores.
+- Copia `frontend/.env.example` a `frontend/.env` y rellena sus valores.
 
 ```bash
 docker compose up -d --build
@@ -114,32 +171,17 @@ Valores importantes:
 - `frontend/.env` debe usar `NEXT_PUBLIC_API_URL=http://localhost:5000`
 
 Para comprobar que todo está levantado:
-=======
-Esto levanta estos servicios:
-
-- `db`: MySQL
-- `backend`: API en `http://localhost:5000`
-- `frontend`: web en `http://localhost:3000`
-- `mailpit`: bandeja de prueba en `http://localhost:8025`
-
-Para comprobar el estado:
->>>>>>> Stashed changes
 
 ```bash
 docker compose ps
 ```
 
-<<<<<<< Updated upstream
 Para parar el entorno:
-=======
-Para parar todo:
->>>>>>> Stashed changes
 
 ```bash
 docker compose down
 ```
 
-<<<<<<< Updated upstream
 Si quieres borrar también los datos persistentes de MySQL:
 
 ```bash
@@ -152,15 +194,15 @@ docker compose down -v
 - Backend API: http://localhost:5000
 - Mailpit: http://localhost:8025
 
-### Datos de ejemplo
-
-Para desarrollo local, el proyecto incluye una migración de datos de ejemplo con un club demo, un manager y varias pistas. Al levantar el proyecto, tendrías en la BBDD los datos de demo cargados.
-
-El flujo principal de navegación de la interfaz es:
+El recorrido principal de la interfaz es:
 
 ```text
 /clubs -> /clubs/:id -> /courts/court -> /courts/:id
 ```
+
+### Datos de ejemplo
+
+Para desarrollo local se incluye una migración de seed con un club demo, un manager y varias pistas. Si la interfaz te aparece vacía, normalmente significa que no se han ejecutado las migraciones o que la base de datos no contiene todavía esa seed.
 
 ---
 
@@ -240,48 +282,35 @@ Los usuarios pueden cambiar el idioma desde la interfaz.
 ---
 
 ## 📝 Scripts Disponibles
-=======
-## Ejecutar sin Docker
-
-Si prefieres levantarlo manualmente:
->>>>>>> Stashed changes
 
 ### Backend
 
 ```bash
-cd backend
-npm install
-npm run migrate:up
-npm run dev
+npm run dev      # Iniciar servidor en modo desarrollo
+npm start        # Iniciar servidor en producción
+npm run migrate:up      # Aplicar migraciones pendientes
+npm run migrate:down    # Revertir la ultima migracion
+npm run migrate:status  # Ver estado de migraciones
+npm run migrate:create -- nombre_migracion  # Crear nueva migracion
 ```
 
 ### Frontend
 
 ```bash
-cd frontend
-npm install
-npm run dev
+npm run dev      # Iniciar Next.js en modo desarrollo
+npm run build    # Compilar aplicación para producción
+npm start        # Iniciar servidor de producción
+npm run lint     # Ejecutar linter
 ```
 
-## Qué probar
+---
 
-- Registro e inicio de sesión
-- Verificación de email desde Mailpit
-- Listado de clubes y pistas
-- Creación y gestión de reservas
+## 📄 Licencia
 
-## Producción / despliegue
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-La forma recomendada de despliegue es con Docker Compose:
+---
 
-1. Configura las variables de entorno de backend y frontend.
-2. Asegúrate de que `MAIL_HOST` apunte a Mailpit en desarrollo o al SMTP real en producción.
-3. Ejecuta `docker compose up -d --build`.
-4. Verifica el arranque con `docker compose ps`.
-5. Expón al exterior solo los puertos que necesites, normalmente `3000` y `5000`, o colócalo detrás de un proxy inverso.
-
-## Notas
-
-- El backend ejecuta migraciones al arrancar dentro del contenedor.
-- Mailpit solo se usa para desarrollo y pruebas de correo.
-- Si cambias credenciales de base de datos o correo, actualiza los archivos `.env` antes de levantar los contenedores.
+<div align="center">
+  Hecho con ❤️ por el equipo de AllCourts
+</div>
