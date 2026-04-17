@@ -1,13 +1,12 @@
 export interface Manager {
-  id: number;
-  user_id: number;
+  id: string;
   subscription_active: boolean;
   subscription_start?: string;
   subscription_end?: string;
 }
 
 export interface CreateManagerDTO {
-  user_id: number;
+  id: string;
   subscription_active?: boolean;
   subscription_start?: string;
   subscription_end?: string;

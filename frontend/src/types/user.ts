@@ -1,7 +1,7 @@
 export type UserRole = "player" | "manager";
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   username: string;
   email: string;
@@ -32,8 +32,6 @@ export interface UpdateUserDTO {
 }
 
 export interface LoginCredentials {
-  email: string;
+  identifier: string;
   password: string;
 }
-
-

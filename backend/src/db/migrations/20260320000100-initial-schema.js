@@ -26,7 +26,7 @@ function runStatements(db, statements, callback) {
 exports.up = function (db, callback) {
   const statements = [
     `CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id CHAR(36) PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
             username VARCHAR(50) NOT NULL UNIQUE,
             email VARCHAR(100) NOT NULL UNIQUE,
@@ -41,16 +41,15 @@ exports.up = function (db, callback) {
             last_login TIMESTAMP NULL
         )`,
     `CREATE TABLE IF NOT EXISTS managers (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL UNIQUE,
+          id CHAR(36) PRIMARY KEY,
             subscription_active BOOLEAN DEFAULT FALSE,
             subscription_start DATE,
             subscription_end DATE,
-            CONSTRAINT fk_managers_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            CONSTRAINT fk_managers_user FOREIGN KEY (id) REFERENCES users (id) ON DELETE CASCADE
         )`,
     `CREATE TABLE IF NOT EXISTS clubs (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            manager_id INT NOT NULL,
+          manager_id CHAR(36) NOT NULL,
             name VARCHAR(100) NOT NULL,
             address VARCHAR(255),
             city VARCHAR(100),
@@ -103,8 +102,8 @@ exports.up = function (db, callback) {
             CONSTRAINT fk_schedules_court FOREIGN KEY (court_id) REFERENCES courts (id) ON DELETE CASCADE
         )`,
     `CREATE TABLE IF NOT EXISTS bookings (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id CHAR(36) NOT NULL,
             court_id INT NOT NULL,
             date DATE NOT NULL,
             start_time TIME NOT NULL,

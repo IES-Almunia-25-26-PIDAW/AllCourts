@@ -2,7 +2,7 @@ export type BookingStatus = "pending" | "confirmed" | "cancelled";
 
 export interface Booking {
   id: number;
-  user_id: number;
+  user_id: string;
   court_id: number;
   date: string;
   start_time: string;
@@ -15,7 +15,7 @@ export interface Booking {
 }
 
 export interface CreateBookingDTO {
-  user_id: number;
+  user_id: string;
   court_id: number;
   date: string;
   start_time: string;
