@@ -6,6 +6,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 type ApiErrorResponse = {
   message?: string;
 };
+
+let refreshPromise: Promise<boolean> | null = null;
 //#endregion
 
 //#region DOCUMENTATION
@@ -27,7 +29,6 @@ type ApiErrorResponse = {
 
 //#region FUNCTIONS
 async function readJson<T>(response: Response): Promise<T> {
-  // Algunas rutas pueden devolver contenido no JSON, así que protegemos el parseo.
   const contentType = response.headers.get("content-type") || "";
 
   if (!contentType.includes("application/json")) {
@@ -35,6 +36,25 @@ async function readJson<T>(response: Response): Promise<T> {
   }
 
   return (await response.json()) as T;
+}
+
+//! Añadir documentación de refreshSession
+async function refreshSession(): Promise<boolean> {
+  if (!refreshPromise) {
+    refreshPromise = fetch(`${API_URL}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.ok)
+      .catch(() => false)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
 }
 
 /**
@@ -45,19 +65,38 @@ async function readJson<T>(response: Response): Promise<T> {
  * @returns La respuesta tipada del backend.
  */
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  // Centralizamos el fetch para que todos los clientes compartan auth y errores.
-  const response = await fetch(`${API_URL}${path}`, {
-    ...init,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers || {}),
-    },
-  });
+  const execute = async () => {
+    const response = await fetch(`${API_URL}${path}`, {
+      ...init,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.headers || {}),
+      },
+    });
 
-  const payload = (await readJson<ApiErrorResponse & T>(response)) as
-    | ApiErrorResponse
-    | T;
+    const payload = (await readJson<ApiErrorResponse & T>(response)) as
+      | ApiErrorResponse
+      | T;
+
+    return { response, payload };
+  };
+
+  let { response, payload } = await execute();
+
+  const skipRefresh =
+    path.startsWith("/auth/login") ||
+    path.startsWith("/auth/register") ||
+    path.startsWith("/auth/logout") ||
+    path.startsWith("/auth/refresh") ||
+    path.startsWith("/auth/verify");
+
+  if (response.status === 401 && !skipRefresh) {
+    const refreshed = await refreshSession();
+    if (refreshed) {
+      ({ response, payload } = await execute());
+    }
+  }
 
   if (!response.ok) {
     const message =
