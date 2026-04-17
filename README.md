@@ -147,69 +147,52 @@ npm run dev
 
 ### 5. Despliegue con Docker
 
-Si quieres levantar todo el stack con Docker, usa docker-compose desde la raíz del proyecto:
+La forma recomendada de despliegue y prueba es con docker-compose desde la raíz del proyecto:
+
+Antes de arrancar el Docker, prepara la configuración de entorno:
+
+- Copia `backend/.env.example` a `backend/.env` y rellena sus valores.
+- Copia `frontend/.env.example` a `frontend/.env` y rellena sus valores.
 
 ```bash
-git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
-cd AllCourts
-docker compose up --build -d
+docker compose up -d --build
 ```
 
-Esto crea y levanta los siguientes servicios:
+Esto construye las imágenes e inicia estos servicios:
 
 - `db`: MySQL 8.4
-- `backend`: API en Node/Express en el puerto `5000`
-- `frontend`: Next.js en el puerto `3000`
+- `backend`: API en Node/Express -> `http://localhost:5000`
+- `frontend`: aplicación web en Next.js -> `http://localhost:3000`
+- `mailpit`: bandeja de correo de prueba con mailpit -> `http://localhost:8025`
 
-Verifica el estado con:
+Valores importantes:
+
+- `backend/.env` debe usar `DB_HOST=db`, `MAIL_HOST=mailpit` y `APP_URL=http://localhost:3000`
+- `frontend/.env` debe usar `NEXT_PUBLIC_API_URL=http://localhost:5000`
+
+Para comprobar que todo está levantado:
 
 ```bash
 docker compose ps
 ```
 
-Para detener y eliminar los contenedores, redes y volúmenes creados:
+Para parar el entorno:
 
 ```bash
 docker compose down
 ```
 
-#### Variables de entorno del backend en Docker
+Si quieres borrar también los datos persistentes de MySQL:
 
-El servicio `backend` utiliza estas variables de entorno. Los valores de abajo son solo de ejemplo y deben adaptarse a tu entorno:
-
-```yaml
-environment:
-  PORT: 5000
-  DB_HOST: db
-  DB_PORT: 3306
-  DB_USER: allcourts
-  DB_PASSWORD: allcourts
-  DB_NAME: allcourts_db
-  JWT_SECRET: change_me_in_production
-  JWT_EXPIRES_IN: 7d
-  SALT_ROUNDS: 10
-  MAIL_USER: changeme@gmail.com
-  MAIL_PASS: change_me_in_production # No es la password de tu correo sino una password de aplicación
-  APP_URL: http://localhost:3000/
-  CORS_ORIGINAL: http://localhost:3000
+```bash
+docker compose down -v
 ```
-
-Si necesitas probar el envío de correos, sustituye `MAIL_USER` y `MAIL_PASS` por credenciales válidas de prueba. Para desarrollo local, `APP_URL` debe apuntar al frontend.
-
-#### Variables de entorno del frontend
-
-El frontend usa una variable pública para saber a qué URL debe hacer las peticiones al backend:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
-
-Si trabajas con Docker, esta URL debe apuntar al backend publicado en tu entorno local. Si trabajas sin Docker, puedes usar la misma dirección siempre que el backend esté arrancado en `localhost:5000`.
 
 ### 6. Acceder a la aplicación
 
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:5000
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- Mailpit: http://localhost:8025
 
 El recorrido principal de la interfaz es:
 
@@ -246,43 +229,34 @@ Para desarrollo local se incluye una migración de seed con un club demo, un man
 
 ### Autenticación
 
-- `POST /auth/register` - Registrar nuevo usuario
-- `POST /auth/login` - Iniciar sesión
-- `GET /auth/me` - Obtener perfil del usuario autenticado
-
-### Clubes
-
-- `GET /clubs` - Listar todos los clubes
-- `GET /clubs/:id` - Obtener detalle de un club
-- `GET /clubs/city/:city` - Listar clubes por ciudad
-- `GET /clubs/manager/:managerId` - Listar clubes de un gestor
+- `POST /api/auth/register` - Registrar nuevo usuario
+- `POST /api/auth/login` - Iniciar sesión
+- `GET /api/auth/profile` - Obtener perfil del usuario
 
 ### Pistas
 
-- `GET /courts` - Listar todas las pistas
-- `GET /courts/:id` - Obtener detalle de una pista
-- `GET /courts/club/:clubId` - Listar pistas de un club
-- `GET /courts/city/:city` - Listar pistas por ciudad
-- `POST /courts` - Crear nueva pista (solo gestores)
-- `PUT /courts/:id` - Actualizar pista (solo gestores)
-- `DELETE /courts/:id` - Eliminar pista (solo gestores)
+- `GET /api/courts` - Listar todas las pistas
+- `GET /api/courts/:id` - Obtener detalle de una pista
+- `POST /api/courts` - Crear nueva pista (solo gestores)
+- `PUT /api/courts/:id` - Actualizar pista (solo gestores)
+- `DELETE /api/courts/:id` - Eliminar pista (solo gestores)
 
 ### Reservas
 
-- `GET /bookings` - Obtener reservas del usuario
-- `POST /bookings` - Crear nueva reserva
-- `PUT /bookings/:id` - Actualizar reserva
-- `DELETE /bookings/:id` - Cancelar reserva
+- `GET /api/bookings` - Obtener reservas del usuario
+- `POST /api/bookings` - Crear nueva reserva
+- `PUT /api/bookings/:id` - Actualizar reserva
+- `DELETE /api/bookings/:id` - Cancelar reserva
 
 ### Pagos
 
-- `POST /payments` - Procesar pago de reserva
-- `GET /payments/:id` - Obtener detalle de pago
+- `POST /api/payments` - Procesar pago de reserva
+- `GET /api/payments/:id` - Obtener detalle de pago
 
 ### Gestores
 
-- `GET /managers/dashboard` - Obtener estadísticas del gestor
-- `GET /managers/bookings` - Listar reservas de las pistas del gestor
+- `GET /api/managers/dashboard` - Obtener estadísticas del gestor
+- `GET /api/managers/bookings` - Listar reservas de las pistas del gestor
 
 ---
 
