@@ -8,10 +8,11 @@ const authMiddleware = require("../middlewares/authMiddleware");
  * @module authRouter
  * Rutas de autenticación.
  *
- * POST  /auth/register        → Registro de nuevo usuario
- * POST  /auth/login           → Login con email y contraseña
- * GET   /auth/me              → Perfil del usuario autenticado (requiere token)
- * GET   /auth/verify/:token   → Verificación de email
+ * POST  /auth/register       → Registro de nuevo usuario
+ * POST  /auth/login          → Login con email y contraseña
+ * GET   /auth/me             → Perfil del usuario autenticado (requiere token)
+ * GET   /auth/verify/:token  → Verificación de email
+ * POST  /auth/refresh        → Refresco de la sesión
  */
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 router.get("/me", authMiddleware, authController.me);
 router.get("/verify/:token", authController.verifyEmail);
+router.post("/refresh", authController.refresh);
 
 module.exports = router;

@@ -4,10 +4,85 @@ const crypto = require("crypto");
 const User = require("../models/User");
 const Manager = require("../models/Manager");
 const { sendVerificationEmail } = require("../services/emailService");
+const RefreshToken = require("../models/RefreshTokens");
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN;
+
+const ACCESS_COOKIE_MAX_AGE = 15 * 60 * 1000; //? cuanto es
+const REFRESH_COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000; //? cuanto es
+
+function hashToken(token) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+function stripSensitiveUser(user) {
+  const { password, verification_token, token_expires_at, ...safeUser } = user;
+  return safeUser;
+}
+
+function signAccessToken(user) {
+  return jwt.sign(
+    {
+      id: user.id,
+      role: user.role,
+    },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN },
+  );
+}
+
+function signRefreshToken(user) {
+  return jwt.sign(
+    {
+      id: user.id,
+      type: "refresh",
+    },
+    REFRESH_TOKEN_SECRET,
+    { expiresIn: REFRESH_TOKEN_EXPIRES_IN },
+  );
+}
+
+function setAuthCookies(res, accessToken, refreshToken) {
+  const baseOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  };
+
+  res.cookie("allcourts_token", accessToken, {
+    ...baseOptions,
+    maxAge: ACCESS_COOKIE_MAX_AGE,
+  });
+
+  res.cookie("allcourts_refresh_token", refreshToken, {
+    ...baseOptions,
+    maxAge: REFRESH_COOKIE_MAX_AGE,
+  });
+}
+
+function clearAuthCookies(res) {
+  const baseOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  };
+
+  res.cookie("allcourts_token", "", {
+    ...baseOptions,
+    maxAge: 0,
+  });
+
+  res.cookie("allcourts_refresh_token", "", {
+    ...baseOptions,
+    maxAge: 0,
+  });
+}
 
 /**
  * @module authController
@@ -116,7 +191,6 @@ const authController = {
 
       const user = rows[0];
 
-      // Comparar contraseña plana con el hash almacenado
       const match = await bcrypt.compare(password, user.password);
       if (!match)
         return res.status(401).json({ message: "Credenciales incorrectas" });
@@ -127,41 +201,78 @@ const authController = {
             "Verifica tu correo electrónico para poder iniciar sesión. Revisa tu bandeja de entrada o de spam",
         });
 
-      // Actualizar timestamp de último acceso
       await User.updateLastLogin(user.id);
 
-      const token = jwt.sign(
-        {
-          id: user.id,
-          role: user.role,
-        },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRES_IN },
-      );
+      const accessToken = signAccessToken(user);
+      const refreshToken = signRefreshToken(user);
 
-      // Set httpOnly cookie for the token so frontends on the same origin
-      // can use cookies for auth without exposing token to JS.
-      try {
-        const maxAge = 60 * 60 * 1000;
-        res.cookie("allcourts_token", token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          maxAge,
-          path: "/",
-        });
-      } catch (e) {
-        // continue even if cookies cannot be set
+      await RefreshToken.create({
+        id: crypto.randomUUID(),
+        user_id: user.id,
+        token_hash: hashToken(refreshToken),
+        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      });
+
+      setAuthCookies(res, accessToken, refreshToken);
+
+      res.json({ user: stripSensitiveUser(user) });
+    } catch (err) {
+      next(err);
+    }
+  },
+  //#endregion
+
+  //! Añadir documentación de refresh
+  //#region refresh
+  refresh: async (req, res, next) => {
+    try {
+      const refreshToken = req.cookies?.allcourts_refresh_token;
+
+      if (!refreshToken) {
+        return res
+          .status(401)
+          .json({ message: "No se ha proporcionado un token de refresco" });
       }
 
-      // Return user data (never the raw token)
-      const {
-        password: _pw,
-        verification_token: _vt,
-        token_expires_at: _te,
-        ...safeUser
-      } = user;
-      res.json({ user: safeUser });
+      let payload;
+      try {
+        payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+      } catch {
+        return res.status(401).json({ message: "No válido o token expirado" });
+      }
+
+      if (payload.type !== "refresh") {
+        return res.status(401).json({ message: "Token de refresco no válido" });
+      }
+
+      const tokenHash = hashToken(refreshToken);
+      const [tokenRows] = await RefreshToken.findByHash(tokenHash);
+
+      if (tokenRows.length === 0 || tokenRows[0].revoked_at) {
+        return res.status(401).json({ message: "Token de refresco revocado" });
+      }
+
+      const [users] = await User.getById(payload.id);
+      if (users.length === 0) {
+        return res.status(401).json({ message: "Usuario no encontrado" });
+      }
+
+      await RefreshToken.revokeByHash(tokenHash);
+
+      const user = users[0];
+      const newAccessToken = signAccessToken(user);
+      const newRefreshToken = signRefreshToken(user);
+
+      await RefreshToken.create({
+        id: crypto.randomUUID(),
+        user_id: user.id,
+        token_hash: hashToken(newRefreshToken),
+        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      });
+
+      setAuthCookies(res, newAccessToken, newRefreshToken);
+
+      res.json({ user: stripSensitiveUser(user) });
     } catch (err) {
       next(err);
     }
@@ -216,14 +327,15 @@ const authController = {
   //#region logout
   logout: async (req, res, next) => {
     try {
-      // Clear the cookie set on login
-      res.cookie("allcourts_token", "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 0,
-        path: "/",
-      });
+      const refreshToken = req.cookies?.allcourts_refresh_token;
+
+      if (refreshToken) {
+        try {
+          await RefreshToken.revokeByHash(hashToken(refreshToken));
+        } catch {}
+      }
+
+      clearAuthCookies(res);
       res.json({ message: "Logged out" });
     } catch (err) {
       next(err);
