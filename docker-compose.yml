@@ -41,6 +41,14 @@ services:
     ports:
       - "5000:5000"
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: allcourts-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
   frontend:
     build:
       context: ./frontend
