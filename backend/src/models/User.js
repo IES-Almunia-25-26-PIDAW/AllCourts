@@ -15,9 +15,10 @@ const { pool } = require("../config/db");
 const User = {
   create: (user) => {
     const sql = `INSERT INTO users 
-        (name, username, email, password, role, phone, avatar_url) 
+        (id, name, username, email, password, role, phone, avatar_url) 
         VALUES (?, ?, ?, ?, ?, ?, ?)`;
     return pool.execute(sql, [
+      user.id,
       user.name,
       user.username,
       user.email,

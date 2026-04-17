@@ -31,6 +31,7 @@ const authController = {
    * Body: { name, username, email, password, role, phone?, avatar_url? }
    * Response 201: { message, token }
    */
+  //#region register
   register: async (req, res, next) => {
     try {
       const { name, username, email, password, role, phone, avatar_url } =
@@ -39,17 +40,25 @@ const authController = {
       // Comprobar duplicados antes de insertar
       const [byEmail] = await User.getByEmail(email);
       if (byEmail.length > 0)
-        return res.status(409).json({ message: "Email already in use" });
+        return res
+          .status(409)
+          .json({ message: "Correo electrónico ya registrado" });
 
       const [byUsername] = await User.getByUsername(username);
       if (byUsername.length > 0)
-        return res.status(409).json({ message: "Username already taken" });
+        return res
+          .status(409)
+          .json({ message: "Nombre de usuario ya registrado" });
 
       // Hashear contraseña (nunca se guarda en texto plano)
       const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
       const userRole = role === "manager" ? "manager" : "player";
 
-      const [result] = await User.create({
+      // id es un UUID
+      const userId = crypto.randomUUID();
+
+      await User.create({
+        id: userId,
         name,
         username,
         email,
@@ -58,8 +67,6 @@ const authController = {
         phone: phone || null,
         avatar_url: avatar_url || null,
       });
-
-      const userId = result.insertId;
 
       // Generar token de verificación y enviarlo por email
       const verificationToken = crypto.randomBytes(32).toString("hex");
@@ -70,7 +77,7 @@ const authController = {
       // Si se registra como manager, crear también su fila en managers
       if (userRole === "manager") {
         await Manager.create({
-          user_id: userId,
+          id: userId,
           subscription_active: false,
           subscription_start: null,
           subscription_end: null,
@@ -82,6 +89,7 @@ const authController = {
       next(err);
     }
   },
+  //#endregion
 
   /**
    * Autentica un usuario con email y contraseña.
@@ -93,26 +101,31 @@ const authController = {
    * Response 200: { token, user }
    * Response 401: credenciales inválidas
    */
+  //#region login
   login: async (req, res, next) => {
     try {
-      const { email, password } = req.body;
+      const { identifier, password } = req.body;
 
-      // Buscar usuario por email (esta query devuelve todos los campos, incluido password)
-      const [rows] = await User.getByEmail(email);
+      const isEmail = identifier.includes("@");
+      const [rows] = isEmail
+        ? await User.getByEmail(identifier)
+        : await User.getByUsername(identifier);
+
       if (rows.length === 0)
-        return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Credenciales incorrectas" });
 
       const user = rows[0];
 
       // Comparar contraseña plana con el hash almacenado
       const match = await bcrypt.compare(password, user.password);
       if (!match)
-        return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Credenciales incorrectas" });
 
       if (!user.is_verified)
-        return res
-          .status(403)
-          .json({ message: "Please verify your email before logging in" });
+        return res.status(403).json({
+          message:
+            "Verifica tu correo electrónico para poder iniciar sesión. Revisa tu bandeja de entrada o de spam",
+        });
 
       // Actualizar timestamp de último acceso
       await User.updateLastLogin(user.id);
@@ -121,9 +134,6 @@ const authController = {
         {
           id: user.id,
           role: user.role,
-          name: user.name,
-          email: user.email,
-          username: user.username,
         },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRES_IN },
@@ -132,7 +142,7 @@ const authController = {
       // Set httpOnly cookie for the token so frontends on the same origin
       // can use cookies for auth without exposing token to JS.
       try {
-        const maxAge = 7 * 24 * 60 * 60 * 1000; // default 7 days
+        const maxAge = 60 * 60 * 1000;
         res.cookie("allcourts_token", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
@@ -156,6 +166,7 @@ const authController = {
       next(err);
     }
   },
+  //#endregion
 
   /**
    * Devuelve el perfil del usuario actualmente autenticado.
@@ -164,6 +175,7 @@ const authController = {
    * Response 200: datos del usuario (sin contraseña)
    * Response 404: usuario no encontrado
    */
+  //#region me
   me: async (req, res, next) => {
     try {
       const [rows] = await User.getById(req.user.id);
@@ -174,6 +186,7 @@ const authController = {
       next(err);
     }
   },
+  //#endregion
 
   /**
    * Verifica el email de un usuario usando el token enviado por correo.
@@ -184,6 +197,7 @@ const authController = {
    * Response 200: verificación exitosa
    * Response 400: token inválido o expirado
    */
+  //#region verifyEmail
   verifyEmail: async (req, res, next) => {
     try {
       const { token } = req.params;
@@ -197,6 +211,9 @@ const authController = {
       next(err);
     }
   },
+  //#endregion
+
+  //#region logout
   logout: async (req, res, next) => {
     try {
       // Clear the cookie set on login
@@ -212,6 +229,7 @@ const authController = {
       next(err);
     }
   },
+  //#endregion
 };
 
 module.exports = authController;

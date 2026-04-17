@@ -7,12 +7,12 @@ const { pool } = require("../config/db");
  * Modelo de datos para la gestión de clubes deportivos.
  * Encapsula las operaciones SQL sobre la tabla `clubs`.
  *
- * Cada método devuelve una Promise de `pool.execute()`, 
+ * Cada método devuelve una Promise de `pool.execute()`,
  * que se gestiona mediante `await`.
  *
  * Relaciones:
  *   clubs → managers  (cl.manager_id = m.id)
- *   managers → users  (m.user_id     = u.id)
+ *   managers → users  (m.id          = u.id)
  */
 const Club = {
   create: (club) => {
@@ -33,7 +33,7 @@ const Club = {
     const sql = `SELECT cl.*, u.name as manager_name, u.email as manager_email
             FROM clubs cl
             JOIN managers m ON cl.manager_id = m.id
-            JOIN users u ON m.user_id = u.id`;
+            JOIN users u ON m.id = u.id`;
     return pool.execute(sql);
   },
 
@@ -41,7 +41,7 @@ const Club = {
     const sql = `SELECT cl.*, u.name as manager_name, u.email as manager_email
             FROM clubs cl
             JOIN managers m ON cl.manager_id = m.id
-            JOIN users u ON m.user_id = u.id
+            JOIN users u ON m.id = u.id
             WHERE cl.id = ?`;
     return pool.execute(sql, [id]);
   },

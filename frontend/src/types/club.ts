@@ -1,6 +1,6 @@
 export interface Club {
   id: number;
-  manager_id: number;
+  manager_id: string;
   name: string;
   address: string;
   city: string;
@@ -15,7 +15,7 @@ export interface ClubWithManager extends Club {
 }
 
 export interface CreateClubDTO {
-  manager_id: number;
+  manager_id: string;
   name: string;
   address: string;
   city: string;

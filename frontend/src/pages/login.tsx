@@ -5,7 +5,11 @@ import { useTranslation } from "react-i18next";
 import styles from "@/styles/pages/Login.module.scss";
 import { login as loginRequest } from "@/api/authApi";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setAuth, setAuthError, setAuthLoading } from "@/store/slices/authSlice";
+import {
+  setAuth,
+  setAuthError,
+  setAuthLoading,
+} from "@/store/slices/authSlice";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -14,7 +18,7 @@ export default function Login() {
   const { loading, error } = useAppSelector((state) => state.auth);
 
   const [role, setRole] = useState<"player" | "manager">("player");
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -24,7 +28,9 @@ export default function Login() {
     }
 
     if (router.query.registered === "1") {
-      setNotice("Registro completado. Revisa tu correo para verificar la cuenta.");
+      setNotice(
+        "Registro completado. Revisa tu correo para verificar la cuenta.",
+      );
     }
   }, [router.isReady, router.query.registered]);
 
@@ -34,13 +40,15 @@ export default function Login() {
     dispatch(setAuthError(null));
 
     try {
-      const { user } = await loginRequest({ email, password });
+      const { user } = await loginRequest({ identifier, password });
       dispatch(setAuth(user));
-      try { window.localStorage.setItem("allcourts_user", JSON.stringify(user)); } catch {}
+      try {
+        window.localStorage.setItem("allcourts_user", JSON.stringify(user));
+      } catch {}
       router.push("/player/dashboard");
     } catch (error) {
       dispatch(
-        setAuthError(error instanceof Error ? error.message : "Login failed")
+        setAuthError(error instanceof Error ? error.message : "Login failed"),
       );
     } finally {
       dispatch(setAuthLoading(false));
@@ -50,7 +58,9 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.loginCard}>
-        <h1>{role === "player" ? t("login.title") : t("login.title_manager")}</h1>
+        <h1>
+          {role === "player" ? t("login.title") : t("login.title_manager")}
+        </h1>
         <p className={styles.subtitle}>{t("login.subtitle")}</p>
 
         <div className={styles.roleToggle}>
@@ -79,8 +89,8 @@ export default function Login() {
             <input
               type="email"
               placeholder={t("login.email_placeholder")}
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={identifier}
+              onChange={(event) => setIdentifier(event.target.value)}
             />
           </div>
 
@@ -98,7 +108,11 @@ export default function Login() {
             <Link href="/forgot-password">{t("login.forgot_password")}</Link>
           </div>
 
-          <button type="submit" className={styles.loginButton} disabled={loading}>
+          <button
+            type="submit"
+            className={styles.loginButton}
+            disabled={loading}
+          >
             {loading ? "..." : t("login.btn_login")}
           </button>
         </form>
@@ -108,7 +122,8 @@ export default function Login() {
         </div>
 
         <div className={styles.registerLink}>
-          {t("login.no_account")} <Link href="/register">{t("login.register")}</Link>
+          {t("login.no_account")}{" "}
+          <Link href="/register">{t("login.register")}</Link>
         </div>
       </div>
     </div>
