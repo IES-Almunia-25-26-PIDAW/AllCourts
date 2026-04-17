@@ -2,32 +2,34 @@
 
 <img width="1024" height="1024" alt="AllCourts Logo" src="https://github.com/user-attachments/assets/019d5034-5501-40a6-a84e-440ab98c8145" />
 
-
-**AllCourts** es una **aplicación web moderna e intuitiva** para **reservar y gestionar pistas deportivas**. Inspirada en **Playtomic**, combina un **frontend en Next.js con TypeScript** y un **backend en Node.js con MySQL** para ofrecer una experiencia rápida, fiable y escalable.  
+**AllCourts** es una **aplicación web moderna e intuitiva** para **reservar y gestionar pistas deportivas**. Inspirada en **Playtomic**, combina un **frontend en Next.js con TypeScript** y un **backend en Node.js con MySQL** para ofrecer una experiencia rápida, fiable y escalable.
 
 ---
 
 ## ✨ Características
 
 ### Para Jugadores
-- 🏟 **Explorar Pistas** – Consulta la disponibilidad de pistas deportivas en **tiempo real**  
-- 📅 **Reservar y Cancelar** – Gestiona tus reservas de forma **rápida e intuitiva**  
-- 💳 **Pagos Seguros** – Sistema de pagos integrado para completar reservas  
-- ✅ **Seguimiento de Reservas** – Visualiza el historial y estado de tus reservas  
-- 🌐 **Multiidioma** – Soporte para español e inglés (i18n)  
-- 📱 **Diseño Responsivo** – Experiencia optimizada en **ordenador, tablet y móvil**  
+
+- 🏟 **Explorar Pistas** – Consulta la disponibilidad de pistas deportivas en **tiempo real**
+- 📅 **Reservar y Cancelar** – Gestiona tus reservas de forma **rápida e intuitiva**
+- 💳 **Pagos Seguros** – Sistema de pagos integrado para completar reservas
+- ✅ **Seguimiento de Reservas** – Visualiza el historial y estado de tus reservas
+- 🌐 **Multiidioma** – Soporte para español e inglés (i18n)
+- 📱 **Diseño Responsivo** – Experiencia optimizada en **ordenador, tablet y móvil**
 
 ### Para Gestores
-- 🏢 **Panel de Gestión** – Dashboard completo para administrar pistas y reservas  
-- 📊 **Estadísticas** – Visualiza métricas y rendimiento de tus instalaciones  
-- ⚙️ **Gestión de Pistas** – Crea, edita y administra pistas deportivas  
-- 📆 **Control de Disponibilidad** – Gestiona horarios y disponibilidad de cada pista  
+
+- 🏢 **Panel de Gestión** – Dashboard completo para administrar pistas y reservas
+- 📊 **Estadísticas** – Visualiza métricas y rendimiento de tus instalaciones
+- ⚙️ **Gestión de Pistas** – Crea, edita y administra pistas deportivas
+- 📆 **Control de Disponibilidad** – Gestiona horarios y disponibilidad de cada pista
 
 ---
 
 ## 💻 Tecnologías
 
 ### Frontend
+
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
@@ -42,6 +44,7 @@
 - **API Client:** Axios para comunicación con el backend
 
 ### Backend
+
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
@@ -90,23 +93,27 @@ allcourts/
 ## 🚀 Instalación y Configuración
 
 ### Prerrequisitos
+
 - Node.js (v16 o superior)
 - MySQL (v8.0 o superior)
 - npm o yarn
 
 ### 1. Clonar el repositorio
+
 ```bash
 git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
 cd allcourts
 ```
 
 ### 2. Configurar la base de datos
+
 ```bash
 # Opcional: crear la base de datos manualmente (si no existe)
 # CREATE DATABASE allcourts_db;
 ```
 
 ### 3. Configurar el Backend
+
 ```bash
 cd backend
 npm install
@@ -121,6 +128,7 @@ npm run dev
 ```
 
 ### 4. Configurar el Frontend
+
 ```bash
 cd ../frontend
 npm install
@@ -130,48 +138,74 @@ npm run dev
 ```
 
 ### 5. Despliegue con Docker
-Si quieres levantar todo el stack con Docker, usa docker-compose desde la raíz del proyecto:
+
+La forma recomendada de despliegue y prueba es con Docker Compose desde la raíz del proyecto:
+
+Antes de arrancar Docker, copia y rellena estos archivos de ejemplo:
+
+- `backend/.env.example` -> `backend/.env`
+- `frontend/.env.example` -> `frontend/.env`
+
+Esos son los valores que hay que completar antes de ejecutar el stack.
 
 ```bash
-git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
-cd AllCourts
-docker compose up --build -d
+docker compose up -d --build
 ```
 
-Esto crea y levanta los siguientes servicios:
-- `db`: MySQL 8.4
-- `backend`: API en Node/Express en el puerto `5000`
-- `frontend`: Next.js en el puerto `3000`
+Esto construye las imágenes e inicia estos servicios:
 
-Verifica el estado con:
+- `db`: MySQL
+- `backend`: API en `http://localhost:5000`
+- `frontend`: aplicación web en `http://localhost:3000`
+- `mailpit`: bandeja de correo de prueba en `http://localhost:8025`
+
+Antes de arrancar, revisa que existan estos archivos:
+
+- `backend/.env`
+- `frontend/.env`
+
+Valores importantes:
+
+- `backend/.env` debe usar `DB_HOST=db`, `MAIL_HOST=mailpit` y `APP_URL=http://localhost:3000`
+- `frontend/.env` debe usar `NEXT_PUBLIC_API_URL=http://localhost:5000`
+
+Para comprobar que todo está levantado:
 
 ```bash
 docker compose ps
 ```
 
-Para detener y eliminar los contenedores, redes y volúmenes creados:
+Para parar el entorno:
 
 ```bash
 docker compose down
 ```
 
-> Nota: el backend en `docker-compose.yml` ya define las variables de entorno necesarias para la base de datos y JWT en modo producción.
+Si quieres borrar también los datos persistentes de MySQL:
+
+```bash
+docker compose down -v
+```
 
 ### 6. Acceder a la aplicación
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:5000
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- Mailpit: http://localhost:8025
 
 ---
 
 ## 📌 Primeros pasos
 
 ### Usuarios
+
 1. **Registrarse** – Crea una cuenta como jugador o gestor de pistas
 2. **Explorar Pistas** – Navega por las pistas disponibles
 3. **Reservar** – Selecciona fecha, hora y completa el pago
 4. **Gestionar** – Visualiza y administra tus reservas desde tu dashboard
 
 ### Gestores
+
 1. **Crear Perfil de Gestor** – Regístrate como administrador de instalaciones
 2. **Añadir Pistas** – Configura tus pistas deportivas
 3. **Gestionar Disponibilidad** – Define horarios y precios
@@ -182,11 +216,13 @@ docker compose down
 ## 🔑 API Endpoints
 
 ### Autenticación
+
 - `POST /api/auth/register` - Registrar nuevo usuario
 - `POST /api/auth/login` - Iniciar sesión
 - `GET /api/auth/profile` - Obtener perfil del usuario
 
 ### Pistas
+
 - `GET /api/courts` - Listar todas las pistas
 - `GET /api/courts/:id` - Obtener detalle de una pista
 - `POST /api/courts` - Crear nueva pista (solo gestores)
@@ -194,16 +230,19 @@ docker compose down
 - `DELETE /api/courts/:id` - Eliminar pista (solo gestores)
 
 ### Reservas
+
 - `GET /api/bookings` - Obtener reservas del usuario
 - `POST /api/bookings` - Crear nueva reserva
 - `PUT /api/bookings/:id` - Actualizar reserva
 - `DELETE /api/bookings/:id` - Cancelar reserva
 
 ### Pagos
+
 - `POST /api/payments` - Procesar pago de reserva
 - `GET /api/payments/:id` - Obtener detalle de pago
 
 ### Gestores
+
 - `GET /api/managers/dashboard` - Obtener estadísticas del gestor
 - `GET /api/managers/bookings` - Listar reservas de las pistas del gestor
 
@@ -222,6 +261,7 @@ docker compose down
 ## 🌍 Internacionalización
 
 La aplicación soporta múltiples idiomas:
+
 - 🇪🇸 Español
 - 🇬🇧 Inglés
 
@@ -232,6 +272,7 @@ Los usuarios pueden cambiar el idioma desde la interfaz.
 ## 📝 Scripts Disponibles
 
 ### Backend
+
 ```bash
 npm run dev      # Iniciar servidor en modo desarrollo
 npm start        # Iniciar servidor en producción
@@ -242,6 +283,7 @@ npm run migrate:create -- nombre_migracion  # Crear nueva migracion
 ```
 
 ### Frontend
+
 ```bash
 npm run dev      # Iniciar Next.js en modo desarrollo
 npm run build    # Compilar aplicación para producción
@@ -257,8 +299,6 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ---
 
-
 <div align="center">
   Hecho con ❤️ por el equipo de AllCourts
 </div>
-
