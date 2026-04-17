@@ -2,7 +2,7 @@
 
 <img width="1024" height="1024" alt="AllCourts Logo" src="https://github.com/user-attachments/assets/019d5034-5501-40a6-a84e-440ab98c8145" />
 
-**AllCourts** es una **aplicación web moderna e intuitiva** para **reservar y gestionar pistas deportivas**. Inspirada en **Playtomic**, combina un **frontend en Next.js con TypeScript** y un **backend en Node.js con MySQL** para ofrecer una experiencia rápida, fiable y escalable.
+**AllCourts** es una **aplicación web moderna e intuitiva** para **reservar y gestionar clubes y pistas deportivas**. Inspirada en **Playtomic**, combina un **frontend en Next.js con TypeScript** y un **backend en Node.js con MySQL** para ofrecer una experiencia rápida, fiable y escalable.
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### Para Jugadores
 
-- 🏟 **Explorar Pistas** – Consulta la disponibilidad de pistas deportivas en **tiempo real**
+- 🏟 **Explorar Clubes y Pistas** – Consulta clubes, entra en cada instalación y revisa sus pistas en **tiempo real**
 - 📅 **Reservar y Cancelar** – Gestiona tus reservas de forma **rápida e intuitiva**
 - 💳 **Pagos Seguros** – Sistema de pagos integrado para completar reservas
 - ✅ **Seguimiento de Reservas** – Visualiza el historial y estado de tus reservas
@@ -41,7 +41,7 @@
 - **Estado:** Redux Toolkit para gestión de estado global
 - **Estilos:** SCSS/CSS Modules
 - **Internacionalización:** i18next para soporte multiidioma
-- **API Client:** Axios para comunicación con el backend
+- **API Client:** helpers `fetch` tipados para comunicación con el backend
 
 ### Backend
 
@@ -127,6 +127,14 @@ npm run migrate:up
 npm run dev
 ```
 
+El proyecto incluye una migración de datos de ejemplo para que puedas probar el flujo desde el primer arranque. Al levantar la base de datos tendrás un club demo y varias pistas cargadas.
+
+El flujo principal de navegación del frontend es:
+
+```text
+/clubs -> /clubs/:id -> /courts/court -> /courts/:id
+```
+
 ### 4. Configurar el Frontend
 
 ```bash
@@ -139,14 +147,12 @@ npm run dev
 
 ### 5. Despliegue con Docker
 
-La forma recomendada de despliegue y prueba es con Docker Compose desde la raíz del proyecto:
+La forma recomendada de despliegue y prueba es con docker-compose desde la raíz del proyecto:
 
-Antes de arrancar Docker, prepara la configuración de entorno:
+Antes de arrancar el Docker, prepara la configuración de entorno:
 
 - Copia `backend/.env.example` a `backend/.env` y rellena sus valores.
 - Copia `frontend/.env.example` a `frontend/.env` y rellena sus valores.
-
-Esos son los valores que hay que completar antes de ejecutar el stack.
 
 ```bash
 docker compose up -d --build
@@ -154,17 +160,10 @@ docker compose up -d --build
 
 Esto construye las imágenes e inicia estos servicios:
 
-- `db`: MySQL
-- `backend`: API en `http://localhost:5000`
-- `frontend`: aplicación web en `http://localhost:3000`
-- `mailpit`: bandeja de correo de prueba en `http://localhost:8025`
-
-La base de datos se crea sola al primer arranque con Docker. Después, el backend ejecuta las migraciones automáticamente dentro del contenedor.
-
-Antes de arrancar, revisa que existan estos archivos:
-
-- `backend/.env`
-- `frontend/.env`
+- `db`: MySQL 8.4
+- `backend`: API en Node/Express -> `http://localhost:5000`
+- `frontend`: aplicación web en Next.js -> `http://localhost:3000`
+- `mailpit`: bandeja de correo de prueba con mailpit -> `http://localhost:8025`
 
 Valores importantes:
 
@@ -195,6 +194,16 @@ docker compose down -v
 - Backend API: http://localhost:5000
 - Mailpit: http://localhost:8025
 
+El recorrido principal de la interfaz es:
+
+```text
+/clubs -> /clubs/:id -> /courts/court -> /courts/:id
+```
+
+### Datos de ejemplo
+
+Para desarrollo local se incluye una migración de seed con un club demo, un manager y varias pistas. Si la interfaz te aparece vacía, normalmente significa que no se han ejecutado las migraciones o que la base de datos no contiene todavía esa seed.
+
 ---
 
 ## 📌 Primeros pasos
@@ -202,9 +211,10 @@ docker compose down -v
 ### Usuarios
 
 1. **Registrarse** – Crea una cuenta como jugador o gestor de pistas
-2. **Explorar Pistas** – Navega por las pistas disponibles
-3. **Reservar** – Selecciona fecha, hora y completa el pago
-4. **Gestionar** – Visualiza y administra tus reservas desde tu dashboard
+2. **Explorar Clubes** – Navega por los clubes disponibles y entra en el que te interese
+3. **Ver Pistas** – Consulta las pistas de cada club y revisa sus precios
+4. **Reservar** – Selecciona fecha, hora y completa el pago
+5. **Gestionar** – Visualiza y administra tus reservas desde tu dashboard
 
 ### Gestores
 

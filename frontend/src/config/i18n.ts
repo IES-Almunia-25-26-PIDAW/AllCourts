@@ -36,7 +36,7 @@ i18n
     // Idioma activo al arrancar la aplicación
     lng: "es",
 
-    // Si una clave no existe en el idioma activo fallbackLng indica el idioma por defecto
+    // Si una clave no existe en el idioma activo, fallbackLng indica el idioma de reserva.
     fallbackLng: "es",
 
     interpolation: {

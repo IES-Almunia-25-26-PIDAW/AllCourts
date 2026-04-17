@@ -17,7 +17,7 @@
   "footer": {
     "text": "AllCourts. Todos los derechos reservados.",
     "column1_title": "AllCourts",
-    "column1_link1": "Pistas",
+    "column1_link1": "Clubes",
     "column1_link2": "Registrarse",
     "column1_link3": "Iniciar sesión",
     "column2_title": "Legal",
@@ -26,9 +26,9 @@
   },
   "login": {
     "title": "Iniciar sesión en tu cuenta de jugador",
-    "title_club": "Iniciar sesión en tu cuenta de club",
-    "username": "Nombre de usuario",
-    "username_placeholder": "Introduce tu nombre de usuario",
+    "title_manager": "Iniciar sesión en tu cuenta de gestor",
+    "email": "Correo electrónico",
+    "email_placeholder": "Introduce tu correo electrónico",
     "password": "Contraseña",
     "password_placeholder": "Introduce tu contraseña",
     "btn_login": "Iniciar sesión",
@@ -47,6 +47,7 @@
     "subtitle": "Completa el formulario para registrarte.",
     "option_player": "Jugador",
     "option_club": "Club",
+    "option_manager": "Gestor",
     "form_name": "Nombre",
     "form_name_placeholder": "Introduce tu nombre",
     "form_lastname": "Apellidos",
@@ -259,7 +260,7 @@
     "cta_title": "¿Listo para jugar?",
     "cta_text": "Únete a miles de jugadores que ya disfrutan de AllCourts",
     "signup_button": "Registrate gratis",
-    "explore_button": "Explorar canchas"
+    "explore_button": "Explorar clubes"
   },
   "cookies": {
     "title": "Política de Cookies",

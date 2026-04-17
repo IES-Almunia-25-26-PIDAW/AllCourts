@@ -13,12 +13,17 @@ import styles from "./CourtCard.module.scss";
  * Muestra la imagen, deporte, precio de entrada, tipo de superficie,
  * descripción recortada, tabla de precios por duración y botón de reserva.
  *
- * Props:
- *   court → objeto Court con todos los datos de la pista (type court.ts) (imagen, nombre, descripción, precios, etc.)
+ * Propiedades:
+ *   court → objeto Court con todos los datos de la pista (imagen, nombre, descripción, precios, etc.)
  *
  * Lógica de precio de entrada:
  *   Se muestra el precio correspondiente a la duración mínima reservable.
  *   Si min_unit_min ≤ 60 → price_60 / Si ≤ 90 → price_90 / Si no → price_120
+ *
+ * Comportamiento:
+ *   - Usa la tarifa mínima como precio destacado para la cabecera.
+ *   - Muestra el desglose completo de precios para 60, 90 y 120 minutos.
+ *   - Mantiene la tarjeta visualmente compacta para el listado general.
  */
 
 //#region TYPES
@@ -27,8 +32,10 @@ interface CourtCardProps {
 }
 //#endregion
 
+//#region FUNCTIONS
 const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
   //#region VARIABLES
+  // Calcula el precio principal a mostrar según la duración mínima reservable.
   const entryPrice =
     court.min_unit_min <= 60
       ? court.price_60
@@ -36,6 +43,7 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
         ? court.price_90
         : court.price_120;
 
+  // Traduce la duración mínima a la etiqueta visible en la tarjeta.
   const entryLabel =
     court.min_unit_min <= 60
       ? "60 min"
@@ -43,10 +51,10 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
         ? "90 min"
         : "120 min";
   //#endregion
-  
+
   return (
-    <div className={styles.courtCard}>
-      <div className={styles.cardLink}>
+    <Link href={`/courts/${court.id}`} className={styles.cardLink}>
+      <article className={styles.courtCard}>
         <div className={styles.imageContainer}>
           <Image
             src={court.image_url}
@@ -93,11 +101,12 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
             </div>
           </div>
 
-          <button className={styles.bookBtn}>Reservar</button>
+          <span className={styles.bookBtn}>Reservar</span>
         </div>
-      </div>
-    </div>
+      </article>
+    </Link>
   );
 };
+//#endregion
 
 export default CourtCard;

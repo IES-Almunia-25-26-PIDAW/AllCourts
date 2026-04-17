@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 //#endregion
 
+//#region DOCUMENTATION
 /**
  * @page Infoplayer
  * Landing informativa dirigida a jugadores.
@@ -18,7 +19,15 @@ import { useTranslation } from "react-i18next";
  *   Features      → características principales para el jugador
  *   FAQ           → preguntas frecuentes
  *   CTA           → botones de registro y login
+ *
+ * Comportamiento:
+ *   - Explica el recorrido de reserva en tres pasos para reducir fricción.
+ *   - Refuerza la confianza con testimonios y ventajas de producto.
+ *   - Mantiene dos acciones claras: registrarse o iniciar sesión.
  */
+//#endregion
+
+//#region FUNCTIONS
 export default function Infoplayer() {
   //#region VARIABLES
   const { t } = useTranslation();
@@ -190,3 +199,4 @@ export default function Infoplayer() {
     </>
   );
 }
+//#endregion

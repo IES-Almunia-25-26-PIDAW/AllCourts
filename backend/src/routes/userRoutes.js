@@ -3,6 +3,7 @@ const express = require("express");
 const userController = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
+const upload = require("../middlewares/uploadMiddleware");
 //#endregion
 
 /**
@@ -19,7 +20,7 @@ const router = express.Router();
 
 router.get("/", authMiddleware, roleMiddleware("manager"), userController.getAll);
 router.get("/:id", authMiddleware, userController.getById);
-router.put("/:id", authMiddleware, userController.update);
+router.put("/:id", authMiddleware, upload.single('avatar'), userController.update);
 router.patch("/:id/password", authMiddleware, userController.updatePassword);
 router.delete("/:id", authMiddleware, roleMiddleware("manager"), userController.delete);
 

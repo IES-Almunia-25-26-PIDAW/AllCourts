@@ -1,0 +1,168 @@
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 20px 72px;
+  color: #2c3e50;
+  background: linear-gradient(180deg, rgba(0, 89, 255, 0.04) 0%, #ffffff 240px);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0059ff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(0, 89, 255, 0.08);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba(0, 89, 255, 0.12);
+  }
+}
+
+.status {
+  color: #666;
+}
+
+.errorText {
+  color: #c62828;
+}
+
+.hero {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(320px, 0.95fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.heroImage {
+  position: relative;
+  min-height: 430px;
+  border-radius: 28px;
+  box-shadow: 0 18px 50px rgba(7, 20, 46, 0.12);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 89, 255, 0.08),
+    rgba(0, 89, 255, 0.02)
+  );
+}
+
+.heroImageMedia {
+  object-fit: cover;
+}
+
+.heroCopy {
+  display: grid;
+  gap: 14px;
+}
+
+.sportTag {
+  margin: 0;
+  width: fit-content;
+  color: #0059ff;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0, 89, 255, 0.08);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.meta {
+  margin: 0;
+  color: #667085;
+  font-size: 1rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 4px 0 8px;
+}
+
+.chip {
+  background: rgba(0, 89, 255, 0.06);
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: #344054;
+  border: 1px solid rgba(0, 89, 255, 0.12);
+  font-weight: 600;
+}
+
+.description {
+  line-height: 1.75;
+  color: #344054;
+  font-size: 1.02rem;
+  max-width: 60ch;
+}
+
+.priceCard {
+  margin-top: 10px;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.priceTitle {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+}
+
+.priceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.priceItem {
+  background: linear-gradient(180deg, rgba(0, 89, 255, 0.05) 0%, #ffffff 100%);
+  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.priceLabel {
+  margin: 0;
+  color: #667085;
+}
+
+.priceValue {
+  font-weight: 800;
+  color: #1d2939;
+  font-size: 1.05rem;
+}
+
+.note {
+  margin-top: 14px;
+  color: #667085;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .heroImage {
+    min-height: 320px;
+  }
+}

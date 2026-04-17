@@ -12,9 +12,9 @@ import i18n from "@/config/i18n";
  *   1. localStorage     → idioma guardado de una sesión anterior
  *   2. Cookie           → i18nextLng seteada por el servidor
  *   3. navigator.language → idioma del navegador
- *   4. 'es'             → fallback por defecto
+ *   4. 'es'             → idioma predeterminado
  *
- * Solo distingue entre 'en' y 'es' — cualquier variante no inglesa fallback al español.
+ * Solo distingue entre 'en' y 'es' — cualquier variante no inglesa usa español como reserva.
  */
 
 export default function LanguageDetector() {
@@ -32,7 +32,7 @@ export default function LanguageDetector() {
     const nav =
       typeof navigator !== "undefined" && navigator.language?.split("-")[0];
 
-    // Si ninguna fuente indica inglés fallback al español
+    // Si ninguna fuente indica inglés, usa español como reserva.
     const newLang = (cached || nav || "es").startsWith("en") ? "en" : "es";
 
     // Solo cambia el idioma si es distinto al activo, evitando re-renders innecesarios

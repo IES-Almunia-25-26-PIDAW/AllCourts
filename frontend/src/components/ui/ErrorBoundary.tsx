@@ -10,7 +10,7 @@ import { withTranslation, WithTranslation } from "react-i18next";
  * parte del árbol de componentes hijo, evitando que la app entera se rompa.
  * Muestra una pantalla de error amigable con un enlace para volver al inicio.
  *
- * Props:
+ * Propiedades:
  *   children → componentes hijos que quedan protegidos por el boundary
  *   t        → función de traducción inyectada por withTranslation
  *
@@ -52,7 +52,7 @@ class ErrorBoundary extends React.Component<Props, State> {
   render() {
     const { t } = this.props;
 
-    // Si hay error, sustituye el árbol hijo por la pantalla de fallback
+    // Si hay error, sustituye el árbol hijo por la pantalla de reserva
     if (this.state.hasError) {
       return (
         <div>
