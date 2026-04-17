@@ -90,13 +90,15 @@ allcourts/
 
 ---
 
-## 🚀 Instalación y Configuración
+## ⚙️ Instalación y Configuración
 
 ### Prerrequisitos
 
 - Node.js (v16 o superior)
 - MySQL (v8.0 o superior)
-- npm o yarn
+- Docker Engine
+
+## 🚀 Pasos a seguir para el despliegue:
 
 ### 1. Clonar el repositorio
 
@@ -105,54 +107,29 @@ git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
 cd allcourts
 ```
 
-### 2. Configurar la base de datos
-
-```bash
-# Opcional: crear la base de datos manualmente (si no existe)
-# CREATE DATABASE allcourts_db;
-```
-
-### 3. Configurar el Backend
+### 2. Configurar el Backend
 
 ```bash
 cd backend
-npm install
 
-# Crear archivo .env a partir de backend/.env.example
+# Copiar archivo backend/.env.example a backend/.env
 # y ajustar valores reales de tu entorno
 
-# Ejecutar migraciones
-npm run migrate:up
-
-npm run dev
-```
-
-El proyecto incluye una migración de datos de ejemplo para que puedas probar el flujo desde el primer arranque. Al levantar la base de datos tendrás un club demo y varias pistas cargadas.
-
-El flujo principal de navegación del frontend es:
-
-```text
-/clubs -> /clubs/:id -> /courts/court -> /courts/:id
 ```
 
 ### 4. Configurar el Frontend
 
 ```bash
-cd ../frontend
-npm install
+cd frontend
 
-# El frontend se conectará al backend en http://localhost:5000
-npm run dev
+# Copiar archivo frontend/.env.example a frontend/.env
+# y ajustar valores reales de tu entorno
+
 ```
 
 ### 5. Despliegue con Docker
 
 La forma recomendada de despliegue y prueba es con docker-compose desde la raíz del proyecto:
-
-Antes de arrancar el Docker, prepara la configuración de entorno:
-
-- Copia `backend/.env.example` a `backend/.env` y rellena sus valores.
-- Copia `frontend/.env.example` a `frontend/.env` y rellena sus valores.
 
 ```bash
 docker compose up -d --build
@@ -194,15 +171,15 @@ docker compose down -v
 - Backend API: http://localhost:5000
 - Mailpit: http://localhost:8025
 
-El recorrido principal de la interfaz es:
+### Datos de ejemplo
+
+Para desarrollo local, el proyecto incluye una migración de datos de ejemplo con un club demo, un manager y varias pistas. Al levantar el proyecto, tendrías en la BBDD los datos de demo cargados.
+
+El flujo principal de navegación de la interfaz es:
 
 ```text
 /clubs -> /clubs/:id -> /courts/court -> /courts/:id
 ```
-
-### Datos de ejemplo
-
-Para desarrollo local se incluye una migración de seed con un club demo, un manager y varias pistas. Si la interfaz te aparece vacía, normalmente significa que no se han ejecutado las migraciones o que la base de datos no contiene todavía esa seed.
 
 ---
 
