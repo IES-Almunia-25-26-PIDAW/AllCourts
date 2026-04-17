@@ -16,7 +16,7 @@ const User = {
   create: (user) => {
     const sql = `INSERT INTO users 
         (id, name, username, email, password, role, phone, avatar_url) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     return pool.execute(sql, [
       user.id,
       user.name,
