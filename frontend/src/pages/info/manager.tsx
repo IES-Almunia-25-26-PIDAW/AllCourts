@@ -133,7 +133,7 @@ export default function Infomanager() {
                 <li>❌ {t("infomanager.subs1charac5")}</li>
                 <li>❌ {t("infomanager.subs1charac6")}</li>
               </ul>
-              <Link href="/manager/login">
+              <Link href="/login">
                 <button className={styles.planButton}>
                   {t("infomanager.subs1btn")}
                 </button>
@@ -159,7 +159,7 @@ export default function Infomanager() {
                 <li>✅ {t("infomanager.subs2charac5")}</li>
                 <li>✅ {t("infomanager.subs2charac6")}</li>
               </ul>
-              <Link href="/manager/login">
+              <Link href="/login">
                 <button className={styles.planButtonFeatured}>
                   {t("infomanager.subs2btn")}
                 </button>
@@ -185,7 +185,7 @@ export default function Infomanager() {
                 <li>✅ {t("infomanager.subs3charac5")}</li>
                 <li>✅ {t("infomanager.subs3charac6")}</li>
               </ul>
-              <Link href="/manager/login">
+              <Link href="/login">
                 <button className={styles.planButton}>
                   {t("infomanager.subs3btn")}
                 </button>

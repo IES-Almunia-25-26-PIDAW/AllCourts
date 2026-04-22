@@ -22,7 +22,7 @@ export default function Footer() {
           <a href="/register" className={styles.link}>
             {t("footer.column1_link2")}
           </a>
-          <a href="/player/login" className={styles.link}>
+          <a href="/login" className={styles.link}>
             {t("footer.column1_link3")}
           </a>
         </div>

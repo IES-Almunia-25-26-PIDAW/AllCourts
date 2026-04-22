@@ -6,7 +6,7 @@ import { getCourtById } from "@/api/courtApi";
 import { formatPrice } from "@/utils/formatters";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import type { CourtWithClub } from "@/types/court";
-import styles from "./CourtDetail.module.scss";
+import styles from "./[id].module.scss";
 
 //#region DOCUMENTATION
 /**

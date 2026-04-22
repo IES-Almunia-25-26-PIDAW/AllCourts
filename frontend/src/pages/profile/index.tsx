@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import styles from "@/styles/pages/Profile.module.scss";
+import styles from "./index.module.scss";
 import { clearAuth, setAuth } from "@/store/slices/authSlice";
 import { logout as logoutRequest } from "@/api/authApi";
 import { updateUser, updateUserForm } from "@/api/userApi";

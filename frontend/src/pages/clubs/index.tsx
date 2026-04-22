@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import ClubCard from "@/components/modules/clubs/ClubCard";
 import { getClubs } from "@/api/clubApi";
 import type { ClubWithManager } from "@/types/club";
-import styles from "./ClubsPage.module.scss";
+import styles from "./index.module.scss";
 
 //#region DOCUMENTATION
 /**

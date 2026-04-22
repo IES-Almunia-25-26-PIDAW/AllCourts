@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import styles from "@/styles/pages/Register.module.scss";
+import styles from "./index.module.scss";
 import { register as registerRequest } from "@/api/authApi";
 
 export default function Register() {
