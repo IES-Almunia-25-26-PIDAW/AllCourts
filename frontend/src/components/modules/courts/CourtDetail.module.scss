@@ -1,0 +1,130 @@
+@use "../../../styles/variables" as *;
+
+.hero {
+	margin-top: 24px;
+	display: grid;
+	grid-template-columns: minmax(320px, 1fr) minmax(320px, 0.95fr);
+	gap: 32px;
+	align-items: start;
+}
+
+.heroImage {
+	position: relative;
+	min-height: 430px;
+	border-radius: 28px;
+	box-shadow: 0 18px 50px #07142e1f;
+	overflow: hidden;
+	background: linear-gradient(135deg, $primary-soft, #0059ff05);
+}
+
+.heroImageMedia {
+	object-fit: cover;
+}
+
+.heroCopy {
+	display: grid;
+	gap: 14px;
+}
+
+.sportTag {
+	margin: 0;
+	width: fit-content;
+	color: $primary-color;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	padding: 6px 10px;
+	border-radius: 999px;
+	background: $primary-soft;
+}
+
+.title {
+	margin: 0;
+	font-size: clamp(2.2rem, 4vw, 3.5rem);
+	line-height: 1.05;
+	letter-spacing: -0.03em;
+}
+
+.meta {
+	margin: 0;
+	color: $text-secondary;
+	font-size: 1rem;
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 4px 0 8px;
+}
+
+.chip {
+	background: $primary-soft;
+	padding: 10px 14px;
+	border-radius: 999px;
+	color: #344054;
+	border: 1px solid $primary-border;
+	font-weight: 600;
+}
+
+.description {
+	line-height: 1.75;
+	color: #344054;
+	font-size: 1.02rem;
+	max-width: 60ch;
+}
+
+.priceCard {
+	margin-top: 10px;
+	padding: 22px;
+	border-radius: 24px;
+	border: 1px solid #94a3b83d;
+	background: #ffffffeb;
+	box-shadow: 0 18px 45px #0f172a0f;
+	backdrop-filter: blur(8px);
+}
+
+.priceTitle {
+	margin: 0 0 14px;
+	font-size: 1.15rem;
+}
+
+.priceGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+	gap: 12px;
+}
+
+.priceItem {
+	background: linear-gradient(180deg, #0059ff0d 0%, #ffffff 100%);
+	border-radius: 16px;
+	padding: 14px;
+	border: 1px solid #94a3b833;
+}
+
+.priceLabel {
+	margin: 0;
+	color: $text-secondary;
+}
+
+.priceValue {
+	font-weight: 800;
+	color: #1d2939;
+	font-size: 1.05rem;
+}
+
+.note {
+	margin-top: 14px;
+	color: $text-secondary;
+}
+
+@media (max-width: 900px) {
+	.hero {
+		grid-template-columns: 1fr;
+	}
+
+	.heroImage {
+		min-height: 320px;
+	}
+}

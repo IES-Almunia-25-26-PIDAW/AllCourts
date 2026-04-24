@@ -1,162 +1,164 @@
-.courtCard {
-  background: #fafafa;
-  border-radius: 12px;
-  border: 1px solid #ebebeb;
-  overflow: hidden;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+@use "../../../styles/variables" as *;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
+.courtCard {
+	background: #fafafa;
+	border-radius: 12px;
+	border: 1px solid $surface-border;
+	overflow: hidden;
+	transition:
+		transform 0.25s ease,
+		box-shadow 0.25s ease;
+
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 8px 24px #00000014;
+	}
 }
 
 .cardLink {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  cursor: pointer;
+	text-decoration: none;
+	color: inherit;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	cursor: pointer;
 }
 
 .imageContainer {
-  position: relative;
-  width: 100%;
-  height: 140px;
-  background: #f0f0ee;
-  overflow: hidden;
-  flex-shrink: 0;
+	position: relative;
+	width: 100%;
+	height: 140px;
+	background: $surface-soft;
+	overflow: hidden;
+	flex-shrink: 0;
 }
 
 .image {
-  object-fit: cover;
-  transition: transform 0.3s ease;
+	object-fit: cover;
+	transition: transform 0.3s ease;
 
-  .courtCard:hover & {
-    transform: scale(1.04);
-  }
+	.courtCard:hover & {
+		transform: scale(1.04);
+	}
 }
 
 .sportBadge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 10px;
-  font-weight: 600;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.42);
-  padding: 3px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  backdrop-filter: blur(4px);
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	font-size: 10px;
+	font-weight: 600;
+	color: #fff;
+	background: #0000006b;
+	padding: 3px 10px;
+	border-radius: 20px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	backdrop-filter: blur(4px);
 }
 
 .priceTag {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  background: #0059ff;
-  padding: 3px 12px;
-  border-radius: 20px;
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #fff;
+	background: $primary-color;
+	padding: 3px 12px;
+	border-radius: 20px;
+	display: flex;
+	align-items: baseline;
+	gap: 2px;
 }
 
 .priceLabel {
-  font-size: 10px;
-  font-weight: 400;
-  opacity: 0.85;
+	font-size: 10px;
+	font-weight: 400;
+	opacity: 0.85;
 }
 
 .body {
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	flex: 1;
 }
 
 .name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #111;
-  margin: 0;
-  line-height: 1.3;
+	font-size: 14px;
+	font-weight: 600;
+	color: #111;
+	margin: 0;
+	line-height: 1.3;
 }
 
 .surface {
-  font-size: 11px;
-  color: #aaa;
-  margin: 0;
+	font-size: 11px;
+	color: $text-muted;
+	margin: 0;
 }
 
 .desc {
-  font-size: 12px;
-  color: #888;
-  line-height: 1.5;
-  margin: 0;
-  flex: 1;
+	font-size: 12px;
+	color: $text-muted;
+	line-height: 1.5;
+	margin: 0;
+	flex: 1;
 }
 
 .prices {
-  display: flex;
-  gap: 5px;
-  margin-top: 4px;
+	display: flex;
+	gap: 5px;
+	margin-top: 4px;
 }
 
 .priceItem {
-  flex: 1;
-  background: #f0f0f0;
-  border-radius: 6px;
-  padding: 6px 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
+	flex: 1;
+	background: #f0f0f0;
+	border-radius: 6px;
+	padding: 6px 4px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
 }
 
 .priceDur {
-  font-size: 10px;
-  color: #aaa;
+	font-size: 10px;
+	color: $text-muted;
 }
 
 .priceVal {
-  font-size: 12px;
-  font-weight: 600;
-  color: #111;
+	font-size: 12px;
+	font-weight: 600;
+	color: #111;
 }
 
 .bookBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: #0059ff;
-  color: #fff;
-  border: none;
-  padding: 9px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 4px;
-  transition: background 0.2s ease;
-  pointer-events: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	background: $primary-color;
+	color: #fff;
+	border: none;
+	padding: 9px;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	margin-top: 4px;
+	transition: background 0.2s ease;
+	pointer-events: none;
 
-  &:hover {
-    background: #0c447c;
-  }
+	&:hover {
+		background: $primary-hover;
+	}
 }
 
 .cardLink:hover .courtCard {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	transform: translateY(-3px);
+	box-shadow: 0 8px 24px #00000014;
 }

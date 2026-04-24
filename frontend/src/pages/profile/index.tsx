@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import styles from "./index.module.scss";
 import { clearAuth, setAuth } from "@/store/slices/authSlice";
 import { logout as logoutRequest } from "@/api/authApi";
-import { updateUser, updateUserForm } from "@/api/userApi";
+import { updateUser, updateUserForm, updateUserPassword } from "@/api/userApi";
 
 export default function ProfilePage() {
   const user = useSelector((state: any) => state.auth.user);
@@ -21,6 +21,11 @@ export default function ProfilePage() {
   );
   const [saving, setSaving] = useState<boolean>(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [passwordSaving, setPasswordSaving] = useState<boolean>(false);
+  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setName(user?.name ?? "");
@@ -30,14 +35,16 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     (async () => {
-      try { await logoutRequest(); } catch {}
-      try { window.localStorage.removeItem("allcourts_user"); } catch {}
+      try {
+        await logoutRequest();
+      } catch { }
+      try {
+        window.localStorage.removeItem("allcourts_user");
+      } catch { }
       dispatch(clearAuth());
       router.push("/");
     })();
   };
-
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
@@ -78,7 +85,12 @@ export default function ProfilePage() {
       }
 
       dispatch(setAuth(serverUser));
-      try { window.localStorage.setItem("allcourts_user", JSON.stringify(serverUser)); } catch {}
+      try {
+        window.localStorage.setItem(
+          "allcourts_user",
+          JSON.stringify(serverUser),
+        );
+      } catch { }
       setSaveMessage("Guardado");
     } catch (err) {
       setSaveMessage("Error al guardar");
@@ -215,7 +227,84 @@ export default function ProfilePage() {
         {section === "password" && (
           <section>
             <h2>Cambiar contraseña</h2>
-            <p>Formulario para cambiar la contraseña (por implementar).</p>
+            <form
+              className={styles.infoForm}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!user) return;
+
+                if (newPassword.length < 8) {
+                  setPasswordMessage("La contraseña debe tener al menos 8 caracteres");
+                  return;
+                }
+                if (newPassword !== confirmPassword) {
+                  setPasswordMessage("Las contraseñas no coinciden");
+                  return;
+                }
+
+                setPasswordSaving(true);
+                setPasswordMessage(null);
+                try {
+                  await updateUserPassword(user.id, currentPassword, newPassword);
+                  setPasswordMessage("Contraseña actualizada");
+                  setCurrentPassword("");
+                  setNewPassword("");
+                  setConfirmPassword("");
+                } catch (err) {
+                  setPasswordMessage("Error al cambiar la contraseña");
+                } finally {
+                  setPasswordSaving(false);
+                  setTimeout(() => setPasswordMessage(null), 2500);
+                }
+              }}
+            >
+              <div className={styles.formRow}>
+                <label>Contraseña actual</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+              </div>
+
+              <div className={styles.formRow}>
+                <label>Nueva contraseña</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+
+              <div className={styles.formRow}>
+                <label>Confirmar nueva contraseña</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+
+              <div className={styles.formActions}>
+                <button type="submit" disabled={passwordSaving}>
+                  Cambiar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentPassword("");
+                    setNewPassword("");
+                    setConfirmPassword("");
+                    setPasswordMessage(null);
+                  }}
+                >
+                  Restablecer
+                </button>
+                {passwordMessage && (
+                  <span className={styles.saveMsg}>{passwordMessage}</span>
+                )}
+              </div>
+            </form>
           </section>
         )}
       </main>

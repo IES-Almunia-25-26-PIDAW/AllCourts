@@ -41,6 +41,11 @@ const User = {
     return pool.execute(sql, [id]);
   },
 
+  getByIdWithPassword: (id) => {
+    const sql = "SELECT * FROM users WHERE id = ?";
+    return pool.execute(sql, [id]);
+  },
+
   getByEmail: (email) => {
     const sql = "SELECT * FROM users WHERE email = ?";
     return pool.execute(sql, [email]);

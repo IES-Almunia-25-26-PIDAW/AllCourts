@@ -106,8 +106,19 @@ const userController = {
      */
     updatePassword: async (req, res, next) => {
         try {
-            const { password } = req.body;
-            // Hashear la nueva contraseña antes de actualizarla en BD
+            const { currentPassword, password } = req.body;
+
+            if (!currentPassword || !password) {
+                return res.status(400).json({ message: "Missing currentPassword or password" });
+            }
+
+            const [rows] = await User.getByIdWithPassword(req.params.id);
+            if (rows.length === 0) return res.status(404).json({ message: "User not found" });
+            const user = rows[0];
+
+            const match = await bcrypt.compare(currentPassword, user.password);
+            if (!match) return res.status(401).json({ message: "Current password incorrect" });
+
             const hashed = await bcrypt.hash(password, SALT_ROUNDS);
             const [result] = await User.updatePassword(req.params.id, hashed);
             if (result.affectedRows === 0)

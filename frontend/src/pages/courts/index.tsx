@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getCourts } from "@/api/courtApi";
-import { formatPrice } from "@/utils/formatters";
-import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import type { CourtWithClub } from "@/types/court";
+import CourtCard from "@/components/modules/courts/CourtCard";
 import styles from "./index.module.scss";
 
 //#region DOCUMENTATION
@@ -109,62 +108,14 @@ export default function CourtPage() {
       {!loading && !error ? (
         <section className={styles.resultsGrid}>
           {filteredCourts.map((court) => {
-            const coverImage = court.image_url || "/logoallcourts.png";
-
             return (
-              <article key={court.id} className={styles.courtCard}>
-                <div className={styles.courtImage}>
-                  <img
-                    src={coverImage}
-                    alt={court.name}
-                    className={styles.courtImageMedia}
-                  />
-
-                  <div className={styles.sportBadge}>
-                    {SPORT_LABELS[court.sport]}
-                  </div>
-
-                  <div className={styles.priceBadge}>
-                    {formatPrice(Number(court.price_60))}
-                  </div>
-                </div>
-
-                <div className={styles.courtBody}>
-                  <h2 className={styles.courtName}>{court.name}</h2>
-
-                  <p className={styles.courtClub}>
-                    {court.club_name ? court.club_name : "Club sin nombre"}
-                    {court.city ? ` · ${court.city}` : ""}
-                  </p>
-
-                  <p className={styles.courtSurface}>
-                    {SURFACE_LABELS[court.surface_type]}
-                  </p>
-
-                  <p className={styles.courtDescription}>
-                    {court.description || "Sin descripción disponible."}
-                  </p>
-
-                  <div className={styles.pricePills}>
-                    <span className={styles.pricePill}>
-                      60 min: {formatPrice(Number(court.price_60))}
-                    </span>
-                    <span className={styles.pricePill}>
-                      90 min: {formatPrice(Number(court.price_90))}
-                    </span>
-                    <span className={styles.pricePill}>
-                      120 min: {formatPrice(Number(court.price_120))}
-                    </span>
-                  </div>
-
-                  <Link
-                    href={`/courts/${court.id}`}
-                    className={styles.detailLink}
-                  >
-                    Ver detalle
-                  </Link>
-                </div>
-              </article>
+              <CourtCard
+                key={court.id}
+                court={{
+                  ...court,
+                  image_url: court.image_url || "/logoallcourts.png",
+                }}
+              />
             );
           })}
         </section>
