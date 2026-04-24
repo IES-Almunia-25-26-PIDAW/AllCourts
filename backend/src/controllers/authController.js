@@ -12,8 +12,8 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN;
 
-const ACCESS_COOKIE_MAX_AGE = 15 * 60 * 1000; //? cuanto es
-const REFRESH_COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000; //? cuanto es
+const ACCESS_COOKIE_MAX_AGE = 60 * 60 * 1000;
+const REFRESH_COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 
 function hashToken(token) {
   return crypto.createHash("sha256").update(token).digest("hex");

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import styles from "@/styles/pages/Login.module.scss";
+import styles from "./index.module.scss";
 import { login as loginRequest } from "@/api/authApi";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
