@@ -1,5 +1,6 @@
 //#region TYPES
 import "@/styles/globals.scss";
+import "react-day-picker/style.css";
 import "@/config/i18n";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";

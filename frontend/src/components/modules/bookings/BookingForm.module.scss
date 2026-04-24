@@ -1,0 +1,290 @@
+.card {
+  margin-top: 24px;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(8px);
+  display: grid;
+  gap: 18px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.titleGroup {
+  display: grid;
+  gap: 4px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #0059ff;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #1d2939;
+}
+
+.subtitle {
+  margin: 0;
+  color: #667085;
+  line-height: 1.55;
+}
+
+.priceTag {
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(0, 89, 255, 0.08);
+  color: #0059ff;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  color: #344054;
+  font-weight: 700;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #1d2939;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgba(0, 89, 255, 0.45);
+  box-shadow: 0 0 0 4px rgba(0, 89, 255, 0.08);
+}
+
+.hint {
+  margin: 0;
+  color: #667085;
+  font-size: 0.95rem;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summaryCard {
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #ffffff;
+}
+
+.summaryLabel {
+  margin: 0;
+  color: #667085;
+  font-size: 0.9rem;
+}
+
+.summaryValue {
+  margin: 4px 0 0;
+  color: #1d2939;
+  font-weight: 800;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chipButton {
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  background: #ffffff;
+  color: #344054;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.chipButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(0, 89, 255, 0.35);
+}
+
+.chipButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.chipButtonActive {
+  background: #0059ff;
+  border-color: #0059ff;
+  color: #ffffff;
+}
+
+.slotsHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.slotsMeta {
+  margin: 0;
+  color: #667085;
+  font-size: 0.92rem;
+}
+
+.slotGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 10px;
+}
+
+.slotButton {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px 10px;
+  display: grid;
+  gap: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.slotButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(0, 89, 255, 0.35);
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.06);
+}
+
+.slotButton:disabled {
+  cursor: not-allowed;
+  background: linear-gradient(
+    180deg,
+    rgba(148, 163, 184, 0.22) 0%,
+    rgba(148, 163, 184, 0.16) 100%
+  );
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #64748b;
+  opacity: 1;
+}
+
+.slotButtonActive {
+  background: rgba(0, 89, 255, 0.08);
+  border-color: #0059ff;
+  box-shadow: inset 0 0 0 1px rgba(0, 89, 255, 0.15);
+  color: #1d2939;
+}
+
+.slotTime {
+  font-weight: 800;
+  color: inherit;
+}
+
+.slotState {
+  font-size: 0.84rem;
+  color: inherit;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.reserveButton {
+  border: none;
+  border-radius: 16px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #0059ff 0%, #0042c2 100%);
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  min-width: 180px;
+  box-shadow: 0 16px 32px rgba(0, 89, 255, 0.24);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.reserveButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 38px rgba(0, 89, 255, 0.28);
+}
+
+.reserveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.errorText {
+  margin: 0;
+  color: #c62828;
+  font-weight: 600;
+}
+
+.notice {
+  margin: 0;
+  color: #667085;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .summaryRow {
+    grid-template-columns: 1fr;
+  }
+
+  .slotsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reserveButton {
+    width: 100%;
+  }
+}
