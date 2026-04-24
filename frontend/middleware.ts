@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
  * Middleware para proteger rutas y redirigir según sesión.
  * - Busca token en la cookie `allcourts_token` o `token`.
  * - Rutas protegidas: `/profile`, `/player/*`, `/manager/*`, `/booking/*`.
- * - Rutas públicas: `/login`, `/register` (si ya hay token redirige al dashboard).
+ * - Rutas públicas: `/login`, `/register` (si ya hay token redirige a clubs).
  *
  * Nota: Este middleware comprueba cookies, no localStorage. Para que funcione
  * correctamente debes establecer la cookie `allcourts_token` (idealmente httpOnly)
@@ -45,7 +45,7 @@ export function middleware(req: NextRequest) {
   if (token) {
     if (isPublic) {
       const url = req.nextUrl.clone();
-      url.pathname = "/profile"; //RUTA POR DEFECTO PARA USUARIOS LOGUEADOS
+      url.pathname = "/clubs"; //RUTA POR DEFECTO PARA USUARIOS LOGUEADOS
       return NextResponse.redirect(url);
     }
     return NextResponse.next();

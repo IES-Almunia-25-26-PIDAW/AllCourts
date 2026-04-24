@@ -45,7 +45,7 @@ export default function Login() {
       try {
         window.localStorage.setItem("allcourts_user", JSON.stringify(user));
       } catch {}
-      router.push("/player/dashboard");
+      router.push("/clubs");
     } catch (error) {
       dispatch(
         setAuthError(error instanceof Error ? error.message : "Login failed"),
