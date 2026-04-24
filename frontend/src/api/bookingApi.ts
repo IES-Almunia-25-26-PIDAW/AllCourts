@@ -1,0 +1,30 @@
+import { request } from "@/api/http";
+import type {
+  CreateBookingDTO,
+  CreateBookingResponse,
+  CourtAvailabilityResponse,
+} from "@/types/booking";
+
+export async function createBooking(
+  payload: CreateBookingDTO,
+): Promise<CreateBookingResponse> {
+  return request<CreateBookingResponse>("/bookings", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getCourtAvailability(
+  courtId: string | number,
+  date: string,
+  durationMin: number,
+): Promise<CourtAvailabilityResponse> {
+  const query = new URLSearchParams({
+    date,
+    duration_min: String(durationMin),
+  });
+
+  return request<CourtAvailabilityResponse>(
+    `/bookings/availability/${courtId}?${query.toString()}`,
+  );
+}

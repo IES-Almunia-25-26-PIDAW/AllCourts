@@ -79,6 +79,16 @@ const Booking = {
     return pool.execute(sql, [courtId]);
   },
 
+  getByCourtAndDate: (courtId, date) => {
+    const sql = `SELECT start_time, end_time, status
+            FROM bookings
+            WHERE court_id = ?
+            AND date = ?
+            AND status != 'cancelled'
+            ORDER BY start_time ASC`;
+    return pool.execute(sql, [courtId, date]);
+  },
+
   checkAvailability: (courtId, date, startTime, endTime) => {
     const sql = `SELECT * FROM bookings 
         WHERE court_id = ? 
