@@ -87,7 +87,7 @@ export default function Login() {
           <div className={styles.inputGroup}>
             <label>{t("login.email")}</label>
             <input
-              type="email"
+              type="text"
               placeholder={t("login.email_placeholder")}
               value={identifier}
               onChange={(event) => setIdentifier(event.target.value)}

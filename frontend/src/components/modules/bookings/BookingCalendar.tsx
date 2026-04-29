@@ -3,7 +3,7 @@ import { DayPicker } from "react-day-picker";
 import { enUS, es } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { formatDateKey, parseDateKey } from "@/utils/formatters";
-import styles from "./BookingCalendar.module.scss";
+import CSS from "./BookingCalendar.module.scss";
 
 type BookingCalendarProps = {
   value: string;
@@ -33,7 +33,7 @@ export default function BookingCalendar({
   );
 
   return (
-    <section className={styles.calendarCard}>
+    <section className={CSS.calendarCard}>
       <DayPicker
         mode="single"
         selected={selectedDate}
@@ -43,7 +43,7 @@ export default function BookingCalendar({
         disabled={{ before: today }}
         locale={locale}
         showOutsideDays={false}
-        className={styles.picker}
+        className={CSS.picker}
       />
     </section>
   );
