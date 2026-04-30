@@ -1,10 +1,10 @@
-import { useTranslation } from "react-i18next";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import styles from "./Navbar.module.scss";
-import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
-import { clearAuth, selectIsLogged } from "@/store/slices/authSlice";
+import { selectIsLogged } from '@/store/slices/authSlice';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from './Navbar.module.scss';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -14,18 +14,18 @@ export default function Navbar() {
   const [langLabel, setLangLabel] = useState<string | null>(null);
 
   const toggleLanguage = () => {
-    const newLang = i18n.language.startsWith("en") ? "es" : "en";
+    const newLang = i18n.language.startsWith('en') ? 'es' : 'en';
     i18n.changeLanguage(newLang);
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem("i18nextLng", newLang);
+        localStorage.setItem('i18nextLng', newLang);
       } catch {}
       document.cookie = `i18nextLng=${newLang};path=/`;
     }
   };
 
   useEffect(() => {
-    setLangLabel(i18n.language.startsWith("en") ? "ES" : "EN");
+    setLangLabel(i18n.language.startsWith('en') ? 'ES' : 'EN');
   }, [i18n.language]);
 
   return (
@@ -33,12 +33,7 @@ export default function Navbar() {
       <div className={styles.container}>
         <Link href="/">
           <div className={styles.logo}>
-            <Image
-              src="/logoallcourts.png"
-              alt="AllCourts Logo"
-              width={40}
-              height={40}
-            />
+            <Image src="/logoallcourts.png" alt="AllCourts Logo" width={40} height={40} />
             <h1>AllCourts</h1>
           </div>
         </Link>
@@ -46,7 +41,7 @@ export default function Navbar() {
         <nav className={styles.nav}>
           <>
             <button className={styles.navButton} onClick={toggleLanguage}>
-              {langLabel ?? ""}
+              {langLabel ?? ''}
             </button>
 
             {isLogged ? (
@@ -57,17 +52,18 @@ export default function Navbar() {
                 <Link href="/courts">
                   <button className={styles.navButton}>Reservar</button>
                 </Link>
+                {user?.role === 'manager' ? (
+                  <Link href="/manager">
+                    <button className={styles.navButton}>Manager</button>
+                  </Link>
+                ) : null}
                 <Link href="/profile">
                   <a className={styles.profileLink}>
                     {user?.avatar_url ? (
-                      <img
-                        src={user.avatar_url}
-                        alt="avatar"
-                        className={styles.avatar}
-                      />
+                      <img src={user.avatar_url} alt="avatar" className={styles.avatar} />
                     ) : (
                       <div className={styles.avatarPlaceholder}>
-                        {(user?.name || user?.username || "U").slice(0, 1)}
+                        {(user?.name || user?.username || 'U').slice(0, 1)}
                       </div>
                     )}
                   </a>
@@ -76,19 +72,13 @@ export default function Navbar() {
             ) : (
               <>
                 <Link href="/info/player">
-                  <button className={styles.navButton}>
-                    {t("header.btn_forplayers")}
-                  </button>
+                  <button className={styles.navButton}>{t('header.btn_forplayers')}</button>
                 </Link>
                 <Link href="/info/manager">
-                  <button className={styles.navButton}>
-                    {t("header.btn_forclubs")}
-                  </button>
+                  <button className={styles.navButton}>{t('header.btn_forclubs')}</button>
                 </Link>
                 <Link href="/login">
-                  <button className={styles.profileButton}>
-                    {t("header.btn_profile")}
-                  </button>
+                  <button className={styles.profileButton}>{t('header.btn_profile')}</button>
                 </Link>
               </>
             )}
