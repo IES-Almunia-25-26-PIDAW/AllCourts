@@ -1,4 +1,4 @@
-@import "../../styles/_variables.scss";
+@use "../../styles/_variables.scss" as *;
 
 .page {
   max-width: 1180px;

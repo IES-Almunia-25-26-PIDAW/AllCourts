@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ClubCard from "@/components/modules/clubs/ClubCard";
+import CourtCard from "@/components/modules/courts/CourtCard";
 import { getClubById } from "@/api/clubApi";
 import { getCourtsByClubId } from "@/api/courtApi";
-import { formatPrice } from "@/utils/formatters";
-import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import type { ClubWithManager } from "@/types/club";
 import type { CourtWithClub } from "@/types/court";
 import styles from "./[id].module.scss";
@@ -121,46 +119,9 @@ export default function ClubDetailPage() {
           </p>
         ) : (
           <div className={styles.courtsGrid}>
-            {courts.map((court) => {
-              const coverCourtImage = court.image_url || "/logoallcourts.png";
-
-              return (
-                <article key={court.id} className={styles.courtCard}>
-                  <div className={styles.courtImage}>
-                    <Image
-                      src={coverCourtImage}
-                      alt={court.name}
-                      fill
-                      className={styles.courtImageMedia}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  </div>
-
-                  <div className={styles.courtBody}>
-                    <p className={styles.courtName}>{court.name}</p>
-
-                    <p className={styles.courtSport}>
-                      {SPORT_LABELS[court.sport]}
-                    </p>
-
-                    <p className={styles.courtSurface}>
-                      {SURFACE_LABELS[court.surface_type]}
-                    </p>
-
-                    <p className={styles.courtPrice}>
-                      Desde {formatPrice(Number(court.price_60))}
-                    </p>
-
-                    <Link
-                      href={`/courts/${court.id}`}
-                      className={styles.courtLink}
-                    >
-                      Ver pista
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+            {courts.map((court) => (
+              <CourtCard key={court.id} court={court} />
+            ))}
           </div>
         )}
       </section>
