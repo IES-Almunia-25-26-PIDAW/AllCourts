@@ -95,8 +95,10 @@ export default function CourtDetailPage() {
         ← Volver al club
       </Link>
 
-      <CourtDetail court={court} />
-      <BookingForm court={court} />
+      <div className={styles.contentStack}>
+        <CourtDetail court={court} />
+        <BookingForm court={court} />
+      </div>
     </main>
   );
 }

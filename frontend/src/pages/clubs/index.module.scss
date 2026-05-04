@@ -86,22 +86,6 @@
   margin-top: 24px;
   align-items: start;
   padding-bottom: 6px;
-
-  // gentle entrance for heavy pages
-  & > * {
-    transition:
-      transform 200ms ease,
-      box-shadow 180ms ease,
-      opacity 220ms ease;
-    will-change: transform, opacity;
-    background: #ffffff;
-    border-radius: 12px;
-  }
-
-  & > *:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 10px 30px rgba(16, 42, 67, 0.08);
-  }
 }
 
 @media (max-width: 720px) {
@@ -117,9 +101,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .resultsGrid > * {
-    transition: none !important;
-  }
   .searchBox {
     transition: none !important;
   }

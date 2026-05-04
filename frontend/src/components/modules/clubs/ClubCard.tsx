@@ -32,16 +32,8 @@ interface ClubCardProps {
 //#endregion
 
 //#region FUNCTIONS
-const ClubCard = ({
-  club,
-  href,
-  courtCount,
-  variant = "default",
-}: ClubCardProps) => {
-  const coverImage =
-    variant === "detail"
-      ? "/logoallcourts.png"
-      : club.logo_url || "/logoallcourts.png";
+const ClubCard = ({ club, href, courtCount, variant = "default" }: ClubCardProps) => {
+  const coverImage = club.logo_url || "/logoallcourts.png";
   const description = club.description || "Sin descripción disponible.";
   const CardContent = (
     <div
@@ -57,18 +49,12 @@ const ClubCard = ({
           className={styles.image}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        {variant === "detail" ? (
-          <span className={styles.detailBadge}>DETAIL</span>
-        ) : (
+        {variant !== "detail" && (
           <span className={styles.cityBadge}>{club.city || "Sin ciudad"}</span>
         )}
       </div>
 
       <div className={styles.body}>
-        {variant === "detail" ? (
-          <p className={styles.detailLabel}>Club detail</p>
-        ) : null}
-
         <p className={styles.name}>{club.name}</p>
 
         <p className={styles.desc}>
