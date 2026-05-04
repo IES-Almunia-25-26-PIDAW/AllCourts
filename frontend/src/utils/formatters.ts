@@ -80,7 +80,8 @@ export function formatLongDate(
     return fallbackLabel;
   }
 
-  const date = new Date(`${dateValue}T12:00:00`);
+  const dateOnly = dateValue.includes("T") ? dateValue.split("T")[0] : dateValue;
+  const date = new Date(`${dateOnly}T12:00:00`);
   if (Number.isNaN(date.getTime())) {
     return fallbackLabel;
   }

@@ -12,6 +12,11 @@ export interface Booking {
   status: BookingStatus;
   cancel_reason?: string;
   created_at?: string;
+  court_name?: string;
+  court_address?: string;
+  court_city?: string;
+  user_name?: string;
+  user_email?: string;
 }
 
 export interface CreateBookingDTO {

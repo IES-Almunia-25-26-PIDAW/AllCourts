@@ -1,5 +1,6 @@
 import { request } from "@/api/http";
 import type {
+  Booking,
   CreateBookingDTO,
   CreateBookingResponse,
   CourtAvailabilityResponse,
@@ -27,4 +28,10 @@ export async function getCourtAvailability(
   return request<CourtAvailabilityResponse>(
     `/bookings/availability/${courtId}?${query.toString()}`,
   );
+}
+
+export async function getBookingsByUserId(
+  userId: string,
+): Promise<Booking[]> {
+  return request<Booking[]>(`/bookings/user/${userId}`);
 }
