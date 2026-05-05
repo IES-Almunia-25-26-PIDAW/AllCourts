@@ -3,6 +3,7 @@ const express = require("express");
 const bookingController = require("../controllers/bookingController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
+const { requireSameUserParam, requireBookingAccessByParam, requireManagerOwnCourt } = require("../middlewares/ownershipMiddleware");
 //#endregion
 
 /**
@@ -27,26 +28,29 @@ router.get(
   roleMiddleware("manager"),
   bookingController.getAll,
 );
-router.get("/user/:userId", authMiddleware, bookingController.getByUserId);
+router.get("/user/:userId", authMiddleware, requireSameUserParam("userId"), bookingController.getByUserId);
 router.get(
   "/court/:courtId",
   authMiddleware,
   roleMiddleware("manager"),
+  requireManagerOwnCourt,
   bookingController.getByCourtId,
 );
 router.get("/availability/:courtId", bookingController.getAvailability);
-router.get("/:id", authMiddleware, bookingController.getById);
+router.get("/:id", authMiddleware, requireBookingAccessByParam("id"), bookingController.getById);
 router.patch(
   "/:id/status",
   authMiddleware,
   roleMiddleware("manager"),
+  requireBookingAccessByParam("id"),
   bookingController.updateStatus,
 );
-router.patch("/:id/cancel", authMiddleware, bookingController.cancel);
+router.patch("/:id/cancel", authMiddleware, requireBookingAccessByParam("id"), bookingController.cancel);
 router.delete(
   "/:id",
   authMiddleware,
   roleMiddleware("manager"),
+  requireBookingAccessByParam("id"),
   bookingController.delete,
 );
 
