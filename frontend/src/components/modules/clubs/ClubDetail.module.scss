@@ -1,0 +1,126 @@
+@use "../../../styles/_variables.scss" as *;
+
+.wrapper {
+	display: grid;
+	grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.8fr);
+	gap: 16px;
+	align-items: start;
+}
+
+.heroCard {
+	overflow: hidden;
+	border-radius: 18px;
+	border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.sectionCard {
+	padding: 16px;
+	border-radius: 18px;
+	border: 1px solid rgba(148, 163, 184, 0.12);
+	background: #ffffff;
+	box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+}
+
+.sectionHeader {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 10px;
+}
+
+.sectionEyebrow {
+	margin: 0;
+	color: $primary-color;
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.sectionSummary {
+	margin: 0;
+	color: $text-secondary;
+	font-size: 0.92rem;
+}
+
+.mainColumn,
+.sidebar {
+	display: grid;
+	gap: 16px;
+}
+
+.sideCard {
+	padding: 16px;
+	border-radius: 18px;
+	border: 1px solid rgba(148, 163, 184, 0.12);
+	background: #ffffff;
+	box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+}
+
+.tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 10px;
+	border-radius: 999px;
+	font-weight: 700;
+	background: $primary-soft;
+	color: $primary-color;
+	border: 1px solid $primary-border;
+}
+
+.tagsList,
+.scheduleList {
+	display: grid;
+	gap: 8px;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.tagItem,
+.scheduleItem {
+	padding: 10px 12px;
+	border-radius: 12px;
+	background: #f8fafc;
+}
+
+.dayName {
+	display: block;
+	margin: 0 0 2px;
+	font-weight: 800;
+	color: #0f172a;
+	font-size: 0.92rem;
+}
+
+.dayLabel {
+	display: block;
+	margin: 0;
+	font-size: 0.86rem;
+	color: $text-secondary;
+	line-height: 1.4;
+}
+
+.courtsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 14px;
+}
+
+.emptyText,
+.sideNote {
+	margin: 0;
+	color: $text-secondary;
+	font-size: 0.9rem;
+}
+
+@media (max-width: 720px) {
+	.wrapper {
+		grid-template-columns: 1fr;
+	}
+
+	.mainColumn,
+	.sidebar {
+		gap: 12px;
+	}
+}

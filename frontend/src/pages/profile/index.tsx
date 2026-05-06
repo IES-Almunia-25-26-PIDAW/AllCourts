@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import styles from "./index.module.scss";
 import { getBookingsByUserId } from "@/api/bookingApi";
 import type { Booking } from "@/types/booking";
@@ -9,8 +8,7 @@ import ChangePassword from "@/components/modules/profile/ChangePassword";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function ProfilePage() {
-	const user = useSelector((state: any) => state.auth.user);
-	const { logout } = useAuth();
+	const { logout, user } = useAuth();
 	const [bookings, setBookings] = useState<Booking[]>([]);
 	const [bookingsLoading, setBookingsLoading] = useState(false);
 	const [bookingsError, setBookingsError] = useState<string | null>(null);

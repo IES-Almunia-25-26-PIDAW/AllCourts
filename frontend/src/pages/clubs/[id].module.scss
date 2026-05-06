@@ -31,6 +31,34 @@ $shadow-2: 0 12px 32px rgba(16, 23, 42, 0.08);
   }
 }
 
+.detailNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-1;
+  }
+}
+
 .status {
   color: $text-secondary;
 }

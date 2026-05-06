@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./UserInfo.module.scss";
 import { setAuth } from "@/store/slices/authSlice";
 import { updateUser, updateUserForm } from "@/api/userApi";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function UserInfo() {
-  const user = useSelector((state: any) => state.auth.user);
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   const [name, setName] = useState<string>(user?.name ?? "");
