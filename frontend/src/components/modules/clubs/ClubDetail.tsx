@@ -142,14 +142,14 @@ export default function ClubDetail({ club }: ClubDetailProps) {
 
 				<section className={styles.sectionCard}>
 					<header className={styles.sectionHeader}>
-						<p className={styles.sectionEyebrow}>Pistas</p>
-						<p className={styles.sectionSummary}>
+						<span className={styles.sectionEyebrow}>Pistas</span>
+						<span className={styles.sectionSummary}>
 							{loadingCourts
 								? "Cargando pistas..."
 								: courts.length
 									? `${courts.length} pista${courts.length === 1 ? "" : "s"} disponible${courts.length === 1 ? "" : "s"}.`
 									: "Este club todavía no tiene pistas cargadas."}
-						</p>
+						</span>
 					</header>
 
 					{courts.length === 0 ? (
@@ -170,12 +170,12 @@ export default function ClubDetail({ club }: ClubDetailProps) {
 			<aside className={styles.sidebar}>
 				<section className={styles.sideCard}>
 					<header className={styles.sectionHeader}>
-						<p className={styles.sectionEyebrow}>Deportes</p>
-						<p className={styles.sideNote}>
+						<span className={styles.sectionEyebrow}>Deportes</span>
+						<span className={styles.sideNote}>
 							{sports.length
 								? `${sports.length} modalidades activas.`
 								: "Sin deportes publicados todavía."}
-						</p>
+						</span>
 					</header>
 
 					{sports.length > 0 ? (
@@ -191,12 +191,12 @@ export default function ClubDetail({ club }: ClubDetailProps) {
 
 				<section className={styles.sideCard}>
 					<header className={styles.sectionHeader}>
-						<p className={styles.sectionEyebrow}>Horario</p>
-						<p className={styles.sideNote}>
+						<span className={styles.sectionEyebrow}>Horario</span>
+						<span className={styles.sideNote}>
 							{loadingSchedules
 								? "Cargando horarios..."
 								: "Semana completa, resumida por día."}
-						</p>
+						</span>
 					</header>
 
 					<ul className={styles.scheduleList}>

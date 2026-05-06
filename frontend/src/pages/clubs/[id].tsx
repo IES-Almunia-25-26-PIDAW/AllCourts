@@ -84,10 +84,6 @@ export default function ClubDetailPage() {
 				<Link href="/clubs" className={styles.backLink}>
 					← Volver a clubes
 				</Link>
-
-				<Link href="/courts" className={styles.secondaryLink}>
-					Ver todas las pistas
-				</Link>
 			</div>
 
 			<ClubDetail club={club} />
