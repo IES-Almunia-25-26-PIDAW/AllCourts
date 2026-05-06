@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getCourts } from "@/api/courtApi";
-import type { CourtWithClub } from "@/types/court";
+import type { CourtWithClub, Sport, SurfaceType } from "@/types/court";
+import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import CourtCard from "@/components/modules/courts/CourtCard";
 import styles from "./index.module.scss";
 
@@ -29,6 +30,8 @@ export default function CourtPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
+  const [selectedSurface, setSelectedSurface] = useState<SurfaceType | null>(null);
 
   useEffect(() => {
     const loadCourts = async () => {
@@ -54,12 +57,9 @@ export default function CourtPage() {
   const filteredCourts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    if (!normalizedQuery) {
-      return courts;
-    }
-
     return courts.filter((court) => {
-      const haystack = [
+      // Text filter
+      const matchesQuery = !normalizedQuery || [
         court.name,
         court.club_name,
         court.city,
@@ -68,11 +68,18 @@ export default function CourtPage() {
       ]
         .filter(Boolean)
         .join(" ")
-        .toLowerCase();
+        .toLowerCase()
+        .includes(normalizedQuery);
 
-      return haystack.includes(normalizedQuery);
+      // Sport filter
+      const matchesSport = selectedSport === null || court.sport === selectedSport;
+
+      // Surface filter
+      const matchesSurface = selectedSurface === null || court.surface_type === selectedSurface;
+
+      return matchesQuery && matchesSport && matchesSurface;
     });
-  }, [courts, query]);
+  }, [courts, query, selectedSport, selectedSurface]);
 
   return (
     <main className={styles.page}>
@@ -96,6 +103,46 @@ export default function CourtPage() {
           placeholder="Buscar pistas..."
           className={styles.searchBox}
         />
+
+        <div className={styles.filtersBlock}>
+          {Object.entries(SPORT_LABELS).map(([sport, label]) => (
+            <button
+              key={sport}
+              type="button"
+              className={selectedSport === sport ? styles.chipActive : styles.chip}
+              onClick={() => setSelectedSport(selectedSport === sport ? null : sport as Sport)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.filtersBlock}>
+          {Object.entries(SURFACE_LABELS).map(([surface, label]) => (
+            <button
+              key={surface}
+              type="button"
+              className={selectedSurface === surface ? styles.chipActive : styles.chip}
+              onClick={() => setSelectedSurface(selectedSurface === surface ? null : surface as SurfaceType)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {(query !== '' || selectedSport !== null || selectedSurface !== null) && (
+          <button
+            type="button"
+            className={styles.clearBtn}
+            onClick={() => {
+              setQuery('');
+              setSelectedSport(null);
+              setSelectedSurface(null);
+            }}
+          >
+            Limpiar filtros
+          </button>
+        )}
       </section>
 
       {loading ? <p className={styles.status}>Cargando pistas...</p> : null}
