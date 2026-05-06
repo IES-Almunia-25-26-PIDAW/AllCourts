@@ -1,141 +1,141 @@
 .page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2.5rem 1rem;
-  min-height: calc(100vh - 80px);
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2.5rem 1rem;
+	min-height: calc(100vh - 80px);
 }
 
 .header {
-  margin-bottom: 2.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+	margin-bottom: 2.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #e5e7eb;
 }
 
 .headerProfile {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
+	display: flex;
+	gap: 1.5rem;
+	align-items: center;
 }
 
 .headerAvatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #0059ff;
-  flex-shrink: 0;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 3px solid #0059ff;
+	flex-shrink: 0;
 }
 
 .headerAvatarPlaceholder {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #eef6ff, #f0f9ff);
-  color: #0059ff;
-  font-weight: 700;
-  font-size: 1.75rem;
-  border: 3px solid #0059ff;
-  flex-shrink: 0;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, #eef6ff, #f0f9ff);
+	color: #0059ff;
+	font-weight: 700;
+	font-size: 1.75rem;
+	border: 3px solid #0059ff;
+	flex-shrink: 0;
 }
 
 .headerInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .headerUsername {
-  margin: 0 0 0.25rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
+	margin: 0 0 0.25rem;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #0f172a;
 }
 
 .headerEmail {
-  margin: 0;
-  color: #667085;
-  font-size: 0.9rem;
+	margin: 0;
+	color: #667085;
+	font-size: 0.9rem;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .formsSide {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 0.5rem;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+	margin-top: 0.5rem;
 }
 
 .logoutSection {
-  padding: 2rem 0;
-  border-top: 1px solid #f0f0f0;
-  margin-top: 2rem;
+	padding: 2rem 0;
+	border-top: 1px solid #f0f0f0;
+	margin-top: 2rem;
 }
 
 .logoutBtn {
-  padding: 0.8rem 1.5rem;
-  background: #ef4444;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 120ms ease;
+	padding: 0.8rem 1.5rem;
+	background: #ef4444;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: all 120ms ease;
 
-  &:hover {
-    background: #dc2626;
-  }
+	&:hover {
+		background: #dc2626;
+	}
 
-  &:active {
-    transform: scale(0.98);
-  }
+	&:active {
+		transform: scale(0.98);
+	}
 }
 
 @media (max-width: 900px) {
-  .formsSide {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
+	.formsSide {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
 }
 
 @media (max-width: 640px) {
-  .page {
-    padding: 1.5rem 0.75rem;
-  }
+	.page {
+		padding: 1.5rem 0.75rem;
+	}
 
-  .header {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-  }
+	.header {
+		margin-bottom: 1.5rem;
+		padding-bottom: 1rem;
+	}
 
-  .headerProfile {
-    gap: 1rem;
-  }
+	.headerProfile {
+		gap: 1rem;
+	}
 
-  .headerAvatar,
-  .headerAvatarPlaceholder {
-    width: 64px;
-    height: 64px;
-    font-size: 1.5rem;
-  }
+	.headerAvatar,
+	.headerAvatarPlaceholder {
+		width: 64px;
+		height: 64px;
+		font-size: 1.5rem;
+	}
 
-  .headerUsername {
-    font-size: 1.25rem;
-  }
+	.headerUsername {
+		font-size: 1.25rem;
+	}
 
-  .headerEmail {
-    font-size: 0.85rem;
-  }
+	.headerEmail {
+		font-size: 0.85rem;
+	}
 
-  .formsSide {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+	.formsSide {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
 }

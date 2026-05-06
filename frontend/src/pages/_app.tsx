@@ -10,7 +10,7 @@ import Footer from "@/components/layouts/Footer";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import LanguageDetector from "@/components/ui/LanguageDetector";
 import store from "@/store";
-import { hydrateAuth, clearAuth } from "@/store/slices/authSlice";
+import { setAuth, clearAuth } from "@/store/slices/authSlice";
 import { getCurrentUser } from "@/api/authApi";
 //#endregion
 
@@ -50,7 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
     try {
       const cached = window.localStorage.getItem("allcourts_user");
       if (cached) {
-        store.dispatch(hydrateAuth(JSON.parse(cached)));
+        store.dispatch(setAuth(JSON.parse(cached)));
       }
     } catch {
       window.localStorage.removeItem("allcourts_user");
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
     // Si la cookie expiró o no existe, /auth/me devolverá 401 y limpiamos el estado.
     getCurrentUser()
       .then((user) => {
-        store.dispatch(hydrateAuth(user));
+        store.dispatch(setAuth(user));
         try {
           window.localStorage.setItem("allcourts_user", JSON.stringify(user));
         } catch {}

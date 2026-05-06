@@ -1,15 +1,15 @@
-import { selectIsLogged } from '@/store/slices/authSlice';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Navbar.module.scss';
+import { selectIsAuthenticated } from '@/store/slices/authSlice';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const isLogged = useSelector(selectIsLogged);
+  const isLogged = useSelector(selectIsAuthenticated);
   const user = useSelector((state: any) => state.auth.user);
   const [langLabel, setLangLabel] = useState<string | null>(null);
 

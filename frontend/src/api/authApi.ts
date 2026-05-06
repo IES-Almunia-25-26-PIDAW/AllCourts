@@ -28,7 +28,7 @@ import { request } from "@/api/http";
  * Se usa al arrancar la app para hidratar la sesión real del usuario.
  */
 export async function getCurrentUser(): Promise<User> {
-  return request<User>("/auth/me");
+	return request<User>("/auth/me");
 }
 
 /**
@@ -36,24 +36,24 @@ export async function getCurrentUser(): Promise<User> {
  * Devuelve el usuario autenticado para sincronizar Redux y localStorage.
  */
 export async function login(
-  credentials: LoginCredentials,
+	credentials: LoginCredentials,
 ): Promise<{ user: User }> {
-  return request<{ user: User }>("/auth/login", {
-    method: "POST",
-    body: JSON.stringify(credentials),
-  });
+	return request<{ user: User }>("/auth/login", {
+		method: "POST",
+		body: JSON.stringify(credentials),
+	});
 }
 
 /**
  * Registra un nuevo usuario y deja la cuenta pendiente de verificación por email.
  */
 export async function register(
-  userData: CreateUserDTO,
+	userData: CreateUserDTO,
 ): Promise<{ message: string }> {
-  return request<{ message: string }>("/auth/register", {
-    method: "POST",
-    body: JSON.stringify(userData),
-  });
+	return request<{ message: string }>("/auth/register", {
+		method: "POST",
+		body: JSON.stringify(userData),
+	});
 }
 
 /**
@@ -61,6 +61,10 @@ export async function register(
  * Se usa para limpiar la sesión local y forzar el estado anónimo.
  */
 export async function logout(): Promise<void> {
-  await request<{ message: string }>("/auth/logout", { method: "POST" });
+	await request<{ message: string }>("/auth/logout", { method: "POST" });
+}
+
+export async function verifyEmail(token: string): Promise<{ message: string }> {
+	return request<{ message: string }>(`/auth/verify/${token}`);
 }
 //#endregion
