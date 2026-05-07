@@ -77,4 +77,11 @@ export async function resetPassword(token: string, newPassword: string): Promise
     body: JSON.stringify({ newPassword })
   });
 }
+
+export async function resendVerification(email: string): Promise<{ message: string }> {
+  return request<{ message: string }>('/auth/resend-verification', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  });
+}
 //#endregion
