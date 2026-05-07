@@ -35,3 +35,13 @@ export async function getBookingsByUserId(
 ): Promise<Booking[]> {
   return request<Booking[]>(`/bookings/user/${userId}`);
 }
+
+export async function cancelBooking(
+  bookingId: number,
+  cancelReason?: string,
+): Promise<void> {
+  return request<void>(`/bookings/${bookingId}/cancel`, {
+    method: "PATCH",
+    body: JSON.stringify({ cancel_reason: cancelReason }),
+  });
+}
