@@ -42,6 +42,23 @@
     "dropdown_login_club": "Iniciar sesión como club",
     "dropdown_label_club": "Gestionar reservas"
   },
+  "forgotPassword": {
+    "title": "¿Olvidaste tu contraseña?",
+    "subtitle": "Introduce tu email y te enviaremos un enlace de recuperación.",
+    "label_email": "Email",
+    "btn_send": "Enviar enlace",
+    "success": "Si el email está registrado, recibirás un enlace en breve.",
+    "back_login": "Volver al login"
+  },
+  "resetPassword": {
+    "title": "Nueva contraseña",
+    "label_password": "Nueva contraseña",
+    "label_confirm": "Confirmar contraseña",
+    "error_mismatch": "Las contraseñas no coinciden",
+    "btn_submit": "Cambiar contraseña",
+    "success": "Contraseña actualizada. Ya puedes iniciar sesión.",
+    "link_login": "Ir a iniciar sesión"
+  },
   "register": {
     "title": "Crear cuenta",
     "subtitle": "Completa el formulario para registrarte.",

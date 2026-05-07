@@ -1,6 +1,6 @@
 //#region MODULES
-import type { CreateUserDTO, LoginCredentials, User } from "@/types/user";
-import { request } from "@/api/http";
+import { request } from '@/api/http';
+import type { CreateUserDTO, LoginCredentials, User } from '@/types/user';
 //#endregion
 
 //#region DOCUMENTATION
@@ -28,32 +28,28 @@ import { request } from "@/api/http";
  * Se usa al arrancar la app para hidratar la sesión real del usuario.
  */
 export async function getCurrentUser(): Promise<User> {
-	return request<User>("/auth/me");
+  return request<User>('/auth/me');
 }
 
 /**
  * Inicia sesión y deja la cookie httpOnly preparada en el navegador.
  * Devuelve el usuario autenticado para sincronizar Redux y localStorage.
  */
-export async function login(
-	credentials: LoginCredentials,
-): Promise<{ user: User }> {
-	return request<{ user: User }>("/auth/login", {
-		method: "POST",
-		body: JSON.stringify(credentials),
-	});
+export async function login(credentials: LoginCredentials): Promise<{ user: User }> {
+  return request<{ user: User }>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials)
+  });
 }
 
 /**
  * Registra un nuevo usuario y deja la cuenta pendiente de verificación por email.
  */
-export async function register(
-	userData: CreateUserDTO,
-): Promise<{ message: string }> {
-	return request<{ message: string }>("/auth/register", {
-		method: "POST",
-		body: JSON.stringify(userData),
-	});
+export async function register(userData: CreateUserDTO): Promise<{ message: string }> {
+  return request<{ message: string }>('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(userData)
+  });
 }
 
 /**
@@ -61,10 +57,24 @@ export async function register(
  * Se usa para limpiar la sesión local y forzar el estado anónimo.
  */
 export async function logout(): Promise<void> {
-	await request<{ message: string }>("/auth/logout", { method: "POST" });
+  await request<{ message: string }>('/auth/logout', { method: 'POST' });
 }
 
 export async function verifyEmail(token: string): Promise<{ message: string }> {
-	return request<{ message: string }>(`/auth/verify/${token}`);
+  return request<{ message: string }>(`/auth/verify/${token}`);
+}
+
+export async function forgotPassword(email: string): Promise<{ message: string }> {
+  return request<{ message: string }>('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  });
+}
+
+export async function resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+  return request<{ message: string }>(`/auth/reset-password/${token}`, {
+    method: 'POST',
+    body: JSON.stringify({ newPassword })
+  });
 }
 //#endregion
