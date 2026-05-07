@@ -45,46 +45,36 @@ import { getCurrentUser } from "@/api/authApi";
 
 //#region FUNCTIONS
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    // Paso 1: Hidratación instantánea desde localStorage (datos no sensibles)
-    try {
-      const cached = window.localStorage.getItem("allcourts_user");
-      if (cached) {
-        store.dispatch(setAuth(JSON.parse(cached)));
-      }
-    } catch {
-      window.localStorage.removeItem("allcourts_user");
-    }
+	useEffect(() => {
+		getCurrentUser()
+			.then((user) => {
+				store.dispatch(setAuth(user));
+				try {
+					window.localStorage.setItem(
+						"allcourts_user",
+						JSON.stringify(user),
+					);
+				} catch {}
+			})
+			.catch(() => {
+				try {
+					window.localStorage.removeItem("allcourts_user");
+				} catch {}
+				store.dispatch(clearAuth());
+			});
+	}, []);
 
-    // Paso 2: Validar la sesión real contra el backend.
-    // La cookie httpOnly se envía automáticamente con credentials: "include".
-    // Si la cookie expiró o no existe, /auth/me devolverá 401 y limpiamos el estado.
-    getCurrentUser()
-      .then((user) => {
-        store.dispatch(setAuth(user));
-        try {
-          window.localStorage.setItem("allcourts_user", JSON.stringify(user));
-        } catch {}
-      })
-      .catch(() => {
-        try {
-          window.localStorage.removeItem("allcourts_user");
-        } catch {}
-        store.dispatch(clearAuth());
-      });
-  }, []);
-
-  return (
-    <Provider store={store}>
-      <ErrorBoundary>
-        <LanguageDetector />
-        <Navbar />
-        <main>
-          <Component {...pageProps} />
-        </main>
-        <Footer />
-      </ErrorBoundary>
-    </Provider>
-  );
+	return (
+		<Provider store={store}>
+			<ErrorBoundary>
+				<LanguageDetector />
+				<Navbar />
+				<main>
+					<Component {...pageProps} />
+				</main>
+				<Footer />
+			</ErrorBoundary>
+		</Provider>
+	);
 }
 //#endregion
