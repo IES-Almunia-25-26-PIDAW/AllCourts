@@ -1,5 +1,5 @@
 //#region MODULES
-const { pool } = require("../config/db");
+const { pool } = require('../config/db');
 //#endregion
 
 /**
@@ -25,34 +25,34 @@ const User = {
       user.password,
       user.role,
       user.phone,
-      user.avatar_url,
+      user.avatar_url
     ]);
   },
 
   getAll: () => {
     const sql =
-      "SELECT id, name, username, email, role, phone, avatar_url, is_verified, created_at, last_login FROM users";
+      'SELECT id, name, username, email, role, phone, avatar_url, is_verified, created_at, last_login FROM users';
     return pool.execute(sql);
   },
 
   getById: (id) => {
     const sql =
-      "SELECT id, name, username, email, role, phone, avatar_url, is_verified, created_at, last_login FROM users WHERE id = ?";
+      'SELECT id, name, username, email, role, phone, avatar_url, is_verified, created_at, last_login FROM users WHERE id = ?';
     return pool.execute(sql, [id]);
   },
 
   getByIdWithPassword: (id) => {
-    const sql = "SELECT * FROM users WHERE id = ?";
+    const sql = 'SELECT * FROM users WHERE id = ?';
     return pool.execute(sql, [id]);
   },
 
   getByEmail: (email) => {
-    const sql = "SELECT * FROM users WHERE email = ?";
+    const sql = 'SELECT * FROM users WHERE email = ?';
     return pool.execute(sql, [email]);
   },
 
   getByUsername: (username) => {
-    const sql = "SELECT * FROM users WHERE username = ?";
+    const sql = 'SELECT * FROM users WHERE username = ?';
     return pool.execute(sql, [username]);
   },
 
@@ -60,29 +60,32 @@ const User = {
     const sql = `UPDATE users 
         SET name = ?, username = ?, phone = ?, avatar_url = ? 
         WHERE id = ?`;
-    return pool.execute(sql, [
-      data.name,
-      data.username,
-      data.phone,
-      data.avatar_url,
-      id,
-    ]);
+    return pool.execute(sql, [data.name, data.username, data.phone, data.avatar_url, id]);
   },
 
   updatePassword: (id, hashedPassword) => {
-    const sql = "UPDATE users SET password = ? WHERE id = ?";
+    const sql = 'UPDATE users SET password = ? WHERE id = ?';
     return pool.execute(sql, [hashedPassword, id]);
   },
 
   updateLastLogin: (id) => {
-    const sql = "UPDATE users SET last_login = NOW() WHERE id = ?";
+    const sql = 'UPDATE users SET last_login = NOW() WHERE id = ?';
     return pool.execute(sql, [id]);
   },
 
   setVerificationToken: (id, token, expiresAt) => {
-    const sql =
-      "UPDATE users SET verification_token = ?, token_expires_at = ? WHERE id = ?";
+    const sql = 'UPDATE users SET verification_token = ?, token_expires_at = ? WHERE id = ?';
     return pool.execute(sql, [token, expiresAt, id]);
+  },
+
+  findByResetToken: (tokenHash) => {
+    const sql = 'SELECT * FROM users WHERE verification_token = ? AND token_expires_at > NOW()';
+    return pool.execute(sql, [tokenHash]);
+  },
+
+  clearResetToken: (id) => {
+    const sql = 'UPDATE users SET verification_token = NULL, token_expires_at = NULL WHERE id = ?';
+    return pool.execute(sql, [id]);
   },
 
   verifyUser: (token) => {
@@ -93,9 +96,9 @@ const User = {
   },
 
   delete: (id) => {
-    const sql = "DELETE FROM users WHERE id = ?";
+    const sql = 'DELETE FROM users WHERE id = ?';
     return pool.execute(sql, [id]);
-  },
+  }
 };
 
 module.exports = User;

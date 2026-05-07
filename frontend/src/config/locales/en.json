@@ -42,6 +42,23 @@
     "dropdown_login_club": "Login as Club",
     "dropdown_label_club": "Manage bookings"
   },
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "subtitle": "Enter your email and we will send you a recovery link.",
+    "label_email": "Email",
+    "btn_send": "Send link",
+    "success": "If the email is registered, you will receive a link shortly.",
+    "back_login": "Back to login"
+  },
+  "resetPassword": {
+    "title": "New password",
+    "label_password": "New password",
+    "label_confirm": "Confirm password",
+    "error_mismatch": "Passwords do not match",
+    "btn_submit": "Change password",
+    "success": "Password updated. You can now sign in.",
+    "link_login": "Go to sign in"
+  },
   "register": {
     "title": "Create Account",
     "subtitle": "Complete the form to register.",
