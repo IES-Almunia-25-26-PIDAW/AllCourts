@@ -61,6 +61,10 @@ export function useAuth() {
     await authApi.resetPassword(token, newPassword);
   };
 
+  const resendVerification = async (email: string): Promise<void> => {
+    await authApi.resendVerification(email);
+  };
+
   const logout = async () => {
     try {
       await authApi.logout();
@@ -82,6 +86,7 @@ export function useAuth() {
     verifyEmail,
     forgotPassword,
     resetPassword,
+    resendVerification,
     logout
   };
 }

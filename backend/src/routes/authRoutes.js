@@ -20,6 +20,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);
+router.post('/resend-verification', authController.resendVerification);
 router.post('/logout', authController.logout);
 router.get('/me', authMiddleware, authController.me);
 router.get('/verify/:token', authController.verifyEmail);

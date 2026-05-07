@@ -42,6 +42,13 @@
     "dropdown_login_club": "Login as Club",
     "dropdown_label_club": "Manage bookings"
   },
+  "resendVerification": {
+    "prompt": "Didn't receive the email or the link expired?",
+    "label_email": "Your registration email",
+    "btn": "Resend verification email",
+    "success": "If the email is registered and unverified, you'll receive a new link shortly.",
+    "error": "Could not send the email. Please try again."
+  },
   "forgotPassword": {
     "title": "Forgot your password?",
     "subtitle": "Enter your email and we will send you a recovery link.",

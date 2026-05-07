@@ -42,6 +42,13 @@
     "dropdown_login_club": "Iniciar sesión como club",
     "dropdown_label_club": "Gestionar reservas"
   },
+  "resendVerification": {
+    "prompt": "¿No recibiste el email o el enlace expiró?",
+    "label_email": "Tu email de registro",
+    "btn": "Reenviar email de verificación",
+    "success": "Si el email está registrado y sin verificar, recibirás un nuevo enlace en breve.",
+    "error": "No se pudo enviar el email. Inténtalo de nuevo."
+  },
   "forgotPassword": {
     "title": "¿Olvidaste tu contraseña?",
     "subtitle": "Introduce tu email y te enviaremos un enlace de recuperación.",

@@ -358,6 +358,30 @@ const authController = {
   },
   //#endregion
 
+  //#region resendVerification
+  resendVerification: async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const [rows] = await User.getByEmail(email);
+
+      if (rows.length > 0 && !rows[0].is_verified) {
+        const user = rows[0];
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        await User.setVerificationToken(user.id, verificationToken, expiresAt);
+        await sendVerificationEmail(email, verificationToken);
+      }
+
+      res.status(200).json({
+        message: 'Si el email existe y no está verificado, recibirás un nuevo enlace de verificación'
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+  //#endregion
+
   //#region logout
   logout: async (req, res, next) => {
     try {
