@@ -12,7 +12,7 @@
 
 - 🏟 **Explorar Clubes y Pistas** – Consulta clubes, entra en cada instalación y revisa sus pistas en **tiempo real**
 - 📅 **Reservar y Cancelar** – Gestiona tus reservas de forma **rápida e intuitiva**
-- 💳 **Pagos Seguros** – Sistema de pagos integrado para completar reservas
+- 💳 **Pagos Seguros** – Sistema de pagos integrado con **Stripe Elements** para completar reservas
 - ✅ **Seguimiento de Reservas** – Visualiza el historial y estado de tus reservas
 - 🌐 **Multiidioma** – Soporte para español e inglés (i18n)
 - 📱 **Diseño Responsivo** – Experiencia optimizada en **ordenador, tablet y móvil**
@@ -35,12 +35,14 @@
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white)
 ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=for-the-badge&logo=stripe&logoColor=white)
 
 - **Framework:** Next.js 14+ (React framework con SSR/SSG)
 - **Lenguaje:** TypeScript para type-safety
 - **Estado:** Redux Toolkit para gestión de estado global
 - **Estilos:** SCSS/CSS Modules
 - **Internacionalización:** i18next para soporte multiidioma
+- **Pagos:** Stripe Elements (`@stripe/stripe-js` + `@stripe/react-stripe-js`)
 - **API Client:** helpers `fetch` tipados para comunicación con el backend
 
 ### Backend
@@ -49,11 +51,13 @@
 ![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=for-the-badge&logo=stripe&logoColor=white)
 
 - **Runtime:** Node.js
 - **Framework:** Express.js para API REST
-- **Base de datos:** MySQL con Sequelize ORM
-- **Autenticación:** JWT (JSON Web Tokens)
+- **Base de datos:** MySQL con db-migrate
+- **Autenticación:** JWT (JSON Web Tokens) via cookies httpOnly
+- **Pagos:** Stripe SDK (`stripe`) con webhook de confirmación
 - **Validación:** Express-validator
 - **Seguridad:** bcrypt para encriptación, helmet para headers HTTP seguros
 
@@ -95,22 +99,28 @@ allcourts/
 ### Prerrequisitos
 
 - Node.js (v16 o superior)
-- MySQL (v8.0 o superior)
+- MySQL (v8.0 o superior) — o Docker para levantar todo con docker-compose
 - npm o yarn
+- Cuenta de Stripe (gratuita) — ver sección [Configurar Stripe](#-configurar-stripe)
 
 ### 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/IES-Almunia-25-26-PIDAW/AllCourts.git
-cd allcourts
+cd AllCourts
 ```
 
-### 2. Configurar la base de datos
+### 2. Configurar variables de entorno
 
 ```bash
-# Opcional: crear la base de datos manualmente (si no existe)
-# CREATE DATABASE allcourts_db;
+# Backend
+cp backend/.env.example backend/.env
+
+# Frontend
+cp frontend/.env.local.example frontend/.env.local
 ```
+
+Edita ambos archivos con tus valores. Los campos de Stripe se explican en la sección siguiente.
 
 ### 3. Configurar el Backend
 
@@ -145,14 +155,14 @@ npm install
 npm run dev
 ```
 
-### 5. Despliegue con Docker
+### 5. Despliegue con Docker (recomendado)
 
 La forma recomendada de despliegue y prueba es con docker-compose desde la raíz del proyecto:
 
 Antes de arrancar el Docker, prepara la configuración de entorno:
 
 - Copia `backend/.env.example` a `backend/.env` y rellena sus valores.
-- Copia `frontend/.env.example` a `frontend/.env` y rellena sus valores.
+- Copia `frontend/.env.local.example` a `frontend/.env.local` y rellena sus valores.
 
 ```bash
 docker compose up -d --build
@@ -161,14 +171,14 @@ docker compose up -d --build
 Esto construye las imágenes e inicia estos servicios:
 
 - `db`: MySQL 8.4
-- `backend`: API en Node/Express -> `http://localhost:5000`
-- `frontend`: aplicación web en Next.js -> `http://localhost:3000`
-- `mailpit`: bandeja de correo de prueba con mailpit -> `http://localhost:8025`
+- `backend`: API en Node/Express → `http://localhost:5000`
+- `frontend`: aplicación web en Next.js → `http://localhost:3000`
+- `mailpit`: bandeja de correo de prueba → `http://localhost:8025`
 
 Valores importantes:
 
 - `backend/.env` debe usar `DB_HOST=db`, `MAIL_HOST=mailpit` y `APP_URL=http://localhost:3000`
-- `frontend/.env` debe usar `NEXT_PUBLIC_API_URL=http://localhost:5000`
+- `frontend/.env.local` debe usar `NEXT_PUBLIC_API_URL=http://localhost:5000`
 
 Para comprobar que todo está levantado:
 
@@ -188,7 +198,20 @@ Si quieres borrar también los datos persistentes de MySQL:
 docker compose down -v
 ```
 
-### 6. Acceder a la aplicación
+### 6. Levantar en local (sin Docker)
+
+```bash
+# Terminal 1 — Backend
+cd backend && npm run dev
+
+# Terminal 2 — Frontend
+cd frontend && npm run dev
+
+# Terminal 3 — Stripe CLI (necesaria para pruebas de pago)
+stripe listen --forward-to localhost:5000/stripe/webhook
+```
+
+### 7. Acceder a la aplicación
 
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
@@ -206,6 +229,88 @@ Para desarrollo local se incluye una migración de seed con un club demo, un man
 
 ---
 
+## 💳 Configurar Stripe
+
+### 1. Crear cuenta
+
+Regístrate gratis en [stripe.com](https://stripe.com). Asegúrate de estar en **modo test**.
+
+### 2. Obtener las claves
+
+Ve a [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys):
+
+| Clave | Dónde va | Ejemplo |
+|-------|----------|---------|
+| **Publishable key** | `frontend/.env.local` → `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_...` |
+| **Secret key** | `backend/.env` → `STRIPE_SECRET_KEY` | `sk_test_...` |
+
+> La clave secreta **nunca** debe estar en el frontend ni en Git.
+
+### 3. Instalar la Stripe CLI
+
+Descarga el ZIP desde [github.com/stripe/stripe-cli/releases](https://github.com/stripe/stripe-cli/releases), extrae el `stripe.exe` (Windows) en una carpeta, por ejemplo `D:\stripe\`, y añádela al PATH:
+
+```powershell
+# PowerShell como administrador
+[Environment]::SetEnvironmentVariable(
+  "Path",
+  $env:Path + ";D:\stripe",
+  [EnvironmentVariableTarget]::Machine
+)
+```
+
+Cierra y vuelve a abrir PowerShell. Verifica:
+
+```bash
+stripe --version
+```
+
+Inicia sesión:
+
+```bash
+stripe login
+```
+
+### 4. Configurar el webhook en local
+
+Con el backend corriendo, ejecuta en una terminal dedicada:
+
+```bash
+stripe listen --forward-to localhost:5000/stripe/webhook
+```
+
+Copia el `whsec_...` que aparece en la terminal y ponlo en `backend/.env`:
+
+```
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+> Debes tener esta terminal abierta siempre que quieras probar pagos en local.
+
+### 5. Tarjetas de prueba
+
+Usa estas tarjetas en el formulario de pago para simular distintos escenarios:
+
+| Número | Resultado |
+|--------|-----------|
+| `4242 4242 4242 4242` | ✅ Pago exitoso |
+| `4000 0000 0000 0002` | ❌ Tarjeta rechazada |
+| `4000 0025 0000 3155` | 🔐 Requiere autenticación 3D Secure |
+
+Fecha de expiración: cualquiera futura. CVV: cualquier 3 dígitos. CP: cualquier 5 dígitos.
+
+### 6. Pasar a producción
+
+Cuando quieras cobros reales:
+
+1. Cambia `STRIPE_SECRET_KEY` por la clave `sk_live_...`
+2. Cambia `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` por la clave `pk_live_...`
+3. Registra el webhook en [dashboard.stripe.com/webhooks](https://dashboard.stripe.com/webhooks) apuntando a tu dominio real (`https://tu-dominio.com/stripe/webhook`) y copia el nuevo `STRIPE_WEBHOOK_SECRET`
+
+El código no cambia nada, solo las variables de entorno.
+
+---
+
 ## 📌 Primeros pasos
 
 ### Usuarios
@@ -213,7 +318,7 @@ Para desarrollo local se incluye una migración de seed con un club demo, un man
 1. **Registrarse** – Crea una cuenta como jugador o gestor de pistas
 2. **Explorar Clubes** – Navega por los clubes disponibles y entra en el que te interese
 3. **Ver Pistas** – Consulta las pistas de cada club y revisa sus precios
-4. **Reservar** – Selecciona fecha, hora y completa el pago
+4. **Reservar** – Selecciona fecha, hora y completa el pago con Stripe
 5. **Gestionar** – Visualiza y administra tus reservas desde tu dashboard
 
 ### Gestores
@@ -227,45 +332,89 @@ Para desarrollo local se incluye una migración de seed con un club demo, un man
 
 ## 🔑 API Endpoints
 
-### Autenticación
+### Autenticación (`/auth`)
 
-- `POST /api/auth/register` - Registrar nuevo usuario
-- `POST /api/auth/login` - Iniciar sesión
-- `GET /api/auth/profile` - Obtener perfil del usuario
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/auth/register` | Registrar nuevo usuario |
+| `POST` | `/auth/login` | Iniciar sesión |
+| `POST` | `/auth/logout` | Cerrar sesión |
+| `GET` | `/auth/me` | Obtener usuario autenticado |
+| `POST` | `/auth/refresh` | Renovar token de sesión |
+| `GET` | `/auth/verify/:token` | Verificar email |
 
-### Pistas
+### Pistas (`/courts`)
 
-- `GET /api/courts` - Listar todas las pistas
-- `GET /api/courts/:id` - Obtener detalle de una pista
-- `POST /api/courts` - Crear nueva pista (solo gestores)
-- `PUT /api/courts/:id` - Actualizar pista (solo gestores)
-- `DELETE /api/courts/:id` - Eliminar pista (solo gestores)
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/courts` | Listar todas las pistas |
+| `GET` | `/courts/:id` | Detalle de una pista |
+| `GET` | `/courts/club/:clubId` | Pistas de un club |
+| `POST` | `/courts` | Crear pista (solo gestores) |
+| `PUT` | `/courts/:id` | Actualizar pista (solo gestores) |
+| `DELETE` | `/courts/:id` | Eliminar pista (solo gestores) |
 
-### Reservas
+### Reservas (`/bookings`)
 
-- `GET /api/bookings` - Obtener reservas del usuario
-- `POST /api/bookings` - Crear nueva reserva
-- `PUT /api/bookings/:id` - Actualizar reserva
-- `DELETE /api/bookings/:id` - Cancelar reserva
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/bookings` | Crear reserva |
+| `GET` | `/bookings` | Todas las reservas (solo managers) |
+| `GET` | `/bookings/:id` | Detalle de una reserva |
+| `GET` | `/bookings/user/:userId` | Reservas de un usuario |
+| `GET` | `/bookings/court/:courtId` | Reservas de una pista (solo managers) |
+| `GET` | `/bookings/availability/:courtId` | Disponibilidad de una pista |
+| `PATCH` | `/bookings/:id/status` | Actualizar estado (solo managers) |
+| `PATCH` | `/bookings/:id/cancel` | Cancelar reserva |
+| `DELETE` | `/bookings/:id` | Eliminar reserva (solo managers) |
 
-### Pagos
+### Pagos (`/payments`)
 
-- `POST /api/payments` - Procesar pago de reserva
-- `GET /api/payments/:id` - Obtener detalle de pago
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/payments` | Todos los pagos (solo managers) |
+| `GET` | `/payments/:id` | Detalle de un pago |
+| `GET` | `/payments/booking/:bookingId` | Pago de una reserva |
+| `GET` | `/payments/user/:userId` | Historial de pagos de un usuario |
+| `GET` | `/payments/manager/:managerId` | Pagos recibidos por un manager |
+| `PATCH` | `/payments/:id/status` | Actualizar estado (solo managers) |
 
-### Gestores
+### Stripe (`/stripe`)
 
-- `GET /api/managers/dashboard` - Obtener estadísticas del gestor
-- `GET /api/managers/bookings` - Listar reservas de las pistas del gestor
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `POST` | `/stripe/create-payment-intent` | Crear PaymentIntent para una reserva | ✅ Requerida |
+| `POST` | `/stripe/webhook` | Webhook de confirmación de Stripe | ❌ (firma Stripe) |
+
+### Gestores (`/managers`)
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/managers` | Listar gestores |
+| `GET` | `/managers/user/:userId` | Manager por user ID |
+| `GET` | `/managers/:id` | Detalle de un manager |
+| `GET` | `/managers/:id/stats` | Estadísticas del manager |
+| `GET` | `/managers/:id/courts` | Pistas del manager |
+| `PATCH` | `/managers/:id/subscription` | Actualizar suscripción |
+| `DELETE` | `/managers/:id` | Eliminar manager |
+
+### Clubes (`/clubs`)
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/clubs` | Listar clubes |
+| `GET` | `/clubs/:id` | Detalle de un club |
 
 ---
 
 ## 🔒 Seguridad
 
-- **Autenticación JWT:** Tokens seguros para gestión de sesiones
+- **Autenticación JWT:** Tokens seguros via cookies httpOnly (no accesibles desde JavaScript)
 - **Encriptación:** Contraseñas encriptadas con bcrypt
 - **Middleware de Roles:** Control de acceso basado en roles (jugador/gestor)
 - **Validación de Datos:** Validación en backend con express-validator
+- **Stripe webhook:** Verificación criptográfica de firma para garantizar que los eventos vienen de Stripe
+- **PCI Compliance:** Los datos de tarjeta nunca pasan por nuestros servidores (Stripe Elements los gestiona directamente)
 - **Headers Seguros:** Protección con helmet.js
 
 ---
@@ -286,12 +435,12 @@ Los usuarios pueden cambiar el idioma desde la interfaz.
 ### Backend
 
 ```bash
-npm run dev      # Iniciar servidor en modo desarrollo
-npm start        # Iniciar servidor en producción
-npm run migrate:up      # Aplicar migraciones pendientes
-npm run migrate:down    # Revertir la ultima migracion
-npm run migrate:status  # Ver estado de migraciones
-npm run migrate:create -- nombre_migracion  # Crear nueva migracion
+npm run dev                                    # Iniciar servidor en modo desarrollo
+npm start                                      # Iniciar servidor en producción
+npm run migrate:up                             # Aplicar migraciones pendientes
+npm run migrate:down                           # Revertir la última migración
+npm run migrate:status                         # Ver estado de migraciones
+npm run migrate:create -- nombre_migracion     # Crear nueva migración
 ```
 
 ### Frontend
