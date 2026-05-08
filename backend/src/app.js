@@ -10,17 +10,12 @@ const courtRoutes = require("./routes/courtRoutes");
 const courtScheduleRoutes = require("./routes/courtScheduleRoutes");
 const managerRoutes = require("./routes/managerRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const stripeRoutes = require("./routes/stripeRoutes");
 const userRoutes = require("./routes/userRoutes");
 const healthRoutes = require("./routes/healthRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-
-// Servir archivos subidos (avatars) estático desde /uploads
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use((req, res, next) => {
 	const FRONTEND_URL = process.env.CORS_ORIGINAL || process.env.FRONTEND_URL;
@@ -28,24 +23,37 @@ app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Credentials", "true");
 	res.setHeader(
 		"Access-Control-Allow-Headers",
-		"Content-Type, Authorization"
+		"Content-Type, Authorization",
 	);
 	res.setHeader(
 		"Access-Control-Allow-Methods",
-		"GET,POST,PUT,PATCH,DELETE,OPTIONS"
+		"GET,POST,PUT,PATCH,DELETE,OPTIONS",
 	);
-
 	if (req.method === "OPTIONS") {
 		return res.sendStatus(204);
 	}
-
 	next();
 });
+
+app.use(cookieParser());
+app.use("/stripe", stripeRoutes);
+app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.get("/", (req, res) => {
 	res.json({
 		message: "AllCourts backend is running",
-		endpoints: ["/auth", "/bookings", "/clubs", "/courts", "/court-schedules", "/managers", "/payments", "/users"],
+		endpoints: [
+			"/auth",
+			"/bookings",
+			"/clubs",
+			"/courts",
+			"/court-schedules",
+			"/managers",
+			"/payments",
+			"/stripe",
+			"/users",
+		],
 	});
 });
 
