@@ -17,3 +17,9 @@ export interface UpdateManagerDTO {
   subscription_start?: string;
   subscription_end?: string;
 }
+
+export interface ManagerStats {
+  total_courts: number;
+  total_bookings: number;
+  total_revenue: number;
+}

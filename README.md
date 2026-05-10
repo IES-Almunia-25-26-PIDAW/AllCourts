@@ -258,6 +258,9 @@ Descarga el ZIP desde [github.com/stripe/stripe-cli/releases](https://github.com
   [EnvironmentVariableTarget]::Machine
 )
 ```
+> Cambia ";D:\stripe.exe" por la ubicación dónde tengas el archivo stripe.exe
+
+> OJO! no añadas a esa ruta el archivo stripe.exe, sólo la ruta en que se encuentra
 
 Cierra y vuelve a abrir PowerShell. Verifica:
 
