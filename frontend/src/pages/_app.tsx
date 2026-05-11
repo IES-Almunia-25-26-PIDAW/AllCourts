@@ -33,13 +33,12 @@ import { getCurrentUser } from "@/api/authApi";
  *
  * Autenticación:
  *   El token JWT se almacena en una cookie httpOnly (nunca accesible por JS).
- *   Al cargar la app, se hidrata el estado Redux con los datos cacheados en localStorage
- *   y se valida la sesión en background llamando a /auth/me.
+ *   Al cargar la app, se valida la sesión real en background llamando a /auth/me.
+ *   Redux solo refleja el estado que devuelve el backend.
  *
  * Flujo de arranque:
- *   1. Leer usuario cacheado desde localStorage para pintar la app rápido.
- *   2. Validar la sesión real en backend con la cookie httpOnly.
- *   3. Sincronizar Redux y localStorage si la sesión sigue siendo válida.
+ *   1. Validar la sesión real en backend con la cookie httpOnly.
+ *   2. Sincronizar Redux con el usuario devuelto por /auth/me si la sesión sigue siendo válida.
  */
 //#endregion
 
@@ -49,17 +48,8 @@ export default function App({ Component, pageProps }: AppProps) {
 		getCurrentUser()
 			.then((user) => {
 				store.dispatch(setAuth(user));
-				try {
-					window.localStorage.setItem(
-						"allcourts_user",
-						JSON.stringify(user),
-					);
-				} catch {}
 			})
 			.catch(() => {
-				try {
-					window.localStorage.removeItem("allcourts_user");
-				} catch {}
 				store.dispatch(clearAuth());
 			});
 	}, []);

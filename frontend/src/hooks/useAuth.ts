@@ -18,9 +18,6 @@ export function useAuth() {
 		try {
 			const { user } = await authApi.login(credentials);
 			dispatch(setAuth(user));
-			try {
-				localStorage.setItem("allcourts_user", JSON.stringify(user));
-			} catch {}
 			const roleTarget = user.role === "manager" ? "/manager" : "/clubs";
 			router.push(redirectFrom ?? roleTarget);
 		} catch (err) {
@@ -59,9 +56,6 @@ export function useAuth() {
 	const logout = async () => {
 		try {
 			await authApi.logout();
-		} catch {}
-		try {
-			localStorage.removeItem("allcourts_user");
 		} catch {}
 		document.cookie = "allcourts_token=; Max-Age=0; path=/";
 		document.cookie = "token=; Max-Age=0; path=/";

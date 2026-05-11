@@ -63,12 +63,6 @@ export default function UserInfo() {
       }
 
       dispatch(setAuth(serverUser));
-      try {
-        window.localStorage.setItem(
-          "allcourts_user",
-          JSON.stringify(serverUser),
-        );
-      } catch {}
       setMessage("Guardado");
       setAvatarFile(null);
     } catch (err) {
