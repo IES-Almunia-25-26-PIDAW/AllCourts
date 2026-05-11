@@ -3,7 +3,7 @@ const express = require("express");
 const clubController = require("../controllers/clubController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
-const { requireManagerOwnClub } = require("../middlewares/ownershipMiddleware");
+const { requireManagerOwnClub, requireActiveManagerSubscription } = require("../middlewares/ownershipMiddleware");
 //#endregion
 
 /**
@@ -24,7 +24,7 @@ router.get("/", clubController.getAll);
 router.get("/city/:city", clubController.getByCity);
 router.get("/manager/:managerId", clubController.getByManagerId);
 router.get("/:id", clubController.getById);
-router.post("/", authMiddleware, roleMiddleware("manager"), clubController.create);
+router.post("/", authMiddleware, roleMiddleware("manager"), requireActiveManagerSubscription, clubController.create);
 router.put("/:id", authMiddleware, roleMiddleware("manager"), requireManagerOwnClub, clubController.update);
 router.delete("/:id", authMiddleware, roleMiddleware("manager"), requireManagerOwnClub, clubController.delete);
 

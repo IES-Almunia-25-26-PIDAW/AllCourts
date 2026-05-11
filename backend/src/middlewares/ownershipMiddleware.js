@@ -3,6 +3,7 @@ const Booking = require("../models/Booking");
 const Payment = require("../models/Payment");
 const Court = require("../models/Court");
 const Club = require("../models/Club");
+const Manager = require("../models/Manager");
 //#endregion
 
 /**
@@ -38,6 +39,41 @@ async function requireManagerOwnClub(req, res, next) {
 
     if (!sameId(clubRows[0].manager_id, req.user?.id)) {
       return forbidden(res);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function requireManagerOwnClubFromBody(req, res, next) {
+  try {
+    const clubId = req.body.club_id;
+    const [clubRows] = await Club.getById(clubId);
+    if (clubRows.length === 0) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+
+    if (!sameId(clubRows[0].manager_id, req.user?.id)) {
+      return forbidden(res);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function requireActiveManagerSubscription(req, res, next) {
+  try {
+    const [managerRows] = await Manager.getById(req.user?.id);
+    if (managerRows.length === 0) {
+      return res.status(404).json({ message: "Manager not found" });
+    }
+
+    if (!managerRows[0].subscription_active) {
+      return res.status(403).json({ message: "Active subscription required" });
     }
 
     next();
@@ -181,6 +217,8 @@ async function requirePaymentCreateAccess(req, res, next) {
 module.exports = {
   requireSameUserParam,
   requireManagerOwnClub,
+  requireManagerOwnClubFromBody,
+  requireActiveManagerSubscription,
   requireBookingAccessByParam,
   requireManagerOwnCourt,
   requirePaymentAccessByParam,

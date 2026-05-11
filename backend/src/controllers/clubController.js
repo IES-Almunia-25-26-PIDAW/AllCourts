@@ -19,15 +19,15 @@ const clubController = {
     /**
      * Crea un nuevo club asociado a un manager.
      *
-     * Body: { manager_id, name, address?, city?, logo_url?, description? }
+     * Body: { name, address?, city?, logo_url?, description? }
+     * El manager se toma de req.user.id para evitar suplantaciones.
      * Response 201: { message, id }
      */
     create: async (req, res, next) => {
         try {
-            const { manager_id, name, address, city, logo_url, description } =
-                req.body;
+            const { name, address, city, logo_url, description } = req.body;
             const [result] = await Club.create({
-                manager_id,
+                manager_id: req.user.id,
                 name,
                 address,
                 city,
