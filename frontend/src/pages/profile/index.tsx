@@ -1,59 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./index.module.scss";
-import { getBookingsByUserId } from "@/api/bookingApi";
-import type { Booking } from "@/types/booking";
 import BookingsSection from "@/components/modules/profile/BookingsSection";
 import UserInfo from "@/components/modules/profile/UserInfo";
 import ChangePassword from "@/components/modules/profile/ChangePassword";
 import { useAuth } from "@/hooks/useAuth";
+import { useProfileBookings } from "@/hooks/useProfileBookings";
 
 export default function ProfilePage() {
 	const { logout, user } = useAuth();
-	const [bookings, setBookings] = useState<Booking[]>([]);
-	const [bookingsLoading, setBookingsLoading] = useState(false);
-	const [bookingsError, setBookingsError] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!user?.id) {
-			setBookings([]);
-			setBookingsLoading(false);
-			setBookingsError(null);
-			return;
-		}
-
-		let cancelled = false;
-
-		const loadBookings = async () => {
-			try {
-				setBookingsLoading(true);
-				setBookingsError(null);
-
-				const data = await getBookingsByUserId(user.id);
-				if (!cancelled) {
-					setBookings(data);
-				}
-			} catch (err) {
-				if (!cancelled) {
-					setBookings([]);
-					setBookingsError(
-						err instanceof Error
-							? err.message
-							: "No se pudieron cargar tus reservas.",
-					);
-				}
-			} finally {
-				if (!cancelled) {
-					setBookingsLoading(false);
-				}
-			}
-		};
-
-		void loadBookings();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [user?.id]);
+	const { bookings, loading: bookingsLoading, error: bookingsError } = useProfileBookings(user?.id);
 
 	return (
 		<div className={styles.page}>

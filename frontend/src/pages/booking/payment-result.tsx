@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { useRouteQueryParam } from "@/hooks/useRouteQueryParam";
 import styles from "./payment-result.module.scss";
 
 const stripePromise = loadStripe(
@@ -22,18 +22,12 @@ const stripePromise = loadStripe(
  */
 function PaymentStatus({ bookingId }: { bookingId: string }) {
 	const stripe = useStripe();
-	const router = useRouter();
 	const [status, setStatus] = useState<string>("loading");
 	const [message, setMessage] = useState<string>("");
+	const { ready, value: clientSecret } = useRouteQueryParam("payment_intent_client_secret");
 
 	useEffect(() => {
-		if (!stripe || !router.isReady) return;
-
-		// Stripe añade el client_secret en la URL al redirigir.
-		// Lo leemos del query param para consultar el estado del PaymentIntent.
-		const clientSecret = new URLSearchParams(window.location.search).get(
-			"payment_intent_client_secret",
-		);
+		if (!stripe || !ready) return;
 
 		if (!clientSecret) {
 			setStatus("unknown");
@@ -74,7 +68,7 @@ function PaymentStatus({ bookingId }: { bookingId: string }) {
 					setMessage("Estado del pago desconocido.");
 			}
 		});
-	}, [stripe, router.isReady]);
+	}, [stripe, ready, clientSecret]);
 
 	if (status === "loading") {
 		return (
@@ -129,8 +123,7 @@ function PaymentStatus({ bookingId }: { bookingId: string }) {
  * Página a la que Stripe redirige tras el pago.
 **/
 export default function PaymentResultPage() {
-	const router = useRouter();
-	const bookingId = (router.query.bookingId as string) ?? "";
+	const { value: bookingId } = useRouteQueryParam("bookingId");
 
 	return (
 		<main className={styles.page}>
@@ -138,7 +131,7 @@ export default function PaymentResultPage() {
 				<section className={styles.card}>
 					<p className={styles.eyebrow}>Estado del pago</p>
 					<h1 className={styles.title}>Resultado del pago</h1>
-					<PaymentStatus bookingId={bookingId} />
+					<PaymentStatus bookingId={typeof bookingId === "string" ? bookingId : ""} />
 				</section>
 			</Elements>
 		</main>

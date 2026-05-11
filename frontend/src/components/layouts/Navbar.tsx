@@ -2,15 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import styles from './Navbar.module.scss';
-import { selectIsAuthenticated } from '@/store/slices/authSlice';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
-  const isLogged = useSelector(selectIsAuthenticated);
-  const { user } =  useAuth();
+  const { user, isAuthenticated: isLogged } = useAuth();
   const [langLabel, setLangLabel] = useState<string | null>(null);
 
   const toggleLanguage = () => {

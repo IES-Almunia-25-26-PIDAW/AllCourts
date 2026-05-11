@@ -1,16 +1,15 @@
 import { useAuth } from '@/hooks/useAuth';
-import { useAppDispatch } from '@/store/hooks';
+import { useRouteQueryParam } from '@/hooks/useRouteQueryParam';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './index.module.scss';
 
 export default function Login() {
   const { t } = useTranslation();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
   const { loading, error, login, resendVerification } = useAuth();
+  const { value: registered } = useRouteQueryParam('registered');
+  const { value: from } = useRouteQueryParam('from');
 
   const [role, setRole] = useState<'player' | 'manager'>('player');
   const [identifier, setIdentifier] = useState('');
@@ -22,11 +21,10 @@ export default function Login() {
   const [resendStatus, setResendStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!router.isReady) return;
-    if (router.query.registered === '1') {
+    if (registered === '1') {
       setNotice('Registro completado. Revisa tu correo para verificar la cuenta.');
     }
-  }, [router.isReady, router.query.registered]);
+  }, [registered]);
 
   useEffect(() => {
     setShowResend(Boolean(error?.includes('Verifica tu correo')));
@@ -47,8 +45,7 @@ export default function Login() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const from = typeof router.query.from === 'string' ? router.query.from : undefined;
-    await login({ identifier, password }, from);
+    await login({ identifier, password }, typeof from === 'string' ? from : undefined);
   };
 
   return (

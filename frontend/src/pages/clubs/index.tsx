@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ClubCard from "@/components/modules/clubs/ClubCard";
-import { getClubs } from "@/api/clubApi";
-import type { ClubWithManager } from "@/types/club";
+import { useClubs } from "@/hooks/useClubs";
 import styles from "./index.module.scss";
 
 //#region DOCUMENTATION
@@ -24,31 +23,8 @@ import styles from "./index.module.scss";
 
 //#region FUNCTIONS
 export default function ClubsPage() {
-  const [clubs, setClubs] = useState<ClubWithManager[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    const loadClubs = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getClubs();
-        setClubs(data);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "No se pudieron cargar los clubes.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void loadClubs();
-  }, []);
+  const { clubs, loading, error } = useClubs();
 
   const filteredClubs = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();

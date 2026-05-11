@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/store/hooks";
-import { createBooking, getCourtAvailability } from "@/api/bookingApi";
+import { useAppDispatch } from "@/store/hooks";
+import { createBooking } from "@/store/slices/bookingSlice";
 import type { CourtWithClub } from "@/types/court";
-import type {
-  BookingAvailabilitySlot,
-  CourtAvailabilityResponse,
-} from "@/types/booking";
+import type { BookingAvailabilitySlot } from "@/types/booking";
 import BookingCalendar from "./BookingCalendar";
 import styles from "./BookingForm.module.scss";
+import { useBookingAvailability } from "@/hooks/useBookingAvailability";
 import {
   calculateEstimatedPrice,
   formatDurationMinutes,
@@ -23,6 +22,7 @@ type BookingFormProps = {
 
 export default function BookingForm({ court }: BookingFormProps) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
 
   const durationOptions = useMemo(
@@ -34,13 +34,15 @@ export default function BookingForm({ court }: BookingFormProps) {
   const [selectedDuration, setSelectedDuration] = useState<number>(
     durationOptions[0] ?? 60,
   );
-  const [availability, setAvailability] =
-    useState<CourtAvailabilityResponse | null>(null);
   const [selectedSlot, setSelectedSlot] =
     useState<BookingAvailabilitySlot | null>(null);
-  const [loadingAvailability, setLoadingAvailability] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { availability, loading: loadingAvailability, error: availabilityError } = useBookingAvailability(
+    court.id,
+    selectedDate,
+    selectedDuration,
+  );
 
   const estimatedPrice = calculateEstimatedPrice(
     Number(court.price_60),
@@ -52,63 +54,10 @@ export default function BookingForm({ court }: BookingFormProps) {
   useEffect(() => {
     setSelectedDuration(durationOptions[0] ?? 60);
     setSelectedDate("");
-    setAvailability(null);
     setSelectedSlot(null);
-    setLoadingAvailability(false);
     setSubmitting(false);
     setError(null);
   }, [court.id, durationOptions]);
-
-  useEffect(() => {
-    if (!selectedDate) {
-      setAvailability(null);
-      setSelectedSlot(null);
-      setError(null);
-      return;
-    }
-
-    let cancelled = false;
-
-    const loadAvailability = async () => {
-      try {
-        setLoadingAvailability(true);
-        setError(null);
-        setSelectedSlot(null);
-
-        const data = await getCourtAvailability(
-          court.id,
-          selectedDate,
-          selectedDuration,
-        );
-
-        if (cancelled) {
-          return;
-        }
-
-        setAvailability(data);
-      } catch (err) {
-        if (!cancelled) {
-          setAvailability(null);
-          setSelectedSlot(null);
-          setError(
-            err instanceof Error
-              ? err.message
-              : "No se pudo cargar la disponibilidad.",
-          );
-        }
-      } finally {
-        if (!cancelled) {
-          setLoadingAvailability(false);
-        }
-      }
-    };
-
-    void loadAvailability();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [court.id, selectedDate, selectedDuration]);
 
   const slots = availability?.slots ?? [];
   const selectedSlotIsAvailable = selectedSlot
@@ -151,13 +100,15 @@ export default function BookingForm({ court }: BookingFormProps) {
       setSubmitting(true);
       setError(null);
 
-      const response = await createBooking({
-        court_id: court.id,
-        date: selectedDate,
-        start_time: selectedSlot.start_time,
-        end_time: selectedSlot.end_time,
-        duration_min: selectedDuration,
-      });
+      const response = await dispatch(
+        createBooking({
+          court_id: court.id,
+          date: selectedDate,
+          start_time: selectedSlot.start_time,
+          end_time: selectedSlot.end_time,
+          duration_min: selectedDuration,
+        }),
+      ).unwrap();
 
       await router.push({
         pathname: "/booking/payment",
@@ -301,6 +252,7 @@ export default function BookingForm({ court }: BookingFormProps) {
           ) : null}
         </div>
 
+        {availabilityError ? <p className={styles.errorText}>{availabilityError}</p> : null}
         {error ? <p className={styles.errorText}>{error}</p> : null}
 
         <div className={styles.buttonRow}>

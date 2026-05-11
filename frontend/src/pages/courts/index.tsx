@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { getCourts } from "@/api/courtApi";
 import type { CourtWithClub, Sport, SurfaceType } from "@/types/court";
 import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
 import CourtCard from "@/components/modules/courts/CourtCard";
+import { useCourts } from "@/hooks/useCourts";
 import styles from "./index.module.scss";
 
 //#region DOCUMENTATION
@@ -26,33 +26,10 @@ import styles from "./index.module.scss";
 
 //#region FUNCTIONS
 export default function CourtPage() {
-  const [courts, setCourts] = useState<CourtWithClub[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
   const [selectedSurface, setSelectedSurface] = useState<SurfaceType | null>(null);
-
-  useEffect(() => {
-    const loadCourts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getCourts();
-        setCourts(data);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "No se pudieron cargar las pistas.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void loadCourts();
-  }, []);
+  const { courts, loading, error } = useCourts();
 
   const filteredCourts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();

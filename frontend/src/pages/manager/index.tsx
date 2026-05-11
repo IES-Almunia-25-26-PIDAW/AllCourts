@@ -1,58 +1,11 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  fetchManagerData,
-  fetchManagerStats,
-  fetchManagerCourts,
-  fetchManagerClubs,
-  fetchAllBookings,
-  selectManager,
-  selectManagerStats,
-  selectManagerCourts,
-  selectManagerClubs,
-  selectManagerBookings,
-  selectManagerLoading,
-} from "@/store/slices/managerSlice";
-import { selectUser } from "@/store/slices/authSlice";
 import DashboardCard from "@/components/DashboardCard";
+import { useManagerDashboard } from "@/hooks/useManagerDashboard";
 import styles from "./index.module.scss";
 
 export default function ManagerPage() {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const user = useAppSelector(selectUser);
-  const manager = useAppSelector(selectManager);
-  const stats = useAppSelector(selectManagerStats);
-  const courts = useAppSelector(selectManagerCourts);
-  const clubs = useAppSelector(selectManagerClubs);
-  const bookings = useAppSelector(selectManagerBookings);
-  const loading = useAppSelector(selectManagerLoading);
+  const { user, manager, stats, courts, clubs, bookings, loading, error, isManager } = useManagerDashboard();
 
-  useEffect(() => {
-    if (!user) return;
-    if (user.role !== "manager") {
-      router.push("/clubs");
-      return;
-    }
-
-    const managerId = user.id;
-    (async () => {
-      try {
-        const res = await dispatch(fetchManagerData(user.id)).unwrap();
-        await Promise.all([
-          dispatch(fetchManagerStats(managerId)),
-          dispatch(fetchManagerCourts(managerId)),
-          dispatch(fetchManagerClubs(managerId)),
-          dispatch(fetchAllBookings()),
-        ]);
-      } catch (err) {
-        // handled by slice
-      }
-    })();
-  }, [user, dispatch, router]);
-
-  if (!user) {
+  if (!user || !isManager) {
     return <div className={styles.loading}>Cargando...</div>;
   }
 

@@ -177,5 +177,6 @@ export const selectManagerCourts = (state: RootState) => state.manager.courts;
 export const selectManagerClubs = (state: RootState) => state.manager.clubs;
 export const selectManagerBookings = (state: RootState) => state.manager.bookings;
 export const selectManagerLoading = (state: RootState) => state.manager.loading;
+export const selectManagerError = (state: RootState) => state.manager.error;
 
 export default managerSlice.reducer;

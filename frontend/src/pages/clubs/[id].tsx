@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { getClubById } from "@/api/clubApi";
 import ClubDetail from "../../components/modules/clubs/ClubDetail";
-import type { ClubWithManager } from "@/types/club";
+import { useClubDetail } from "@/hooks/useClubDetail";
+import { useRouteQueryParam } from "@/hooks/useRouteQueryParam";
 import styles from "./[id].module.scss";
 
 //#region DOCUMENTATION
@@ -21,43 +19,8 @@ import styles from "./[id].module.scss";
 
 //#region FUNCTIONS
 export default function ClubDetailPage() {
-	const router = useRouter();
-	const [club, setClub] = useState<ClubWithManager | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-
-	const clubId = Array.isArray(router.query.id)
-		? router.query.id[0]
-		: router.query.id;
-
-	useEffect(() => {
-		if (!router.isReady || !clubId) {
-			return;
-		}
-
-		// Cargamos el club y sus pistas a la vez para mantener la vista sincronizada.
-		const loadClub = async () => {
-			try {
-				setLoading(true);
-				setError(null);
-
-				const clubData = await getClubById(clubId);
-
-				setClub(clubData);
-			} catch (err) {
-				setClub(null);
-				setError(
-					err instanceof Error
-						? err.message
-						: "No se pudo cargar el club.",
-				);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		void loadClub();
-	}, [router.isReady, clubId]);
+	const { value: clubId } = useRouteQueryParam("id");
+	const { club, loading, error } = useClubDetail(typeof clubId === "string" ? clubId : undefined);
 
 	if (loading) {
 		return (

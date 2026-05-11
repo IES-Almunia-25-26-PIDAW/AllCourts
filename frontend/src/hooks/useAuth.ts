@@ -1,16 +1,16 @@
 import * as authApi from "@/api/authApi";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearAuth, selectAuthError, selectAuthLoading, selectIsAuthenticated, selectUser, setAuth, setAuthError, setAuthLoading } from "@/store/slices/authSlice";
 import type { CreateUserDTO, LoginCredentials } from "@/types/user";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
 
 export function useAuth() {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const user = useSelector(selectUser);
-	const isAuthenticated = useSelector(selectIsAuthenticated);
-	const loading = useSelector(selectAuthLoading);
-	const error = useSelector(selectAuthError);
+	const user = useAppSelector(selectUser);
+	const isAuthenticated = useAppSelector(selectIsAuthenticated);
+	const loading = useAppSelector(selectAuthLoading);
+	const error = useAppSelector(selectAuthError);
 
 	const login = async (credentials: LoginCredentials, redirectFrom?: string) => {
 		dispatch(setAuthLoading(true));

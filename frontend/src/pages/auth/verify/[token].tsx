@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import { useRouteQueryParam } from "@/hooks/useRouteQueryParam";
 import styles from "./[token].module.scss";
 
 export default function VerifyEmailPage() {
-	const router = useRouter();
 	const { verifyEmail } = useAuth();
+	const { ready, value: token } = useRouteQueryParam("token");
 	const [message, setMessage] = useState("Verificando tu cuenta...");
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (!router.isReady) return;
-
-		const token = router.query.token;
-
 		if (typeof token !== "string" || !token) {
 			setMessage("No se encontró el token de verificación.");
 			setLoading(false);
@@ -39,7 +35,7 @@ export default function VerifyEmailPage() {
 		};
 
 		void verify();
-	}, [router.isReady, router.query.token]);
+	}, [ready, token, verifyEmail]);
 
 	return (
 		<div className={styles.container}>

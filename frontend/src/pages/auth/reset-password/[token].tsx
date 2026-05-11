@@ -1,14 +1,14 @@
 import { useAuth } from '@/hooks/useAuth';
+import { useRouteQueryParam } from '@/hooks/useRouteQueryParam';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './[token].module.scss';
 
 export default function ResetPasswordPage() {
-  const router = useRouter();
   const { t } = useTranslation();
   const { resetPassword } = useAuth();
+  const { ready, value: queryToken } = useRouteQueryParam('token');
   const [token, setToken] = useState<string | null>(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,10 +18,6 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!router.isReady) return;
-
-    const queryToken = router.query.token;
-
     if (typeof queryToken !== 'string' || !queryToken) {
       setError('No se encontró el token de recuperación.');
       setLoading(false);
@@ -30,7 +26,7 @@ export default function ResetPasswordPage() {
 
     setToken(queryToken);
     setLoading(false);
-  }, [router.isReady, router.query.token]);
+  }, [queryToken, ready]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
