@@ -29,6 +29,23 @@ function requireSameUserParam(paramName) {
   };
 }
 
+async function requireManagerOwnClub(req, res, next) {
+  try {
+    const [clubRows] = await Club.getById(req.params.id);
+    if (clubRows.length === 0) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+
+    if (!sameId(clubRows[0].manager_id, req.user?.id)) {
+      return forbidden(res);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function loadBookingContext(bookingId) {
   const [bookingRows] = await Booking.getById(bookingId);
   if (bookingRows.length === 0) {
@@ -89,7 +106,8 @@ function requireBookingAccessByParam(paramName) {
 
 async function requireManagerOwnCourt(req, res, next) {
   try {
-    const [courtRows] = await Court.getById(req.params.courtId);
+    const courtId = req.params.id || req.params.courtId;
+    const [courtRows] = await Court.getById(courtId);
     if (courtRows.length === 0) {
       return res.status(404).json({ message: "Court not found" });
     }
@@ -162,6 +180,7 @@ async function requirePaymentCreateAccess(req, res, next) {
 
 module.exports = {
   requireSameUserParam,
+  requireManagerOwnClub,
   requireBookingAccessByParam,
   requireManagerOwnCourt,
   requirePaymentAccessByParam,
