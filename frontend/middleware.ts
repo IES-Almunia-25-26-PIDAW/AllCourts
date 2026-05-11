@@ -10,6 +10,26 @@ import { NextRequest, NextResponse } from "next/server";
  * correctamente debes establecer la cookie `allcourts_token` (idealmente httpOnly)
  * cuando el usuario se autentique en el backend.
  */
+
+function getRoleFromToken(token: string): string | null {
+  try {
+    const payload = token.split(".")[1];
+
+    if (!payload) {
+      return null;
+    }
+
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const json = atob(padded);
+    const decoded = JSON.parse(json) as { role?: string };
+
+    return typeof decoded.role === "string" ? decoded.role : null;
+  } catch {
+    return null;
+  }
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -43,6 +63,16 @@ export function middleware(req: NextRequest) {
   );
 
   if (token) {
+    if (pathname.startsWith("/manager")) {
+      const role = getRoleFromToken(token);
+
+      if (role !== "manager") {
+        const url = req.nextUrl.clone();
+        url.pathname = "/clubs";
+        return NextResponse.redirect(url);
+      }
+    }
+
     if (isPublic) {
       const url = req.nextUrl.clone();
       url.pathname = "/clubs"; //RUTA POR DEFECTO PARA USUARIOS LOGUEADOS
