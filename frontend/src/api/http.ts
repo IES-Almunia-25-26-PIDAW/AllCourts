@@ -38,7 +38,12 @@ async function readJson<T>(response: Response): Promise<T> {
   return (await response.json()) as T;
 }
 
-//! Añadir documentación de refreshSession
+/**
+ * Intenta refrescar la sesión usando la cookie httpOnly actual.
+ * Se usa automáticamente cuando una petición devuelve 401 y la ruta no está excluida.
+ *
+ * @returns {Promise<boolean>} Indica si el refresh fue exitoso.
+ */
 async function refreshSession(): Promise<boolean> {
   if (!refreshPromise) {
     refreshPromise = fetch(`${API_URL}/auth/refresh`, {
@@ -60,9 +65,10 @@ async function refreshSession(): Promise<boolean> {
 /**
  * Ejecuta una petición al backend con la configuración común del frontend.
  *
+ * @template T
  * @param path Ruta relativa del endpoint, por ejemplo /clubs o /auth/me.
  * @param init Opciones estándar de fetch para métodos, headers o body.
- * @returns La respuesta tipada del backend.
+ * @returns {Promise<T>} La respuesta tipada del backend.
  */
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const execute = async () => {

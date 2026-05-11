@@ -5,6 +5,10 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './index.module.scss';
 
+/**
+ * @page Login
+ * Pantalla de acceso para jugadores y managers.
+ */
 export default function Login() {
   const { t } = useTranslation();
   const { loading, error, login, resendVerification } = useAuth();

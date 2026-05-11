@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { formatDurationMinutes, formatLongDate, formatPrice, formatTimeRange } from "@/utils/formatters";
 import { request } from "@/api/http";
+import CheckoutForm from "@/components/modules/payments/CheckoutForm";
 import styles from "./payment.module.scss";
 
 const stripePromise = loadStripe(
@@ -23,85 +24,17 @@ interface PaymentIntentResponse {
 }
 
 /**
- * CheckoutForm
+ * @page BookingPayment
+ * Pantalla de checkout para completar el pago de una reserva pendiente.
  *
- * Componente separado porque los hooks useStripe() y useElements() solo
- * funcionan dentro del proveedor <Elements>. El componente principal lo
- * envuelve en <Elements> una vez que tiene el clientSecret.
- *
- * Flujo:
- *   1. <PaymentElement /> renderiza el formulario de Stripe (tarjeta, etc.)
- *   2. Al enviar, stripe.confirmPayment() manda los datos directamente a Stripe
- *   3. Si el pago es correcto, Stripe redirige a return_url
- *   4. Si hay error (tarjeta rechazada, etc.) lo mostramos en pantalla
+ * Secciones:
+ *   Summary     → datos de la reserva antes de pagar
+ *   PaymentForm → formulario de Stripe para confirmar el pago
+ *   Status      → estados de carga y error del intent
  */
-function CheckoutForm({bookingId, returnUrl}: {bookingId: string, returnUrl: string}) {
-	const stripe = useStripe(); 
-	const elements = useElements(); 
-
-	const [isLoading, setIsLoading] = useState(false);
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!stripe || !elements) return; // Esperamos a que Stripe cargue
-
-		setIsLoading(true);
-		setErrorMessage(null);
-
-		try {
-			// confirmPayment() valida y envía los datos de tarjeta directamente a Stripe.
-			// Si todo va bien → redirige al usuario a return_url automáticamente.
-			// Si hay error (fondos insuficientes, tarjeta inválida...) → devuelve { error }.
-			const { error } = await stripe.confirmPayment({
-				elements,
-				confirmParams: {
-					return_url: returnUrl,
-				},
-			});
-
-			if (error) {
-				setErrorMessage(
-					error.message ??
-						"Ha ocurrido un error al procesar el pago.",
-				);
-			}
-		} catch {
-			setErrorMessage("Error inesperado. Por favor, inténtalo de nuevo.");
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	return (
-		<form onSubmit={handleSubmit} className={styles.stripeForm}>
-			<PaymentElement className={styles.paymentElement} />
-
-			{errorMessage && (
-				<div className={styles.errorMessage} role="alert">
-					{errorMessage}
-				</div>
-			)}
-
-			<button
-				type="submit"
-				disabled={!stripe || !elements || isLoading}
-				className={styles.payButton}
-			>
-				{isLoading ? (
-					<span className={styles.spinner} aria-hidden="true" />
-				) : null}
-				{isLoading ? "Procesando..." : "Pagar ahora"}
-			</button>
-
-			<p className={styles.securityNote}>
-				🔒 Pago seguro con Stripe. Tus datos bancarios nunca llegan a
-				nuestros servidores.
-			</p>
-		</form>
-	);
-}
-
+/**
+ * @returns {JSX.Element} Página de pago.
+ */
 export default function BookingPaymentPage() {
 	const router = useRouter();
 
@@ -252,10 +185,7 @@ export default function BookingPaymentPage() {
 								appearance: stripeAppearance,
 							}}
 						>
-							<CheckoutForm
-								bookingId={bookingId}
-								returnUrl={returnUrl}
-							/>
+							<CheckoutForm returnUrl={returnUrl} />
 						</Elements>
 					)}
 				</div>

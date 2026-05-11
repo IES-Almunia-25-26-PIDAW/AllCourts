@@ -2,9 +2,13 @@ import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './index.module.scss';
 
+import styles from "./index.module.scss";
 export default function ForgotPasswordPage() {
+/**
+ * @page ForgotPassword
+ * Pantalla para solicitar un enlace de recuperación de contraseña.
+ */
   const { t } = useTranslation();
   const { forgotPassword } = useAuth();
   const [email, setEmail] = useState('');

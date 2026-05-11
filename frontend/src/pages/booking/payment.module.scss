@@ -147,15 +147,6 @@
 	color: #1d2939;
 }
 
-.stripeForm {
-	display: grid;
-	gap: 20px;
-}
-
-.paymentElement {
-	padding: 4px 0;
-}
-
 .errorMessage {
 	padding: 14px 18px;
 	border-radius: 12px;
@@ -164,42 +155,6 @@
 	color: #dc2626;
 	font-size: 0.95rem;
 	line-height: 1.5;
-}
-
-.payButton {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	width: 100%;
-	padding: 16px 24px;
-	background: #0059ff;
-	color: white;
-	border: none;
-	border-radius: 999px;
-	font-size: 1rem;
-	font-weight: 800;
-	cursor: pointer;
-	transition:
-		opacity 0.2s,
-		transform 0.15s;
-
-	&:hover:not(:disabled) {
-		opacity: 0.88;
-		transform: translateY(-1px);
-	}
-
-	&:disabled {
-		opacity: 0.55;
-		cursor: not-allowed;
-	}
-}
-
-.securityNote {
-	margin: 0;
-	text-align: center;
-	color: #667085;
-	font-size: 0.85rem;
 }
 
 .loadingContainer {

@@ -5,6 +5,10 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './[token].module.scss';
 
+/**
+ * @page ResetPassword
+ * Página para establecer una nueva contraseña desde un enlace temporal.
+ */
 export default function ResetPasswordPage() {
   const { t } = useTranslation();
   const { resetPassword } = useAuth();

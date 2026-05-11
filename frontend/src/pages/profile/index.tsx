@@ -6,6 +6,10 @@ import ChangePassword from "@/components/modules/profile/ChangePassword";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfileBookings } from "@/hooks/useProfileBookings";
 
+/**
+ * @page Profile
+ * Área privada con datos de usuario y reservas.
+ */
 export default function ProfilePage() {
 	const { logout, user } = useAuth();
 	const { bookings, loading: bookingsLoading, error: bookingsError } = useProfileBookings(user?.id);

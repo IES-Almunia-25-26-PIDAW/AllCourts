@@ -1,0 +1,71 @@
+.stripeForm {
+	display: grid;
+	gap: 20px;
+}
+
+.paymentElement {
+	padding: 4px 0;
+}
+
+.errorMessage {
+	padding: 14px 18px;
+	border-radius: 12px;
+	background: rgba(239, 68, 68, 0.06);
+	border: 1px solid rgba(239, 68, 68, 0.2);
+	color: #dc2626;
+	font-size: 0.95rem;
+	line-height: 1.5;
+}
+
+.payButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: 100%;
+	padding: 16px 24px;
+	background: #0059ff;
+	color: white;
+	border: none;
+	border-radius: 999px;
+	font-size: 1rem;
+	font-weight: 800;
+	cursor: pointer;
+	transition:
+		opacity 0.2s,
+		transform 0.15s;
+
+	&:hover:not(:disabled) {
+		opacity: 0.88;
+		transform: translateY(-1px);
+	}
+
+	&:disabled {
+		opacity: 0.55;
+		cursor: not-allowed;
+	}
+}
+
+.securityNote {
+	margin: 0;
+	text-align: center;
+	color: #667085;
+	font-size: 0.85rem;
+}
+
+.spinner {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 2.5px solid rgba(255, 255, 255, 0.4);
+	border-top-color: currentColor;
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+	flex-shrink: 0;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}

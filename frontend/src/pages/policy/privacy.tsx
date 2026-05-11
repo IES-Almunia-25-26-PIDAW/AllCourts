@@ -1,6 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import styles from './Privacy.module.scss';
 
+/**
+ * @page PrivacyPolicy
+ * Documento de política de privacidad de la plataforma.
+ */
 export default function PrivacyPolicy() {
   const { t } = useTranslation();
 

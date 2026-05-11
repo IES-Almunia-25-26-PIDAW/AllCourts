@@ -17,8 +17,10 @@ interface PaymentIntentResponse {
 }
 
 /**
- * @param bookingId - ID de la reserva que se va a pagar
- * @returns clientSecret, paymentIntentId y amount del PaymentIntent creado
+ * Crea un PaymentIntent asociado a una reserva.
+ *
+ * @param bookingId Identificador de la reserva.
+ * @returns {Promise<PaymentIntentResponse>} Datos del PaymentIntent.
  */
 export async function createPaymentIntent(
 	bookingId: string | number,

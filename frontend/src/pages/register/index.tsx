@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import styles from "./index.module.scss";
 import { useAuth } from "@/hooks/useAuth";
+import styles from "./index.module.scss";
 
+/**
+ * @page Register
+ * Formulario de registro para crear una cuenta nueva.
+ */
 export default function Register() {
 	const { t } = useTranslation();
 	const { register } = useAuth();

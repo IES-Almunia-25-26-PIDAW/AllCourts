@@ -1,6 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import styles from './Cookies.module.scss';
 
+/**
+ * @page CookiesPolicy
+ * Documento de política de cookies de la plataforma.
+ */
 export default function CookiesPolicy() {
   const { t } = useTranslation();
 

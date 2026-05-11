@@ -4,6 +4,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouteQueryParam } from "@/hooks/useRouteQueryParam";
 import styles from "./[token].module.scss";
 
+/**
+ * @page VerifyEmail
+ * Página para verificar la cuenta mediante un token enviado por correo.
+ */
 export default function VerifyEmailPage() {
 	const { verifyEmail } = useAuth();
 	const { ready, value: token } = useRouteQueryParam("token");

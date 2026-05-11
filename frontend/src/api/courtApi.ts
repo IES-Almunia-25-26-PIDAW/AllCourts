@@ -24,6 +24,8 @@ import type { CourtWithClub } from "@/types/court";
 /**
  * Obtiene todas las pistas.
  * Se usa en la pantalla de búsqueda general.
+ *
+ * @returns {Promise<CourtWithClub[]>} Lista de pistas.
  */
 export async function getCourts(): Promise<CourtWithClub[]> {
   return request<CourtWithClub[]>("/courts");
@@ -32,6 +34,9 @@ export async function getCourts(): Promise<CourtWithClub[]> {
 /**
  * Obtiene las pistas de un club concreto.
  * Se usa en la ficha del club para mostrar sus pistas relacionadas.
+ *
+ * @param clubId Identificador del club.
+ * @returns {Promise<CourtWithClub[]>} Lista de pistas del club.
  */
 export async function getCourtsByClubId(
   clubId: string | number,
@@ -42,6 +47,9 @@ export async function getCourtsByClubId(
 /**
  * Obtiene el detalle de una pista concreta.
  * Se usa en la pantalla de detalle para recuperar precios, superficie y metadatos.
+ *
+ * @param id Identificador de la pista.
+ * @returns {Promise<CourtWithClub>} Detalle de la pista.
  */
 export async function getCourtById(
   id: string | number,

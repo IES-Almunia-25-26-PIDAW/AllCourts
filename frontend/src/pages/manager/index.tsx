@@ -2,6 +2,10 @@ import DashboardCard from "@/components/DashboardCard";
 import { useManagerDashboard } from "@/hooks/useManagerDashboard";
 import styles from "./index.module.scss";
 
+/**
+ * @page Manager
+ * Panel de control para managers con métricas y listados.
+ */
 export default function ManagerPage() {
   const { user, manager, stats, courts, clubs, bookings, loading, error, isManager } = useManagerDashboard();
 
