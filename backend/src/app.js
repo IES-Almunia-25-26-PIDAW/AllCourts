@@ -1,5 +1,11 @@
 require("./config/env");
 
+/**
+ * @module app
+ * Configuración principal de Express para AllCourts.
+ * Registra CORS, cookies, rutas, archivos estáticos y el manejador global de errores.
+ */
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");

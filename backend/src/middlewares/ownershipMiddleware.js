@@ -5,6 +5,12 @@ const Court = require("../models/Court");
 const Club = require("../models/Club");
 //#endregion
 
+/**
+ * @module ownershipMiddleware
+ * Middleware de autorización por propiedad y relación jerárquica.
+ * Permite validar que un usuario, manager o propietario pueda acceder a reservas, pagos o pistas concretas.
+ */
+
 function sameId(left, right) {
   return String(left) === String(right);
 }

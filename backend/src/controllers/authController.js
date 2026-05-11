@@ -19,11 +19,23 @@ function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
+/**
+ * Elimina del objeto usuario los campos sensibles antes de enviarlo al cliente.
+ *
+ * @param {object} user Usuario recuperado de la base de datos.
+ * @returns {object} Usuario sin contraseña ni tokens de verificación.
+ */
 function stripSensitiveUser(user) {
   const { password, verification_token, token_expires_at, ...safeUser } = user;
   return safeUser;
 }
 
+/**
+ * Genera el JWT de acceso para la sesión activa.
+ *
+ * @param {object} user Usuario autenticado.
+ * @returns {string} Token de acceso firmado.
+ */
 function signAccessToken(user) {
   return jwt.sign(
     {
@@ -35,6 +47,12 @@ function signAccessToken(user) {
   );
 }
 
+/**
+ * Genera el JWT de refresco para renovar la sesión.
+ *
+ * @param {object} user Usuario autenticado.
+ * @returns {string} Token de refresco firmado.
+ */
 function signRefreshToken(user) {
   return jwt.sign(
     {
@@ -46,6 +64,13 @@ function signRefreshToken(user) {
   );
 }
 
+/**
+ * Escribe las cookies seguras de autenticación en la respuesta.
+ *
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @param {string} accessToken Token de acceso.
+ * @param {string} refreshToken Token de refresco.
+ */
 function setAuthCookies(res, accessToken, refreshToken) {
   const baseOptions = {
     httpOnly: true,
@@ -65,6 +90,11 @@ function setAuthCookies(res, accessToken, refreshToken) {
   });
 }
 
+/**
+ * Borra las cookies de autenticación dejando la sesión cerrada.
+ *
+ * @param {import('express').Response} res Respuesta HTTP.
+ */
 function clearAuthCookies(res) {
   const baseOptions = {
     httpOnly: true,
@@ -210,7 +240,13 @@ const authController = {
   },
   //#endregion
 
-  //! Añadir documentación de refresh
+  /**
+   * Renueva la sesión usando la cookie de refresco.
+   * Verifica el token, comprueba que no esté revocado y emite nuevas cookies.
+   *
+   * Response 200: sesión renovada
+   * Response 401: token ausente, inválido, expirado o revocado
+   */
   //#region refresh
   refresh: async (req, res, next) => {
     try {
@@ -306,6 +342,13 @@ const authController = {
   },
   //#endregion
 
+  /**
+   * Solicita un enlace de recuperación de contraseña.
+   * Si el correo existe, genera un token temporal y lo envía por email.
+   *
+   * Body: { email }
+   * Response 200: mensaje genérico de seguridad
+   */
   //#region forgotPassword
   forgotPassword: async (req, res, next) => {
     try {
@@ -331,6 +374,14 @@ const authController = {
   },
   //#endregion
 
+  /**
+   * Cambia la contraseña usando un token de recuperación válido.
+   *
+   * Params: token
+   * Body: { newPassword }
+   * Response 200: contraseña actualizada
+   * Response 400: token inválido o expirado
+   */
   //#region resetPassword
   resetPassword: async (req, res, next) => {
     try {

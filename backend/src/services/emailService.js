@@ -1,3 +1,8 @@
+/**
+ * @module emailService
+ * Servicio de correo saliente de AllCourts.
+ * Centraliza los emails de verificación, recuperación de contraseña y confirmación de reserva.
+ */
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -6,6 +11,13 @@ const transporter = nodemailer.createTransport({
   secure: false
 });
 
+/**
+ * Envía un enlace de verificación de cuenta al correo indicado.
+ *
+ * @param {string} toEmail Correo destino.
+ * @param {string} token Token de verificación sin hashear.
+ * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
+ */
 const sendVerificationEmail = (toEmail, token) => {
   const verifyUrl = `${process.env.APP_URL}/auth/verify/${token}`;
 
@@ -22,6 +34,13 @@ const sendVerificationEmail = (toEmail, token) => {
   });
 };
 
+/**
+ * Envía un enlace temporal para restablecer la contraseña.
+ *
+ * @param {string} toEmail Correo destino.
+ * @param {string} token Token de recuperación sin hashear.
+ * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
+ */
 const sendPasswordResetEmail = (toEmail, token) => {
   const resetUrl = `${process.env.APP_URL}/auth/reset-password/${token}`;
 
@@ -38,6 +57,13 @@ const sendPasswordResetEmail = (toEmail, token) => {
   });
 };
 
+/**
+ * Envía el correo de confirmación de una reserva pagada.
+ *
+ * @param {object} user Usuario destinatario.
+ * @param {object} booking Reserva confirmada.
+ * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
+ */
 const sendBookingConfirmationEmail = (user, booking) => {
   const bookingDate = booking.date;
   const bookingTime = booking.start_time;

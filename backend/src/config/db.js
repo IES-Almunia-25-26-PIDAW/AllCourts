@@ -1,3 +1,8 @@
+/**
+ * @module db
+ * Inicializa el pool de conexiones MySQL usado por los modelos.
+ * Exporta una versión `promise()` para trabajar con async/await.
+ */
 const mysql = require("mysql2");
 
 const pool = mysql.createPool({

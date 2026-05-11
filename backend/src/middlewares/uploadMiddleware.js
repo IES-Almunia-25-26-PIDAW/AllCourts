@@ -1,3 +1,8 @@
+/**
+ * @module uploadMiddleware
+ * Configuración de subida de archivos para avatares.
+ * Guarda en disco dentro de `uploads/avatars` y limita los tipos y el tamaño de imagen.
+ */
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
