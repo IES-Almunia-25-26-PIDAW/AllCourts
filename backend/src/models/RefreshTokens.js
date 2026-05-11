@@ -69,6 +69,20 @@ const RefreshToken = {
     `;
     return pool.execute(sql, [userId]);
   },
+
+  /**
+   * Elimina tokens de refresco ya caducados o revocados.
+   *
+   * @returns {Promise<any>} Resultado de la eliminación.
+   */
+  deleteExpiredOrRevoked: () => {
+    const sql = `
+      DELETE FROM refresh_tokens
+      WHERE expires_at < NOW()
+         OR revoked_at IS NOT NULL
+    `;
+    return pool.execute(sql);
+  },
 };
 
 module.exports = RefreshToken;
