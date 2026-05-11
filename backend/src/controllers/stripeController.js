@@ -1,6 +1,8 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Booking = require("../models/Booking");
 const Payment = require("../models/Payment");
+const User = require("../models/User");
+const emailService = require("../services/emailService");
 
 /**
  * @module stripeController
@@ -199,6 +201,40 @@ const stripeController = {
 							method: "card", // Stripe Elements usa tarjeta por defecto
 							stripe_payment_intent_id: paymentIntent.id,
 						});
+					}
+
+					try {
+						const [bookingRows] = await Booking.getById(bookingId);
+						if (!bookingRows.length) {
+							console.warn(
+								`Webhook: booking ${bookingId} not found for email`,
+							);
+							break;
+						}
+
+						const booking = bookingRows[0];
+						let user = {
+							name: booking.user_name,
+							email: booking.user_email,
+						};
+
+						if (!user.email) {
+							const [userRows] = await User.getById(booking.user_id);
+							if (!userRows.length) {
+								console.warn(
+									`Webhook: user ${booking.user_id} not found for email`,
+								);
+								break;
+							}
+							user = userRows[0];
+						}
+
+						await emailService.sendBookingConfirmationEmail(user, booking);
+					} catch (emailError) {
+						console.error(
+							"Webhook: failed to send booking confirmation email:",
+							emailError,
+						);
 					}
 
 					console.log(
