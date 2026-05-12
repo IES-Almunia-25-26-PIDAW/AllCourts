@@ -144,6 +144,8 @@ services:
   # Depende del backend porque Next.js necesita la API disponible
   # para el renderizado en servidor (SSR).
   frontend:
+    env_file:
+      - ./frontend/.env
     build:
       context: ./frontend
       dockerfile: Dockerfile
