@@ -1,5 +1,9 @@
 //#region MODULES
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { getApiUrl } from "@/utils/runtimeConfig";
+//#endregion
+
+//#region CONSTANTS
+const API_URL = getApiUrl();
 //#endregion
 
 //#region TYPES

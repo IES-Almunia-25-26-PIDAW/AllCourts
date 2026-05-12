@@ -1,6 +1,7 @@
 //#region MODULES
 import { request } from "@/api/http";
 import type { UpdateUserDTO, User } from "@/types/user";
+import { getApiUrl } from "@/utils/runtimeConfig";
 //#endregion
 
 //#region DOCUMENTATION
@@ -54,8 +55,9 @@ export async function updateUserForm(
 	id: string,
 	formData: FormData,
 ): Promise<User> {
+	const apiUrl = getApiUrl();
 	const response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+		`${apiUrl}/users/${id}`,
 		{
 			method: "PUT",
 			credentials: "include",
