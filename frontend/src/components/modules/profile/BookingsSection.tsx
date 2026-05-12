@@ -57,10 +57,12 @@ export default function BookingsSection({ title, bookings, loading, error, empty
 
   const visibleBookings = useMemo(() => {
     const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     return localBookings.filter((booking) => {
-      const todayStr = now.toISOString().split("T")[0];
-      const isActive = booking.status !== "cancelled" && booking.date >= todayStr;
+      const bookingDate = new Date(`${booking.date}T00:00:00`);
+      const isPastBooking = Number.isNaN(bookingDate.getTime()) || bookingDate < todayStart;
+      const isActive = booking.status !== "cancelled" && !isPastBooking;
       return variant === "active" ? isActive : !isActive;
     });
   }, [localBookings, variant]);
