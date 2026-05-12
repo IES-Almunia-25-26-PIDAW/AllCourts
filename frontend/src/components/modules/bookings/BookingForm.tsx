@@ -92,7 +92,8 @@ export default function BookingForm({ court }: BookingFormProps) {
     }
 
     if (!user) {
-      setError("Necesitas iniciar sesión para reservar.");
+      const currentPath = router.asPath;
+      router.push(`/login?from=${encodeURIComponent(currentPath)}`);
       return;
     }
 

@@ -55,6 +55,7 @@ export function middleware(req: NextRequest) {
     "/booking",
     "/clubs",
     "/courts",
+    "/subscription",
   ];
 
   const isPublic = publicPaths.includes(pathname);
@@ -102,5 +103,7 @@ export const config = {
     "/clubs/:path*",
     "/courts",
     "/courts/:path*",
+    "/subscription",
+    "/subscription/:path*",
   ],
 };
