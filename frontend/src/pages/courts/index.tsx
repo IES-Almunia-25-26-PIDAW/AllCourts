@@ -29,6 +29,7 @@ export default function CourtPage() {
   const [query, setQuery] = useState("");
   const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
   const [selectedSurface, setSelectedSurface] = useState<SurfaceType | null>(null);
+  const [selectedIndoor, setSelectedIndoor] = useState<boolean | null>(null);
   const { courts, loading, error } = useCourts();
 
   const filteredCourts = useMemo(() => {
@@ -54,9 +55,13 @@ export default function CourtPage() {
       // Surface filter
       const matchesSurface = selectedSurface === null || court.surface_type === selectedSurface;
 
-      return matchesQuery && matchesSport && matchesSurface;
+      // Indoor/outdoor filter
+      const courtIsIndoor = Boolean(court.is_indoor);
+      const matchesIndoor = selectedIndoor === null || courtIsIndoor === selectedIndoor;
+
+      return matchesQuery && matchesSport && matchesSurface && matchesIndoor;
     });
-  }, [courts, query, selectedSport, selectedSurface]);
+  }, [courts, query, selectedSport, selectedSurface, selectedIndoor]);
 
   return (
     <main className={styles.page}>
@@ -107,7 +112,24 @@ export default function CourtPage() {
           ))}
         </div>
 
-        {(query !== '' || selectedSport !== null || selectedSurface !== null) && (
+        <div className={styles.filtersBlock}>
+          {[
+            { label: 'Todos', value: null },
+            { label: 'Cubierta', value: true },
+            { label: 'Exterior', value: false },
+          ].map((option) => (
+            <button
+              key={option.label}
+              type="button"
+              className={selectedIndoor === option.value ? styles.chipActive : styles.chip}
+              onClick={() => setSelectedIndoor(selectedIndoor === option.value ? null : option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        {(query !== '' || selectedSport !== null || selectedSurface !== null || selectedIndoor !== null) && (
           <button
             type="button"
             className={styles.clearBtn}
@@ -115,6 +137,7 @@ export default function CourtPage() {
               setQuery('');
               setSelectedSport(null);
               setSelectedSurface(null);
+              setSelectedIndoor(null);
             }}
           >
             Limpiar filtros

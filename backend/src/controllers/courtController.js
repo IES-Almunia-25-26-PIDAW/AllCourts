@@ -23,7 +23,7 @@ const courtController = {
      * Body: {
      *   club_id, name, surface_type, sport,
      *   price_60, price_90, price_120,
-     *   min_unit_min?, image_url?, description?
+    *   min_unit_min?, image_url?, description?, is_indoor?
      * }
      * surface_type: 'tierra_batida' | 'cesped_natural' | 'cesped_artificial' | 'dura' | 'arena' | 'parque'
      * sport: 'tenis' | 'padel' | 'pickleball' | 'baloncesto_3x3' | 'baloncesto_5x5' |
@@ -43,6 +43,7 @@ const courtController = {
                 min_unit_min,
                 image_url,
                 description,
+                is_indoor,
             } = req.body;
             const [result] = await Court.create({
                 club_id,
@@ -55,6 +56,7 @@ const courtController = {
                 min_unit_min,
                 image_url,
                 description,
+                is_indoor,
             });
             res
                 .status(201)
@@ -67,11 +69,23 @@ const courtController = {
     /**
      * Devuelve todas las pistas con datos del club (nombre, dirección, ciudad).
      *
+     * Query params opcionales: sport, surface_type, is_indoor (boolean)
+     * Ejemplo: GET /courts?sport=padel&is_indoor=true
      * Response 200: array de pistas
      */
     getAll: async (req, res, next) => {
         try {
-            const [rows] = await Court.getAll();
+            const { sport, surface_type } = req.query;
+            const isIndoorParam = req.query.is_indoor;
+            const is_indoor =
+                isIndoorParam === "true" ? true : isIndoorParam === "false" ? false : undefined;
+
+            const filters = {};
+            if (sport !== undefined) filters.sport = sport;
+            if (surface_type !== undefined) filters.surface_type = surface_type;
+            if (is_indoor !== undefined) filters.is_indoor = is_indoor;
+
+            const [rows] = await Court.getAll(filters);
             res.json(rows);
         } catch (err) {
             next(err);
@@ -131,7 +145,7 @@ const courtController = {
      * Actualiza los datos de una pista existente.
      *
      * Params: id
-     * Body: { name, surface_type, sport, price_60, price_90, price_120, min_unit_min?, image_url?, description? }
+    * Body: { name, surface_type, sport, price_60, price_90, price_120, min_unit_min?, image_url?, description?, is_indoor? }
      * Response 200: confirmación
      * Response 404: pista no encontrada
      */
@@ -147,6 +161,7 @@ const courtController = {
                 min_unit_min,
                 image_url,
                 description,
+                is_indoor,
             } = req.body;
             const [result] = await Court.update(req.params.id, {
                 name,
@@ -158,6 +173,7 @@ const courtController = {
                 min_unit_min,
                 image_url,
                 description,
+                is_indoor,
             });
             if (result.affectedRows === 0)
                 return res.status(404).json({ message: "Court not found" });

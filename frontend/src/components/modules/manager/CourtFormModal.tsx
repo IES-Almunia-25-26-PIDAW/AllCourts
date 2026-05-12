@@ -19,6 +19,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
   const [clubId, setClubId] = useState<number>(clubs[0]?.id ?? court?.club_id ?? 0);
   const [sport, setSport] = useState<Sport>('padel');
   const [surfaceType, setSurfaceType] = useState<SurfaceType>('dura');
+  const [isIndoor, setIsIndoor] = useState<boolean>(court?.is_indoor ?? false);
   const [price60, setPrice60] = useState('');
   const [price90, setPrice90] = useState('');
   const [price120, setPrice120] = useState('');
@@ -34,6 +35,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
       setClubId(court.club_id ?? clubs[0]?.id ?? 0);
       setSport(court.sport ?? 'padel');
       setSurfaceType(court.surface_type ?? 'dura');
+      setIsIndoor(court.is_indoor ?? false);
       setPrice60(String(court.price_60 ?? ''));
       setPrice90(String(court.price_90 ?? ''));
       setPrice120(String(court.price_120 ?? ''));
@@ -45,6 +47,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
       setClubId(clubs[0]?.id ?? 0);
       setSport('padel');
       setSurfaceType('dura');
+      setIsIndoor(false);
       setPrice60('');
       setPrice90('');
       setPrice120('');
@@ -76,7 +79,8 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
           price_120: parseFloat(price120),
           min_unit_min: parseInt(minUnit),
           image_url: imageUrl,
-          description
+          description,
+          is_indoor: isIndoor
         };
         await dispatch(updateCourt({ id: court.id, data })).unwrap();
       } else {
@@ -90,7 +94,8 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
           price_120: parseFloat(price120),
           min_unit_min: parseInt(minUnit),
           image_url: imageUrl,
-          description
+          description,
+          is_indoor: isIndoor
         };
         await dispatch(createCourt(data)).unwrap();
       }
@@ -182,6 +187,21 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
                   {label}
                 </option>
               ))}
+            </select>
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="court-indoor">
+              Tipo de pista
+            </label>
+            <select
+              id="court-indoor"
+              className={styles.input}
+              value={isIndoor ? 'true' : 'false'}
+              onChange={(event) => setIsIndoor(event.target.value === 'true')}
+            >
+              <option value="false">Exterior</option>
+              <option value="true">Cubierta</option>
             </select>
           </div>
 
