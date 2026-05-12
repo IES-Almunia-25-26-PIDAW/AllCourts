@@ -60,7 +60,7 @@ export function useAuth() {
 		document.cookie = "allcourts_token=; Max-Age=0; path=/";
 		document.cookie = "token=; Max-Age=0; path=/";
 		dispatch(clearAuth());
-		router.push("/");
+		window.location.replace("/login");
 	};
 
 	return {
