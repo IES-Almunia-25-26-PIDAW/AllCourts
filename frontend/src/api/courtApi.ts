@@ -1,6 +1,6 @@
 //#region MODULES
-import { request } from "@/api/http";
-import type { CourtWithClub } from "@/types/court";
+import { request } from '@/api/http';
+import type { Court, CourtWithClub, CreateCourtDTO, UpdateCourtDTO } from '@/types/court';
 //#endregion
 
 //#region DOCUMENTATION
@@ -28,32 +28,32 @@ import type { CourtWithClub } from "@/types/court";
  * @returns {Promise<CourtWithClub[]>} Lista de pistas.
  */
 export async function getCourts(): Promise<CourtWithClub[]> {
-  return request<CourtWithClub[]>("/courts");
+  return request<CourtWithClub[]>('/courts');
 }
 
-/**
- * Obtiene las pistas de un club concreto.
- * Se usa en la ficha del club para mostrar sus pistas relacionadas.
- *
- * @param clubId Identificador del club.
- * @returns {Promise<CourtWithClub[]>} Lista de pistas del club.
- */
-export async function getCourtsByClubId(
-  clubId: string | number,
-): Promise<CourtWithClub[]> {
+export async function getCourtsByClubId(clubId: string | number): Promise<CourtWithClub[]> {
   return request<CourtWithClub[]>(`/courts/club/${clubId}`);
 }
 
 /**
- * Obtiene el detalle de una pista concreta.
- * Se usa en la pantalla de detalle para recuperar precios, superficie y metadatos.
+ * Obtiene el detalle de una pista concreta
+ * Se usa en la pantalla de detalle para recuperar precios, superficie y metadatos
  *
- * @param id Identificador de la pista.
- * @returns {Promise<CourtWithClub>} Detalle de la pista.
+ * @param id Identificador de la pista
+ * @returns {Promise<CourtWithClub>} Detalle de la pista
  */
-export async function getCourtById(
-  id: string | number,
-): Promise<CourtWithClub> {
+export async function getCourtById(id: string | number): Promise<CourtWithClub> {
   return request<CourtWithClub>(`/courts/${id}`);
 }
-//#endregion
+
+export async function createCourt(data: CreateCourtDTO): Promise<Court> {
+  return request<Court>('/courts', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export async function updateCourt(id: number, data: UpdateCourtDTO): Promise<Court> {
+  return request<Court>(`/courts/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+}
+
+export async function deleteCourt(id: number): Promise<void> {
+  return request<void>(`/courts/${id}`, { method: 'DELETE' });
+}

@@ -1,11 +1,12 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import * as managerApi from "@/api/managerApi";
-import type { RootState } from "@/store";
-import type { Manager, UpdateManagerDTO } from "@/types/manager";
-import type { ManagerStats } from "@/types/manager";
-import type { Court } from "@/types/court";
-import type { Club } from "@/types/club";
-import type { Booking } from "@/types/booking";
+import * as clubApi from '@/api/clubApi';
+import * as courtApi from '@/api/courtApi';
+import * as managerApi from '@/api/managerApi';
+import type { RootState } from '@/store';
+import type { Booking } from '@/types/booking';
+import type { Club, CreateClubDTO, UpdateClubDTO } from '@/types/club';
+import type { Court, CreateCourtDTO, UpdateCourtDTO } from '@/types/court';
+import type { Manager, ManagerStats, UpdateManagerDTO } from '@/types/manager';
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type ManagerState = {
   manager: Manager | null;
@@ -24,55 +25,74 @@ const initialState: ManagerState = {
   clubs: [],
   bookings: [],
   loading: false,
-  error: null,
+  error: null
 };
 
-export const fetchManagerData = createAsyncThunk(
-  "manager/fetchManagerData",
-  async (userId: string) => {
-    const manager = await managerApi.getManagerByUserId(userId);
-    return manager;
-  },
-);
+export const fetchManagerData = createAsyncThunk('manager/fetchManagerData', async (userId: string) => {
+  const manager = await managerApi.getManagerByUserId(userId);
+  return manager;
+});
 
-export const fetchManagerStats = createAsyncThunk(
-  "manager/fetchManagerStats",
-  async (managerId: string) => {
-    return managerApi.getManagerStats(managerId);
-  },
-);
+export const fetchManagerStats = createAsyncThunk('manager/fetchManagerStats', async (managerId: string) => {
+  return managerApi.getManagerStats(managerId);
+});
 
-export const fetchManagerCourts = createAsyncThunk(
-  "manager/fetchManagerCourts",
-  async (managerId: string) => {
-    return managerApi.getManagerCourts(managerId);
-  },
-);
+export const fetchManagerCourts = createAsyncThunk('manager/fetchManagerCourts', async (managerId: string) => {
+  return managerApi.getManagerCourts(managerId);
+});
 
-export const fetchManagerClubs = createAsyncThunk(
-  "manager/fetchManagerClubs",
-  async (managerId: string) => {
-    return managerApi.getManagerClubs(managerId);
-  },
-);
+export const fetchManagerClubs = createAsyncThunk('manager/fetchManagerClubs', async (managerId: string) => {
+  return managerApi.getManagerClubs(managerId);
+});
 
-export const fetchAllBookings = createAsyncThunk(
-  "manager/fetchAllBookings",
-  async () => {
-    return managerApi.getAllBookings();
-  },
-);
+export const fetchAllBookings = createAsyncThunk('manager/fetchAllBookings', async () => {
+  return managerApi.getAllBookings();
+});
 
 export const updateManagerSubscription = createAsyncThunk(
-  "manager/updateSubscription",
+  'manager/updateSubscription',
   async ({ managerId, data }: { managerId: string; data: UpdateManagerDTO }) => {
     await managerApi.updateSubscription(managerId, data);
     return { managerId, data };
-  },
+  }
 );
 
+export const createClub = createAsyncThunk('manager/createClub', async (data: CreateClubDTO) => {
+  const createdClub = await clubApi.createClub(data);
+  return clubApi.getClubById(createdClub.id);
+});
+
+export const updateClub = createAsyncThunk(
+  'manager/updateClub',
+  async ({ id, data }: { id: number; data: UpdateClubDTO }) => {
+    return clubApi.updateClub(id, data);
+  }
+);
+
+export const deleteClub = createAsyncThunk('manager/deleteClub', async (id: number) => {
+  await clubApi.deleteClub(id);
+  return id;
+});
+
+export const createCourt = createAsyncThunk('manager/createCourt', async (data: CreateCourtDTO) => {
+  const createdCourt = await courtApi.createCourt(data);
+  return courtApi.getCourtById(createdCourt.id);
+});
+
+export const updateCourt = createAsyncThunk(
+  'manager/updateCourt',
+  async ({ id, data }: { id: number; data: UpdateCourtDTO }) => {
+    return courtApi.updateCourt(id, data);
+  }
+);
+
+export const deleteCourt = createAsyncThunk('manager/deleteCourt', async (id: number) => {
+  await courtApi.deleteCourt(id);
+  return id;
+});
+
 const managerSlice = createSlice({
-  name: "manager",
+  name: 'manager',
   initialState,
   reducers: {
     clearManagerState: (state) => {
@@ -83,7 +103,7 @@ const managerSlice = createSlice({
       state.bookings = [];
       state.loading = false;
       state.error = null;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -97,7 +117,7 @@ const managerSlice = createSlice({
       })
       .addCase(fetchManagerData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message ?? "Failed to load manager";
+        state.error = action.error?.message ?? 'Failed to load manager';
       })
 
       .addCase(fetchManagerStats.pending, (state) => {
@@ -110,7 +130,7 @@ const managerSlice = createSlice({
       })
       .addCase(fetchManagerStats.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message ?? "Failed to load stats";
+        state.error = action.error?.message ?? 'Failed to load stats';
       })
 
       .addCase(fetchManagerCourts.pending, (state) => {
@@ -123,7 +143,7 @@ const managerSlice = createSlice({
       })
       .addCase(fetchManagerCourts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message ?? "Failed to load courts";
+        state.error = action.error?.message ?? 'Failed to load courts';
       })
 
       .addCase(fetchManagerClubs.pending, (state) => {
@@ -136,7 +156,7 @@ const managerSlice = createSlice({
       })
       .addCase(fetchManagerClubs.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message ?? "Failed to load clubs";
+        state.error = action.error?.message ?? 'Failed to load clubs';
       })
 
       .addCase(fetchAllBookings.pending, (state) => {
@@ -149,7 +169,7 @@ const managerSlice = createSlice({
       })
       .addCase(fetchAllBookings.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message ?? "Failed to load bookings";
+        state.error = action.error?.message ?? 'Failed to load bookings';
       })
 
       .addCase(updateManagerSubscription.pending, (state) => {
@@ -164,9 +184,93 @@ const managerSlice = createSlice({
       })
       .addCase(updateManagerSubscription.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message ?? "Failed to update subscription";
+        state.error = action.error?.message ?? 'Failed to update subscription';
+      })
+
+      .addCase(createClub.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createClub.fulfilled, (state, action) => {
+        state.clubs.push(action.payload);
+        state.loading = false;
+      })
+      .addCase(createClub.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al crear club';
+      })
+
+      .addCase(updateClub.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateClub.fulfilled, (state, action) => {
+        const index = state.clubs.findIndex((club) => club.id === action.payload.id);
+        if (index >= 0) {
+          state.clubs[index] = action.payload;
+        }
+        state.loading = false;
+      })
+      .addCase(updateClub.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al actualizar club';
+      })
+
+      .addCase(deleteClub.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteClub.fulfilled, (state, action) => {
+        state.clubs = state.clubs.filter((club) => club.id !== action.payload);
+        state.loading = false;
+      })
+      .addCase(deleteClub.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al eliminar club';
+      })
+
+      .addCase(createCourt.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createCourt.fulfilled, (state, action) => {
+        state.courts.push(action.payload);
+        state.loading = false;
+      })
+      .addCase(createCourt.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al crear pista';
+      })
+
+      .addCase(updateCourt.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCourt.fulfilled, (state, action) => {
+        const index = state.courts.findIndex((court) => court.id === action.payload.id);
+        if (index >= 0) {
+          state.courts[index] = action.payload;
+        }
+        state.loading = false;
+      })
+      .addCase(updateCourt.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al actualizar pista';
+      })
+
+      .addCase(deleteCourt.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCourt.fulfilled, (state, action) => {
+        state.courts = state.courts.filter((court) => court.id !== action.payload);
+        state.loading = false;
+      })
+      .addCase(deleteCourt.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al eliminar pista';
       });
-  },
+  }
 });
 
 export const { clearManagerState } = managerSlice.actions;

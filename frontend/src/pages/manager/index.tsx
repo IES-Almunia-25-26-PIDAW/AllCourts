@@ -1,6 +1,13 @@
-import DashboardCard from "@/components/DashboardCard";
-import { useManagerDashboard } from "@/hooks/useManagerDashboard";
-import styles from "./index.module.scss";
+import DashboardCard from '@/components/DashboardCard';
+import ClubFormModal from '@/components/modules/manager/ClubFormModal';
+import CourtFormModal from '@/components/modules/manager/CourtFormModal';
+import { useManagerDashboard } from '@/hooks/useManagerDashboard';
+import { useAppDispatch } from '@/store/hooks';
+import { deleteClub, deleteCourt } from '@/store/slices/managerSlice';
+import type { Club } from '@/types/club';
+import type { Court } from '@/types/court';
+import { useState } from 'react';
+import styles from './index.module.scss';
 
 /**
  * @page Manager
@@ -8,6 +15,21 @@ import styles from "./index.module.scss";
  */
 export default function ManagerPage() {
   const { user, manager, stats, courts, clubs, bookings, loading, error, isManager } = useManagerDashboard();
+  const dispatch = useAppDispatch();
+  const [clubModal, setClubModal] = useState<{ open: boolean; club?: Club }>({ open: false });
+  const [courtModal, setCourtModal] = useState<{ open: boolean; court?: Court }>({ open: false });
+
+  const handleDeleteClub = (id: number) => {
+    if (window.confirm('¿Seguro que quieres eliminar este club? También se eliminarán sus pistas.')) {
+      void dispatch(deleteClub(id));
+    }
+  };
+
+  const handleDeleteCourt = (id: number) => {
+    if (window.confirm('¿Seguro que quieres eliminar esta pista?')) {
+      void dispatch(deleteCourt(id));
+    }
+  };
 
   if (!user || !isManager) {
     return <div className={styles.loading}>Cargando...</div>;
@@ -23,10 +45,10 @@ export default function ManagerPage() {
         <div>
           {manager ? (
             <div className={`${styles.badge} ${manager.subscription_active ? styles.active : styles.inactive}`}>
-              {manager.subscription_active ? "Suscripción activa" : "Suscripción inactiva"}
+              {manager.subscription_active ? 'Suscripción activa' : 'Suscripción inactiva'}
             </div>
           ) : (
-            <div className={styles.badge + " " + styles.inactive}>Sin perfil</div>
+            <div className={styles.badge + ' ' + styles.inactive}>Sin perfil</div>
           )}
         </div>
       </div>
@@ -45,21 +67,28 @@ export default function ManagerPage() {
             <div className={styles.card}>
               <DashboardCard
                 title="Ingresos"
-                value={new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(
-                  stats?.total_revenue ?? 0,
+                value={new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(
+                  stats?.total_revenue ?? 0
                 )}
               />
             </div>
           </div>
 
           <div className={styles.section}>
-            <div className={styles.sectionTitle}>Mis Clubs</div>
+            //! Añadir traducciones
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionTitle}>Mis Clubs</span>
+              <button className={styles.btnPrimary} onClick={() => setClubModal({ open: true })} type="button">
+                + Nuevo club
+              </button>
+            </div>
             <table className={styles.table}>
               <thead>
                 <tr>
                   <th>Nombre</th>
                   <th>Ciudad</th>
                   <th>Dirección</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,6 +97,18 @@ export default function ManagerPage() {
                     <td>{c.name}</td>
                     <td>{c.city}</td>
                     <td>{c.address}</td>
+                    <td>
+                      <button
+                        className={styles.btnEdit}
+                        onClick={() => setClubModal({ open: true, club: c })}
+                        type="button"
+                      >
+                        Editar
+                      </button>
+                      <button className={styles.btnDelete} onClick={() => handleDeleteClub(c.id)} type="button">
+                        Eliminar
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -75,7 +116,12 @@ export default function ManagerPage() {
           </div>
 
           <div className={styles.section}>
-            <div className={styles.sectionTitle}>Mis Pistas</div>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionTitle}>Mis Pistas</span>
+              <button className={styles.btnPrimary} onClick={() => setCourtModal({ open: true })} type="button">
+                + Nueva pista
+              </button>
+            </div>
             <table className={styles.table}>
               <thead>
                 <tr>
@@ -83,6 +129,7 @@ export default function ManagerPage() {
                   <th>Deporte</th>
                   <th>Superficie</th>
                   <th>Precio 60min</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,6 +139,18 @@ export default function ManagerPage() {
                     <td>{p.sport}</td>
                     <td>{p.surface_type}</td>
                     <td>{p.price_60}€</td>
+                    <td>
+                      <button
+                        className={styles.btnEdit}
+                        onClick={() => setCourtModal({ open: true, court: p })}
+                        type="button"
+                      >
+                        Editar
+                      </button>
+                      <button className={styles.btnDelete} onClick={() => handleDeleteCourt(p.id)} type="button">
+                        Eliminar
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -114,7 +173,7 @@ export default function ManagerPage() {
                 {bookings.map((b) => (
                   <tr key={b.id}>
                     <td>
-                      {b.date} {b.start_time ? ` ${b.start_time}` : ""}
+                      {b.date} {b.start_time ? ` ${b.start_time}` : ''}
                     </td>
                     <td>{b.court_name}</td>
                     <td>{b.user_name}</td>
@@ -127,9 +186,21 @@ export default function ManagerPage() {
               </tbody>
             </table>
           </div>
+
+          <ClubFormModal
+            isOpen={clubModal.open}
+            onClose={() => setClubModal({ open: false })}
+            club={clubModal.club}
+            managerId={manager?.id ?? ''}
+          />
+          <CourtFormModal
+            isOpen={courtModal.open}
+            onClose={() => setCourtModal({ open: false })}
+            court={courtModal.court}
+            clubs={clubs}
+          />
         </>
       )}
     </div>
   );
 }
-

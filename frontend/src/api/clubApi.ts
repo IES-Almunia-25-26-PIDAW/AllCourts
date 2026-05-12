@@ -1,5 +1,5 @@
 import { request } from "./http";
-import type { ClubWithManager } from "@/types/club";
+import type { Club, ClubWithManager, CreateClubDTO, UpdateClubDTO } from "@/types/club";
 
 /**
  * @module clubApi
@@ -26,4 +26,16 @@ export async function getClubById(
   id: string | number,
 ): Promise<ClubWithManager> {
   return request<ClubWithManager>(`/clubs/${id}`);
+}
+
+export async function createClub(data: CreateClubDTO): Promise<Club> {
+  return request<Club>("/clubs", { method: "POST", body: JSON.stringify(data) });
+}
+
+export async function updateClub(id: number, data: UpdateClubDTO): Promise<Club> {
+  return request<Club>(`/clubs/${id}`, { method: "PUT", body: JSON.stringify(data) });
+}
+
+export async function deleteClub(id: number): Promise<void> {
+  return request<void>(`/clubs/${id}`, { method: "DELETE" });
 }
