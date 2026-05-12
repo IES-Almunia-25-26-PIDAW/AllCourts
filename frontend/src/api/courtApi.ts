@@ -21,14 +21,35 @@ import type { Court, CourtWithClub, CreateCourtDTO, UpdateCourtDTO } from '@/typ
 //#endregion
 
 //#region FUNCTIONS
+export interface CourtFilters {
+  sport?: Court['sport'];
+  surface_type?: Court['surface_type'];
+  is_indoor?: boolean;
+}
+
 /**
  * Obtiene todas las pistas.
  * Se usa en la pantalla de búsqueda general.
  *
  * @returns {Promise<CourtWithClub[]>} Lista de pistas.
  */
-export async function getCourts(): Promise<CourtWithClub[]> {
-  return request<CourtWithClub[]>('/courts');
+export async function getCourts(filters?: CourtFilters): Promise<CourtWithClub[]> {
+  const params = new URLSearchParams();
+
+  if (filters?.sport !== undefined) {
+    params.set('sport', filters.sport);
+  }
+
+  if (filters?.surface_type !== undefined) {
+    params.set('surface_type', filters.surface_type);
+  }
+
+  if (filters?.is_indoor !== undefined) {
+    params.set('is_indoor', String(filters.is_indoor));
+  }
+
+  const queryString = params.toString();
+  return request<CourtWithClub[]>(`/courts${queryString ? `?${queryString}` : ''}`);
 }
 
 export async function getCourtsByClubId(clubId: string | number): Promise<CourtWithClub[]> {

@@ -19,8 +19,8 @@ const { pool } = require("../config/db");
 const Court = {
   create: (court) => {
     const sql = `INSERT INTO courts
-        (club_id, name, surface_type, sport, price_60, price_90, price_120, min_unit_min, image_url, description)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        (club_id, name, surface_type, sport, price_60, price_90, price_120, min_unit_min, image_url, description, is_indoor)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     return pool.execute(sql, [
       court.club_id,
       court.name,
@@ -32,14 +32,34 @@ const Court = {
       court.min_unit_min || 30,
       court.image_url,
       court.description,
+      court.is_indoor ?? false,
     ]);
   },
 
-  getAll: () => {
+  getAll: (filters = {}) => {
+    const conditions = [];
+    const params = [];
+
+    if (filters.sport !== undefined) {
+      conditions.push("c.sport = ?");
+      params.push(filters.sport);
+    }
+
+    if (filters.surface_type !== undefined) {
+      conditions.push("c.surface_type = ?");
+      params.push(filters.surface_type);
+    }
+
+    if (filters.is_indoor !== undefined) {
+      conditions.push("c.is_indoor = ?");
+      params.push(filters.is_indoor);
+    }
+
+    const whereClause = conditions.length > 0 ? ` WHERE ${conditions.join(" AND ")}` : "";
     const sql = `SELECT c.*, cl.name as club_name, cl.address, cl.city, cl.logo_url
             FROM courts c
-            JOIN clubs cl ON c.club_id = cl.id`;
-    return pool.execute(sql);
+            JOIN clubs cl ON c.club_id = cl.id${whereClause}`;
+    return pool.execute(sql, params);
   },
 
   getById: (id) => {
@@ -65,7 +85,7 @@ const Court = {
 
   update: (id, data) => {
     const sql = `UPDATE courts 
-        SET name = ?, surface_type = ?, sport = ?, price_60 = ?, price_90 = ?, price_120 = ?, min_unit_min = ?, image_url = ?, description = ?
+        SET name = ?, surface_type = ?, sport = ?, price_60 = ?, price_90 = ?, price_120 = ?, min_unit_min = ?, image_url = ?, description = ?, is_indoor = ?
         WHERE id = ?`;
     return pool.execute(sql, [
       data.name,
@@ -77,6 +97,7 @@ const Court = {
       data.min_unit_min,
       data.image_url,
       data.description,
+      data.is_indoor,
       id,
     ]);
   },

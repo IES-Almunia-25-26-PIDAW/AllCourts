@@ -52,6 +52,7 @@ export interface Court {
   min_unit_min: number;
   image_url: string;
   description: string;
+  is_indoor: boolean;
   created_at?: string;
 }
 
@@ -73,6 +74,7 @@ export interface CreateCourtDTO {
   min_unit_min?: number;
   image_url: string;
   description: string;
+  is_indoor?: boolean;
 }
 
 export interface UpdateCourtDTO {
@@ -85,4 +87,5 @@ export interface UpdateCourtDTO {
   min_unit_min?: number;
   image_url?: string;
   description?: string;
+  is_indoor?: boolean;
 }
