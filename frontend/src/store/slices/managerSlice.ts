@@ -65,7 +65,8 @@ export const createClub = createAsyncThunk('manager/createClub', async (data: Cr
 export const updateClub = createAsyncThunk(
   'manager/updateClub',
   async ({ id, data }: { id: number; data: UpdateClubDTO }) => {
-    return clubApi.updateClub(id, data);
+    await clubApi.updateClub(id, data);
+    return clubApi.getClubById(id);
   }
 );
 
@@ -82,7 +83,8 @@ export const createCourt = createAsyncThunk('manager/createCourt', async (data: 
 export const updateCourt = createAsyncThunk(
   'manager/updateCourt',
   async ({ id, data }: { id: number; data: UpdateCourtDTO }) => {
-    return courtApi.updateCourt(id, data);
+    await courtApi.updateCourt(id, data);
+    return courtApi.getCourtById(id);
   }
 );
 
