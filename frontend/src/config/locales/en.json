@@ -224,6 +224,16 @@
     "ctatext": "Join hundreds of clubs that already trust AllCourts. Try it free for 14 days.",
     "cta1btn": "View Plans"
   },
+  "subscription": {
+    "choosePlan": "Choose your plan",
+    "monthly": "/month",
+    "selectPlan": "Select Plan",
+    "payNow": "Pay Now",
+    "back": "Back",
+    "processing": "Processing...",
+    "success": "Subscription activated!",
+    "error": "Payment failed. Please try again."
+  },
   "home": {
     "title": "Find courts and players near you",
     "subtitle": "Book sports courts anywhere. Connect whenever you want, wherever you want.",

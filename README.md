@@ -290,7 +290,16 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 
 > Debes tener esta terminal abierta siempre que quieras probar pagos en local.
 
-### 5. Tarjetas de prueba
+### 5. Configurar los Payment Links
+
+Si estás usando enlaces de pago de Stripe para la suscripción de managers, edita cada Payment Link en el panel de Stripe y configura el comportamiento tras el pago:
+
+- **After payment** → **Redirect to a URL**
+- URL recomendada en local: `http://localhost:3000/manager`
+
+Con eso, al terminar el pago Stripe devuelve al usuario a AllCourts. La activación de la suscripción no depende de ese retorno: la hace el webhook cuando Stripe envía `checkout.session.completed` o `customer.subscription.updated`.
+
+### 6. Tarjetas de prueba
 
 Usa estas tarjetas en el formulario de pago para simular distintos escenarios:
 
@@ -302,7 +311,7 @@ Usa estas tarjetas en el formulario de pago para simular distintos escenarios:
 
 Fecha de expiración: cualquiera futura. CVV: cualquier 3 dígitos. CP: cualquier 5 dígitos.
 
-### 6. Pasar a producción
+### 7. Pasar a producción
 
 Cuando quieras cobros reales:
 

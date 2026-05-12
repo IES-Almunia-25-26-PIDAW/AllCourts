@@ -184,9 +184,43 @@ const sendBookingCancellationEmail = (user, booking) => {
   });
 };
 
+/**
+ * Envía el correo de activación de la suscripción del manager.
+ *
+ * @param {object} user Usuario destinatario.
+ * @param {string} planName Nombre legible del plan contratado.
+ * @param {object} subscription Datos básicos de la suscripción.
+ * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
+ */
+const sendSubscriptionActivationEmail = (user, planName, subscription) => {
+  const subscriptionStart = subscription.subscription_start || subscription.start_date || null;
+  const subscriptionEnd = subscription.subscription_end || subscription.current_period_end || null;
+
+  return transporter.sendMail({
+    from: `"AllCourts" <${process.env.MAIL_FROM}>`,
+    to: user.email,
+    subject: "Tu suscripción de manager está activa – AllCourts",
+    html: buildEmailTemplate(
+      "Suscripción activada",
+      `
+        <p style="margin:0 0 18px;">Hola ${user.name}, ya tienes la suscripción de manager activa.</p>
+        <div style="margin:0 0 18px;padding:16px;border-radius:10px;background-color:#f8fbff;border:1px solid #dbe7ff;box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);">
+          <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Plan:</strong> ${planName || "Manager"}</p>
+          ${subscriptionStart ? `<p style="margin:0 0 8px;"><strong style="color:#0f172a;">Inicio:</strong> ${subscriptionStart}</p>` : ""}
+          ${subscriptionEnd ? `<p style="margin:0;"><strong style="color:#0f172a;">Renovación:</strong> ${subscriptionEnd}</p>` : ""}
+        </div>
+        <p style="margin:0;text-align:center;">
+          <a href="${process.env.APP_URL}/manager" style="display:inline-block;background-color:#0059ff;color:#ffffff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;box-shadow:0 8px 16px rgba(0,89,255,0.20);">Ir al panel</a>
+        </p>
+      `
+    ),
+  });
+};
+
 module.exports = {
   sendVerificationEmail,
   sendPasswordResetEmail,
   sendBookingConfirmationEmail,
   sendBookingCancellationEmail,
+  sendSubscriptionActivationEmail,
 };

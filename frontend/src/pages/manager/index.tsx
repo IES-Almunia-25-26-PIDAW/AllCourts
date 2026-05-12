@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { deleteClub, deleteCourt } from '@/store/slices/managerSlice';
 import type { Club } from '@/types/club';
 import type { Court } from '@/types/court';
+import Link from 'next/link';
 import { useState } from 'react';
 import styles from './index.module.scss';
 
@@ -46,8 +47,13 @@ export default function ManagerPage() {
         </div>
         <div>
           {manager ? (
-            <div className={`${styles.badge} ${manager.subscription_active ? styles.active : styles.inactive}`}>
-              {manager.subscription_active ? 'Suscripción activa' : 'Suscripción inactiva'}
+            <div className={styles.headerActions}>
+              <div className={`${styles.badge} ${manager.subscription_active ? styles.active : styles.inactive}`}>
+                {manager.subscription_active ? 'Suscripción activa' : 'Suscripción inactiva'}
+              </div>
+              <Link href="/subscription" className={styles.subscriptionLink}>
+                {manager.subscription_active ? 'Gestionar suscripción' : 'Activar suscripción'}
+              </Link>
             </div>
           ) : (
             <div className={styles.badge + ' ' + styles.inactive}>Sin perfil</div>
@@ -77,7 +83,6 @@ export default function ManagerPage() {
           </div>
 
           <div className={styles.section}>
-            //! Añadir traducciones
             <div className={styles.sectionHeader}>
               <span className={styles.sectionTitle}>Mis Clubs</span>
               <button className={styles.btnPrimary} onClick={() => setClubModal({ open: true })} type="button">

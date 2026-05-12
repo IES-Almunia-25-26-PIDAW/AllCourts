@@ -10,7 +10,7 @@ import Footer from "@/components/layouts/Footer";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import LanguageDetector from "@/components/ui/LanguageDetector";
 import store from "@/store";
-import { setAuth, clearAuth } from "@/store/slices/authSlice";
+import { setAuth, clearAuth, setAuthLoading } from "@/store/slices/authSlice";
 import { getCurrentUser } from "@/api/authApi";
 //#endregion
 
@@ -45,12 +45,16 @@ import { getCurrentUser } from "@/api/authApi";
 //#region FUNCTIONS
 export default function App({ Component, pageProps }: AppProps) {
 	useEffect(() => {
+		store.dispatch(setAuthLoading(true));
 		getCurrentUser()
 			.then((user) => {
 				store.dispatch(setAuth(user));
 			})
 			.catch(() => {
 				store.dispatch(clearAuth());
+			})
+			.finally(() => {
+				store.dispatch(setAuthLoading(false));
 			});
 	}, []);
 
