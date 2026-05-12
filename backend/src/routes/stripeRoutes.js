@@ -1,6 +1,7 @@
 const express = require("express");
 const stripeController = require("../controllers/stripeController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 /**
  * @module stripeRouter
@@ -24,6 +25,21 @@ router.post(
 	express.json(), 
 	authMiddleware, 
 	stripeController.createPaymentIntent,
+);
+
+router.post(
+	"/create-subscription",
+	express.json(),
+	authMiddleware,
+	roleMiddleware("manager"),
+	stripeController.createSubscription,
+);
+
+router.get(
+	"/subscription-status",
+	authMiddleware,
+	roleMiddleware("manager"),
+	stripeController.getSubscriptionStatus,
 );
 
 router.post(

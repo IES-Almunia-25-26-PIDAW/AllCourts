@@ -16,6 +16,16 @@ interface PaymentIntentResponse {
 	amount: number;
 }
 
+interface SubscriptionResponse {
+	clientSecret: string;
+	subscriptionId: string;
+}
+
+interface SubscriptionStatusResponse {
+	status: string;
+	plan: string | null;
+}
+
 /**
  * Crea un PaymentIntent asociado a una reserva.
  *
@@ -29,4 +39,28 @@ export async function createPaymentIntent(
 		method: "POST",
 		body: JSON.stringify({ bookingId }),
 	});
+}
+
+/**
+ * Crea una suscripción de Stripe asociada al plan seleccionado.
+ *
+ * @param priceId Identificador del precio en Stripe.
+ * @returns {Promise<SubscriptionResponse>} Datos necesarios para confirmar el pago.
+ */
+export async function createSubscription(
+	priceId: string,
+): Promise<SubscriptionResponse> {
+	return request<SubscriptionResponse>("/stripe/create-subscription", {
+		method: "POST",
+		body: JSON.stringify({ priceId }),
+	});
+}
+
+/**
+ * Obtiene el estado de la suscripción del manager autenticado.
+ *
+ * @returns {Promise<SubscriptionStatusResponse>} Estado y plan activo.
+ */
+export async function getSubscriptionStatus(): Promise<SubscriptionStatusResponse> {
+	return request<SubscriptionStatusResponse>("/stripe/subscription-status");
 }

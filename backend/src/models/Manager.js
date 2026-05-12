@@ -54,6 +54,14 @@ const Manager = {
     return pool.execute(sql, [userId]);
   },
 
+  getByEmail: (email) => {
+    const sql = `SELECT m.*, u.name, u.email, u.phone 
+        FROM managers m 
+        JOIN users u ON m.id = u.id 
+        WHERE u.email = ?`;
+    return pool.execute(sql, [email]);
+  },
+
   updateSubscription: (id, subscriptionData) => {
     const sql = `UPDATE managers 
         SET subscription_active = ?, subscription_start = ?, subscription_end = ? 
@@ -62,6 +70,21 @@ const Manager = {
       subscriptionData.subscription_active,
       subscriptionData.subscription_start,
       subscriptionData.subscription_end,
+      id,
+    ]);
+  },
+  
+  updateStripeSubscriptionData: (
+    id,
+    { stripeCustomerId, stripeSubscriptionId, subscriptionStatus },
+  ) => {
+    const sql = `UPDATE managers 
+        SET stripe_customer_id = ?, stripe_subscription_id = ?, subscription_status = ? 
+        WHERE id = ?`;
+    return pool.execute(sql, [
+      stripeCustomerId,
+      stripeSubscriptionId,
+      subscriptionStatus,
       id,
     ]);
   },

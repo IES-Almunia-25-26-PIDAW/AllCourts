@@ -224,6 +224,16 @@
     "ctatext": "Únete a cientos de clubes que ya confían en AllCourts. Prueba gratis durante 14 días.",
     "cta1btn": "Ver Planes"
   },
+  "subscription": {
+    "choosePlan": "Elige tu plan",
+    "monthly": "/mes",
+    "selectPlan": "Seleccionar Plan",
+    "payNow": "Pagar ahora",
+    "back": "Volver",
+    "processing": "Procesando...",
+    "success": "¡Suscripción activada!",
+    "error": "Pago fallido. Por favor inténtalo de nuevo."
+  },
   "home": {
     "title": "Encuentra canchas y jugadores cerca de ti",
     "subtitle": "Reserva canchas deportivas en cualquier lugar. Conecta cuando quieras, donde quieras",
