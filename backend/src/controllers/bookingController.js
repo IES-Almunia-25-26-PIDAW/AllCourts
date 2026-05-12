@@ -1,6 +1,7 @@
 const Booking = require("../models/Booking");
 const Court = require("../models/Court");
 const CourtSchedule = require("../models/CourtSchedule");
+const { sendBookingCancellationEmail } = require("../services/emailService");
 
 /**
  * @module bookingController
@@ -398,6 +399,21 @@ const bookingController = {
       );
       if (result.affectedRows === 0)
         return res.status(404).json({ message: "Booking not found" });
+
+      const [rows] = await Booking.getById(req.params.id);
+      const booking = rows[0];
+      const user = {
+        ...req.user,
+        email: req.user?.email || booking?.user_email,
+        name: req.user?.name || booking?.user_name,
+      };
+
+      try {
+        await sendBookingCancellationEmail(user, booking);
+      } catch (emailErr) {
+        console.error("Error sending booking cancellation email:", emailErr);
+      }
+
       res.json({ message: "Booking cancelled successfully" });
     } catch (err) {
       next(err);

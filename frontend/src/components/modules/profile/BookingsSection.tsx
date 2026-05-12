@@ -13,11 +13,12 @@ type BookingsSectionProps = {
   error: string | null;
   emptyMessage: string;
   variant: "active" | "past";
+  onBookingStatusChange?: (bookingId: number, updates: Partial<Booking>) => void;
 };
 
 const INITIAL_DISPLAY_COUNT = 2;
 
-export default function BookingsSection({ title, bookings, loading, error, emptyMessage, variant }: BookingsSectionProps) {
+export default function BookingsSection({ title, bookings, loading, error, emptyMessage, variant, onBookingStatusChange }: BookingsSectionProps) {
   const { i18n } = useTranslation();
   const locale = i18n.language.startsWith("en") ? "en-US" : "es-ES";
   const [expanded, setExpanded] = useState(false);
@@ -35,6 +36,10 @@ export default function BookingsSection({ title, bookings, loading, error, empty
     setCancelErrorId(null);
     try {
       await cancelBooking(bookingId, cancelReasonMap[bookingId]);
+      onBookingStatusChange?.(bookingId, {
+        status: "cancelled",
+        cancel_reason: cancelReasonMap[bookingId] || undefined,
+      });
       setLocalBookings(prev =>
         prev.map(b =>
           b.id === bookingId
