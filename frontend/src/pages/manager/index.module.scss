@@ -162,3 +162,18 @@
     background: #fecaca;
   }
 }
+
+.btnSchedule {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-right: 6px;
+
+  &:hover {
+    background: #dbeafe;
+  }
+}

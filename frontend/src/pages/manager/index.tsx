@@ -1,6 +1,7 @@
 import DashboardCard from '@/components/DashboardCard';
 import ClubFormModal from '@/components/modules/manager/ClubFormModal';
 import CourtFormModal from '@/components/modules/manager/CourtFormModal';
+import CourtScheduleModal from '@/components/modules/manager/CourtScheduleModal';
 import { useManagerDashboard } from '@/hooks/useManagerDashboard';
 import { useAppDispatch } from '@/store/hooks';
 import { deleteClub, deleteCourt } from '@/store/slices/managerSlice';
@@ -18,6 +19,7 @@ export default function ManagerPage() {
   const dispatch = useAppDispatch();
   const [clubModal, setClubModal] = useState<{ open: boolean; club?: Club }>({ open: false });
   const [courtModal, setCourtModal] = useState<{ open: boolean; court?: Court }>({ open: false });
+  const [scheduleModal, setScheduleModal] = useState<{ open: boolean; court?: Court }>({ open: false });
 
   const handleDeleteClub = (id: number) => {
     if (window.confirm('¿Seguro que quieres eliminar este club? También se eliminarán sus pistas.')) {
@@ -147,6 +149,13 @@ export default function ManagerPage() {
                       >
                         Editar
                       </button>
+                      <button
+                        className={styles.btnSchedule}
+                        onClick={() => setScheduleModal({ open: true, court: p })}
+                        type="button"
+                      >
+                        Horario
+                      </button>
                       <button className={styles.btnDelete} onClick={() => handleDeleteCourt(p.id)} type="button">
                         Eliminar
                       </button>
@@ -199,6 +208,13 @@ export default function ManagerPage() {
             court={courtModal.court}
             clubs={clubs}
           />
+          {scheduleModal.court && (
+            <CourtScheduleModal
+              isOpen={scheduleModal.open}
+              onClose={() => setScheduleModal({ open: false })}
+              court={scheduleModal.court}
+            />
+          )}
         </>
       )}
     </div>

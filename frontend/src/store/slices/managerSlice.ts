@@ -1,10 +1,12 @@
 import * as clubApi from '@/api/clubApi';
 import * as courtApi from '@/api/courtApi';
+import * as courtScheduleApi from '@/api/courtScheduleApi';
 import * as managerApi from '@/api/managerApi';
 import type { RootState } from '@/store';
 import type { Booking } from '@/types/booking';
 import type { Club, CreateClubDTO, UpdateClubDTO } from '@/types/club';
 import type { Court, CreateCourtDTO, UpdateCourtDTO } from '@/types/court';
+import type { CourtSchedule, DayOfWeek } from '@/types/courtSchedule';
 import type { Manager, ManagerStats, UpdateManagerDTO } from '@/types/manager';
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
@@ -14,6 +16,7 @@ type ManagerState = {
   courts: Court[];
   clubs: Club[];
   bookings: Booking[];
+  schedulesByCourtId: Record<number, CourtSchedule[]>;
   loading: boolean;
   error: string | null;
 };
@@ -24,6 +27,7 @@ const initialState: ManagerState = {
   courts: [],
   clubs: [],
   bookings: [],
+  schedulesByCourtId: {},
   loading: false,
   error: null
 };
@@ -92,6 +96,26 @@ export const deleteCourt = createAsyncThunk('manager/deleteCourt', async (id: nu
   await courtApi.deleteCourt(id);
   return id;
 });
+
+export const fetchCourtSchedules = createAsyncThunk('manager/fetchCourtSchedules', async (courtId: number) => {
+  const schedules = await courtScheduleApi.getCourtSchedulesByCourtId(courtId);
+  return { courtId, schedules };
+});
+
+export const saveCourtSchedules = createAsyncThunk(
+  'manager/saveCourtSchedules',
+  async ({
+    courtId,
+    schedules
+  }: {
+    courtId: number;
+    schedules: { day_of_week: DayOfWeek; opening_time: string; closing_time: string; is_closed: boolean }[];
+  }) => {
+    await courtScheduleApi.upsertBulkCourtSchedules(courtId, schedules);
+    const updated = await courtScheduleApi.getCourtSchedulesByCourtId(courtId);
+    return { courtId, schedules: updated };
+  }
+);
 
 const managerSlice = createSlice({
   name: 'manager',
@@ -271,6 +295,22 @@ const managerSlice = createSlice({
       .addCase(deleteCourt.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message ?? 'Error al eliminar pista';
+      })
+
+      .addCase(fetchCourtSchedules.fulfilled, (state, action) => {
+        state.schedulesByCourtId[action.payload.courtId] = action.payload.schedules;
+      })
+      .addCase(saveCourtSchedules.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(saveCourtSchedules.fulfilled, (state, action) => {
+        state.schedulesByCourtId[action.payload.courtId] = action.payload.schedules;
+        state.loading = false;
+      })
+      .addCase(saveCourtSchedules.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Error al guardar horarios';
       });
   }
 });
@@ -282,6 +322,7 @@ export const selectManagerStats = (state: RootState) => state.manager.stats;
 export const selectManagerCourts = (state: RootState) => state.manager.courts;
 export const selectManagerClubs = (state: RootState) => state.manager.clubs;
 export const selectManagerBookings = (state: RootState) => state.manager.bookings;
+export const selectSchedulesByCourtId = (state: RootState) => state.manager.schedulesByCourtId;
 export const selectManagerLoading = (state: RootState) => state.manager.loading;
 export const selectManagerError = (state: RootState) => state.manager.error;
 
