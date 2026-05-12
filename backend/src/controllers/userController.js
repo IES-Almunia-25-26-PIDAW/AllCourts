@@ -1,7 +1,27 @@
 const bcrypt = require("bcrypt");
+const fs = require("fs/promises");
+const path = require("path");
 const User = require("../models/User");
 
 const SALT_ROUNDS = 10;
+const AVATAR_PATH_PREFIX = "/uploads/avatars/";
+const AVATAR_DIR = path.resolve(__dirname, "../../uploads/avatars");
+
+const getLocalAvatarPath = (avatarUrl, baseUrl) => {
+    if (typeof avatarUrl !== "string" || avatarUrl.length === 0) {
+        return null;
+    }
+
+    if (avatarUrl.startsWith(`${baseUrl}${AVATAR_PATH_PREFIX}`)) {
+        return path.join(AVATAR_DIR, path.basename(avatarUrl));
+    }
+
+    if (avatarUrl.startsWith(AVATAR_PATH_PREFIX)) {
+        return path.join(AVATAR_DIR, path.basename(avatarUrl));
+    }
+
+    return null;
+};
 
 /**
  * @module userController
@@ -75,6 +95,7 @@ const userController = {
             const host = req.get("host");
             const protocol = req.protocol || "http";
             const baseUrl = `${protocol}://${host}`;
+            const previousAvatarPath = file ? getLocalAvatarPath(current.avatar_url, baseUrl) : null;
             const avatar_url = file ? `${baseUrl}/uploads/avatars/${file.filename}` : (req.body.avatar_url || current.avatar_url);
 
             const newData = {
@@ -87,6 +108,14 @@ const userController = {
             const [result] = await User.update(req.params.id, newData);
             if (result.affectedRows === 0)
                 return res.status(404).json({ message: "User not found" });
+
+            if (previousAvatarPath && previousAvatarPath !== path.join(AVATAR_DIR, file.filename)) {
+                await fs.unlink(previousAvatarPath).catch((error) => {
+                    if (error?.code !== "ENOENT") {
+                        throw error;
+                    }
+                });
+            }
 
             const [rows] = await User.getById(req.params.id);
             res.json(rows[0]);
