@@ -114,3 +114,51 @@
   color: #6b7280;
   font-size: 0.95rem;
 }
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.btnPrimary {
+  background: #0059ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background: #0047cc;
+  }
+}
+
+.btnEdit {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-right: 6px;
+  &:hover {
+    background: #e5e7eb;
+  }
+}
+
+.btnDelete {
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  &:hover {
+    background: #fecaca;
+  }
+}
