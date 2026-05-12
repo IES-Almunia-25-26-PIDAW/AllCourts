@@ -34,7 +34,7 @@ const Booking = {
     ]);
   },
 
-  getAll: () => {
+  getAll: (managerId) => {
     const sql = `SELECT b.*, 
             u.name as user_name, u.email as user_email,
             c.name as court_name, cl.address as court_address, cl.city as court_city
@@ -42,8 +42,9 @@ const Booking = {
             JOIN users u ON b.user_id = u.id
             JOIN courts c ON b.court_id = c.id
             JOIN clubs cl ON c.club_id = cl.id
+            WHERE cl.manager_id = ?
             ORDER BY b.date DESC, b.start_time DESC`;
-    return pool.execute(sql);
+    return pool.execute(sql, [managerId]);
   },
 
   getById: (id) => {

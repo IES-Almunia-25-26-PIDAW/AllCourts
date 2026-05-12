@@ -290,14 +290,14 @@ const bookingController = {
   },
 
   /**
-   * Devuelve todas las reservas con datos de usuario, pista y club (JOIN).
+   * Devuelve las reservas visibles para el manager autenticado con datos de usuario, pista y club (JOIN).
    * Ordenadas por fecha y hora descendente.
    *
    * Response 200: array de reservas
    */
   getAll: async (req, res, next) => {
     try {
-      const [rows] = await Booking.getAll();
+      const [rows] = await Booking.getAll(req.user.id);
       res.json(rows);
     } catch (err) {
       next(err);
