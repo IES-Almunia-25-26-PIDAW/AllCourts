@@ -4,6 +4,7 @@ const { body } = require('express-validator');
 const authController = require('../controllers/authController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const handleValidation = require('../middlewares/handleValidation');
+const { loginLimiter, registerLimiter, forgotPasswordLimiter } = require('../middlewares/rateLimiter');
 //#endregion
 
 /**
@@ -20,6 +21,7 @@ const router = express.Router();
 
 router.post(
   '/register',
+  registerLimiter,
   body('name')
     .notEmpty()
     .withMessage('El nombre es obligatorio')
@@ -44,6 +46,7 @@ router.post(
 );
 router.post(
   '/login',
+  loginLimiter,
   body('identifier').notEmpty().withMessage('El identificador es obligatorio').trim(),
   body('password').notEmpty().withMessage('La contraseña es obligatoria'),
   handleValidation,
@@ -51,6 +54,7 @@ router.post(
 );
 router.post(
   '/forgot-password',
+  forgotPasswordLimiter,
   body('email').isEmail().withMessage('El email no es válido').normalizeEmail(),
   handleValidation,
   authController.forgotPassword
