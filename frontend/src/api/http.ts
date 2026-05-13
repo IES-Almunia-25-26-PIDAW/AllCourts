@@ -9,6 +9,10 @@ const API_URL = getApiUrl();
 //#region TYPES
 type ApiErrorResponse = {
   message?: string;
+  errors?: Array<{
+    field: string;
+    message: string;
+  }>;
 };
 
 let refreshPromise: Promise<boolean> | null = null;
@@ -33,13 +37,11 @@ let refreshPromise: Promise<boolean> | null = null;
 
 //#region FUNCTIONS
 async function readJson<T>(response: Response): Promise<T> {
-  const contentType = response.headers.get("content-type") || "";
-
-  if (!contentType.includes("application/json")) {
+  try {
+    return (await response.json()) as T;
+  } catch (e) {
     return {} as T;
   }
-
-  return (await response.json()) as T;
 }
 
 /**
@@ -109,10 +111,21 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   if (!response.ok) {
-    const message =
-      typeof payload === "object" && payload !== null && "message" in payload
-        ? (payload as ApiErrorResponse).message
-        : "Request failed";
+    const errorPayload = payload as ApiErrorResponse;
+    let message: string | null = null;
+
+    if (response.status === 422) {
+      const list = Array.isArray(errorPayload?.errors) ? errorPayload.errors : undefined;
+      if (list && list.length > 0) {
+        message = list.map((error) => `El campo ${error.field} no cumple los requisitos: ${error.message}`).join('. ');
+      }
+    }
+
+    if (!message) {
+      message = typeof payload === 'object' && payload !== null && 'message' in payload ? errorPayload.message || null : null;
+    }
+
+    if (!message) message = 'Request failed';
 
     throw new Error(message || "Request failed");
   }
