@@ -1,5 +1,5 @@
 //#region MODULES
-import { getApiUrl } from "@/utils/runtimeConfig";
+import { getApiUrl } from '@/utils/runtimeConfig';
 //#endregion
 
 //#region CONSTANTS
@@ -53,11 +53,11 @@ async function readJson<T>(response: Response): Promise<T> {
 async function refreshSession(): Promise<boolean> {
   if (!refreshPromise) {
     refreshPromise = fetch(`${API_URL}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
+      method: 'POST',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
-      },
+        'Content-Type': 'application/json'
+      }
     })
       .then((response) => response.ok)
       .catch(() => false)
@@ -80,16 +80,14 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const execute = async () => {
     const response = await fetch(`${API_URL}${path}`, {
       ...init,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
-        ...(init?.headers || {}),
-      },
+        'Content-Type': 'application/json',
+        ...(init?.headers || {})
+      }
     });
 
-    const payload = (await readJson<ApiErrorResponse & T>(response)) as
-      | ApiErrorResponse
-      | T;
+    const payload = (await readJson<ApiErrorResponse & T>(response)) as ApiErrorResponse | T;
 
     return { response, payload };
   };
@@ -97,11 +95,11 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let { response, payload } = await execute();
 
   const skipRefresh =
-    path.startsWith("/auth/login") ||
-    path.startsWith("/auth/register") ||
-    path.startsWith("/auth/logout") ||
-    path.startsWith("/auth/refresh") ||
-    path.startsWith("/auth/verify");
+    path.startsWith('/auth/login') ||
+    path.startsWith('/auth/register') ||
+    path.startsWith('/auth/logout') ||
+    path.startsWith('/auth/refresh') ||
+    path.startsWith('/auth/verify');
 
   if (response.status === 401 && !skipRefresh) {
     const refreshed = await refreshSession();
@@ -122,12 +120,13 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
     }
 
     if (!message) {
-      message = typeof payload === 'object' && payload !== null && 'message' in payload ? errorPayload.message || null : null;
+      message =
+        typeof payload === 'object' && payload !== null && 'message' in payload ? errorPayload.message || null : null;
     }
 
     if (!message) message = 'Request failed';
 
-    throw new Error(message || "Request failed");
+    throw new Error(message || 'Request failed');
   }
 
   return payload as T;

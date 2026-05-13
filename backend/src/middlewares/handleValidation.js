@@ -10,8 +10,8 @@ function handleValidation(req, res, next) {
   return res.status(422).json({
     errors: result.array().map((err) => ({
       field: err.path,
-      message: err.msg,
-    })),
+      message: err.msg
+    }))
   });
 }
 
