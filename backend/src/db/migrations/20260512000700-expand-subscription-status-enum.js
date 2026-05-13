@@ -13,7 +13,7 @@ exports.setup = function (options, seedLink) {
 exports.up = function (db) {
 	return db.runSql(`
     ALTER TABLE managers
-    MODIFY COLUMN subscription_status ENUM('inactive', 'incomplete', 'active', 'past_due', 'canceled', 'incomplete_expired', 'trialing', 'unpaid', 'paused') NOT NULL DEFAULT 'inactive'
+		ADD COLUMN subscription_status ENUM('inactive', 'incomplete', 'active', 'past_due', 'canceled', 'incomplete_expired', 'trialing', 'unpaid', 'paused') NOT NULL DEFAULT 'inactive'
   `);
 };
 

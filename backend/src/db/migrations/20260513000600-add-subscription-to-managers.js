@@ -14,15 +14,13 @@ exports.up = function (db) {
 	return db.runSql(`
     ALTER TABLE managers
     ADD COLUMN stripe_customer_id VARCHAR(255) NULL,
-    ADD COLUMN stripe_subscription_id VARCHAR(255) NULL,
-    ADD COLUMN subscription_status ENUM('inactive', 'active', 'past_due', 'canceled') NOT NULL DEFAULT 'inactive'
+    ADD COLUMN stripe_subscription_id VARCHAR(255) NULL
   `);
 };
 
 exports.down = function (db) {
 	return db.runSql(`
     ALTER TABLE managers
-    DROP COLUMN subscription_status,
     DROP COLUMN stripe_subscription_id,
     DROP COLUMN stripe_customer_id
   `);
