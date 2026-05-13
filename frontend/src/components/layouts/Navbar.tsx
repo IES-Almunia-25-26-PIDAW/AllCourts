@@ -1,9 +1,9 @@
+import { useAuth } from '@/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.scss';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -44,14 +44,14 @@ export default function Navbar() {
             {isLogged ? (
               <>
                 <Link href="/clubs">
-                  <button className={styles.navButton}>Clubs</button>
+                  <button className={styles.navButton}>{t('nav.clubs')}</button>
                 </Link>
                 <Link href="/courts">
-                  <button className={styles.navButton}>Reservar</button>
+                  <button className={styles.navButton}>{t('nav.reserve')}</button>
                 </Link>
                 {user?.role === 'manager' ? (
                   <Link href="/manager">
-                    <button className={styles.navButton}>Manager</button>
+                    <button className={styles.navButton}>{t('nav.manager')}</button>
                   </Link>
                 ) : null}
                 <Link href="/profile">

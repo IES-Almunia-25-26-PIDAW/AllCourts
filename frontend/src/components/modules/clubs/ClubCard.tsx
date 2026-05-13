@@ -1,8 +1,9 @@
 //#region MODULES
-import Image from "next/image";
-import Link from "next/link";
-import type { ClubWithManager } from "@/types/club";
-import styles from "./ClubCard.module.scss";
+import type { ClubWithManager } from '@/types/club';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import styles from './ClubCard.module.scss';
 //#endregion
 
 /**
@@ -27,21 +28,18 @@ interface ClubCardProps {
   club: ClubWithManager;
   href?: string;
   courtCount?: number;
-  variant?: "default" | "detail";
+  variant?: 'default' | 'detail';
 }
 //#endregion
 
 //#region FUNCTIONS
-const ClubCard = ({ club, href, courtCount, variant = "default" }: ClubCardProps) => {
-  const coverImage = club.logo_url || "/logoallcourts.png";
-  const description = club.description || "Sin descripción disponible.";
+const ClubCard = ({ club, href, courtCount, variant = 'default' }: ClubCardProps) => {
+  const { t } = useTranslation();
+  const coverImage = club.logo_url || '/logoallcourts.png';
+  const description = club.description || t('clubs.no_description');
   const CardContent = (
-    <div
-      className={`${styles.clubCard} ${variant === "detail" ? styles.detailCard : ""}`}
-    >
-      <div
-        className={`${styles.imageContainer} ${variant === "detail" ? styles.detailImageContainer : ""}`}
-      >
+    <div className={`${styles.clubCard} ${variant === 'detail' ? styles.detailCard : ''}`}>
+      <div className={`${styles.imageContainer} ${variant === 'detail' ? styles.detailImageContainer : ''}`}>
         <Image
           src={coverImage}
           alt={club.name}
@@ -49,28 +47,22 @@ const ClubCard = ({ club, href, courtCount, variant = "default" }: ClubCardProps
           className={styles.image}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        {variant !== "detail" && (
-          <span className={styles.cityBadge}>{club.city || "Sin ciudad"}</span>
-        )}
+        {variant !== 'detail' && <span className={styles.cityBadge}>{club.city || t('clubs.no_city')}</span>}
       </div>
 
       <div className={styles.body}>
         <p className={styles.name}>{club.name}</p>
 
-        <p className={styles.desc}>
-          {description.length > 90
-            ? `${description.slice(0, 90)}...`
-            : description}
-        </p>
+        <p className={styles.desc}>{description.length > 90 ? `${description.slice(0, 90)}...` : description}</p>
 
         <div className={styles.footer}>
-          <span className={styles.address}>
-            {club.address || "Sin dirección"}
-          </span>
+          <span className={styles.address}>{club.address || t('clubs.no_address')}</span>
 
           {courtCount !== undefined && (
             <span className={styles.count}>
-              {courtCount} {courtCount === 1 ? "pista" : "pistas"}
+              {courtCount === 1
+                ? t('clubs.courts_one', { count: courtCount })
+                : t('clubs.courts_other', { count: courtCount })}
             </span>
           )}
         </div>

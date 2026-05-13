@@ -2,6 +2,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { createClub, updateClub } from '@/store/slices/managerSlice';
 import type { Club, CreateClubDTO, UpdateClubDTO } from '@/types/club';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './ClubFormModal.module.scss';
 
 type ClubFormModalProps = {
@@ -13,6 +14,7 @@ type ClubFormModalProps = {
 
 export default function ClubFormModal({ isOpen, onClose, club, managerId }: ClubFormModalProps) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -58,7 +60,7 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
       }
       onClose();
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'No se pudo guardar el club';
+      const message = error instanceof Error ? error.message : t('manager.club_form_error_save');
       setFormError(message);
     } finally {
       setSubmitting(false);
@@ -69,7 +71,9 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>{club ? 'Editar club' : 'Nuevo club'}</h2>
+          <h2 className={styles.modalTitle}>
+            {club ? t('manager.club_form_edit_title') : t('manager.club_form_new_title')}
+          </h2>
           <button className={styles.closeBtn} onClick={onClose} type="button">
             ✕
           </button>
@@ -78,7 +82,7 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="club-name">
-              Nombre
+              {t('manager.club_form_name')}
             </label>
             <input
               id="club-name"
@@ -92,7 +96,7 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="club-city">
-              Ciudad
+              {t('manager.club_form_city')}
             </label>
             <input
               id="club-city"
@@ -106,7 +110,7 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="club-address">
-              Dirección
+              {t('manager.club_form_address')}
             </label>
             <input
               id="club-address"
@@ -120,7 +124,7 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="club-logo">
-              URL del logo
+              {t('manager.club_form_logo')}
             </label>
             <input
               id="club-logo"
@@ -133,7 +137,7 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="club-description">
-              Descripción
+              {t('manager.club_form_description')}
             </label>
             <textarea
               id="club-description"
@@ -145,10 +149,10 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
 
           <div className={styles.modalFooter}>
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>
-              Cancelar
+              {t('manager.cancel')}
             </button>
             <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-              {submitting ? 'Guardando...' : club ? 'Guardar cambios' : 'Crear club'}
+              {submitting ? t('manager.saving') : club ? t('manager.club_form_save') : t('manager.club_form_create')}
             </button>
           </div>
         </form>

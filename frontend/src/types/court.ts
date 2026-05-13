@@ -1,43 +1,37 @@
-export type SurfaceType =
-  | "tierra_batida"
-  | "cesped_natural"
-  | "cesped_artificial"
-  | "dura"
-  | "arena"
-  | "parque";
+export type SurfaceType = 'tierra_batida' | 'cesped_natural' | 'cesped_artificial' | 'dura' | 'arena' | 'parque';
 
 export type Sport =
-  | "tenis"
-  | "padel"
-  | "pickleball"
-  | "baloncesto_3x3"
-  | "baloncesto_5x5"
-  | "futbol_5"
-  | "futbol_7"
-  | "futbol_11"
-  | "voley"
-  | "balonmano";
+  | 'tenis'
+  | 'padel'
+  | 'pickleball'
+  | 'baloncesto_3x3'
+  | 'baloncesto_5x5'
+  | 'futbol_5'
+  | 'futbol_7'
+  | 'futbol_11'
+  | 'voley'
+  | 'balonmano';
 
 export const SURFACE_LABELS: Record<SurfaceType, string> = {
-  tierra_batida: "Tierra batida",
-  cesped_natural: "Césped natural",
-  cesped_artificial: "Césped artificial",
-  dura: "Superficie dura",
-  arena: "Arena",
-  parque: "Parque",
+  tierra_batida: 'courts.surface_tierra_batida',
+  cesped_natural: 'courts.surface_cesped_natural',
+  cesped_artificial: 'courts.surface_cesped_artificial',
+  dura: 'courts.surface_dura',
+  arena: 'courts.surface_arena',
+  parque: 'courts.surface_parque'
 };
 
 export const SPORT_LABELS: Record<Sport, string> = {
-  tenis: "Tenis",
-  padel: "Pádel",
-  pickleball: "Pickleball",
-  baloncesto_3x3: "Baloncesto 3×3",
-  baloncesto_5x5: "Baloncesto 5×5",
-  futbol_5: "Fútbol 5",
-  futbol_7: "Fútbol 7",
-  futbol_11: "Fútbol 11",
-  voley: "Vóley",
-  balonmano: "Balonmano",
+  tenis: 'courts.sport_tenis',
+  padel: 'courts.sport_padel',
+  pickleball: 'courts.sport_pickleball',
+  baloncesto_3x3: 'courts.sport_baloncesto_3x3',
+  baloncesto_5x5: 'courts.sport_baloncesto_5x5',
+  futbol_5: 'courts.sport_futbol_5',
+  futbol_7: 'courts.sport_futbol_7',
+  futbol_11: 'courts.sport_futbol_11',
+  voley: 'courts.sport_voley',
+  balonmano: 'courts.sport_balonmano'
 };
 
 export interface Court {

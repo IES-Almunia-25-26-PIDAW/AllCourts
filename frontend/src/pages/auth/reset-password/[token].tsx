@@ -23,7 +23,7 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     if (typeof queryToken !== 'string' || !queryToken) {
-      setError('No se encontró el token de recuperación.');
+      setError(t('resetPassword.error_token_missing'));
       setLoading(false);
       return;
     }
@@ -50,7 +50,7 @@ export default function ResetPasswordPage() {
       await resetPassword(token, password);
       setMessage(t('resetPassword.success'));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo actualizar la contraseña.');
+      setError(err instanceof Error ? err.message : t('resetPassword.error_generic'));
     } finally {
       setSubmitting(false);
     }

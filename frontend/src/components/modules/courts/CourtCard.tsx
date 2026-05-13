@@ -1,10 +1,11 @@
 //#region MODULES
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Court, SURFACE_LABELS, SPORT_LABELS } from "@/types/court";
-import { formatPrice } from "@/utils/formatters";
-import styles from "./CourtCard.module.scss";
+import { Court, SPORT_LABELS, SURFACE_LABELS } from '@/types/court';
+import { formatPrice } from '@/utils/formatters';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import styles from './CourtCard.module.scss';
 //#endregion
 
 /**
@@ -34,22 +35,39 @@ interface CourtCardProps {
 
 //#region FUNCTIONS
 const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
+  const { t } = useTranslation();
   //#region VARIABLES
   // Calcula el precio principal a mostrar según la duración mínima reservable.
   const entryPrice =
-    court.min_unit_min <= 60
-      ? court.price_60
-      : court.min_unit_min <= 90
-        ? court.price_90
-        : court.price_120;
+    court.min_unit_min <= 60 ? court.price_60 : court.min_unit_min <= 90 ? court.price_90 : court.price_120;
 
   // Traduce la duración mínima a la etiqueta visible en la tarjeta.
   const entryLabel =
     court.min_unit_min <= 60
-      ? "60 min"
+      ? t('courts.duration_60')
       : court.min_unit_min <= 90
-        ? "90 min"
-        : "120 min";
+        ? t('courts.duration_90')
+        : t('courts.duration_120');
+  const sportLabels: Record<keyof typeof SPORT_LABELS, string> = {
+    tenis: t('courts.sport_tenis'),
+    padel: t('courts.sport_padel'),
+    pickleball: t('courts.sport_pickleball'),
+    baloncesto_3x3: t('courts.sport_baloncesto_3x3'),
+    baloncesto_5x5: t('courts.sport_baloncesto_5x5'),
+    futbol_5: t('courts.sport_futbol_5'),
+    futbol_7: t('courts.sport_futbol_7'),
+    futbol_11: t('courts.sport_futbol_11'),
+    voley: t('courts.sport_voley'),
+    balonmano: t('courts.sport_balonmano')
+  };
+  const surfaceLabels: Record<keyof typeof SURFACE_LABELS, string> = {
+    tierra_batida: t('courts.surface_tierra_batida'),
+    cesped_natural: t('courts.surface_cesped_natural'),
+    cesped_artificial: t('courts.surface_cesped_artificial'),
+    dura: t('courts.surface_dura'),
+    arena: t('courts.surface_arena'),
+    parque: t('courts.surface_parque')
+  };
   //#endregion
 
   return (
@@ -63,7 +81,7 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
             className={styles.image}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <span className={styles.sportBadge}>{SPORT_LABELS[court.sport]}</span>
+          <span className={styles.sportBadge}>{sportLabels[court.sport]}</span>
           <div className={styles.priceTag}>
             {formatPrice(entryPrice)}
             <span className={styles.priceLabel}>/{entryLabel}</span>
@@ -72,36 +90,28 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
 
         <div className={styles.body}>
           <p className={styles.name}>{court.name}</p>
-          <p className={styles.surface}>{SURFACE_LABELS[court.surface_type]}</p>
+          <p className={styles.surface}>{surfaceLabels[court.surface_type]}</p>
 
           <p className={styles.desc}>
-            {court.description.length > 80
-              ? `${court.description.slice(0, 80)}...`
-              : court.description}
+            {court.description.length > 80 ? `${court.description.slice(0, 80)}...` : court.description}
           </p>
 
           <div className={styles.prices}>
             <div className={styles.priceItem}>
-              <span className={styles.priceDur}>60 min</span>
-              <span className={styles.priceVal}>
-                {formatPrice(court.price_60)}
-              </span>
+              <span className={styles.priceDur}>{t('courts.duration_60')}</span>
+              <span className={styles.priceVal}>{formatPrice(court.price_60)}</span>
             </div>
             <div className={styles.priceItem}>
-              <span className={styles.priceDur}>90 min</span>
-              <span className={styles.priceVal}>
-                {formatPrice(court.price_90)}
-              </span>
+              <span className={styles.priceDur}>{t('courts.duration_90')}</span>
+              <span className={styles.priceVal}>{formatPrice(court.price_90)}</span>
             </div>
             <div className={styles.priceItem}>
-              <span className={styles.priceDur}>120 min</span>
-              <span className={styles.priceVal}>
-                {formatPrice(court.price_120)}
-              </span>
+              <span className={styles.priceDur}>{t('courts.duration_120')}</span>
+              <span className={styles.priceVal}>{formatPrice(court.price_120)}</span>
             </div>
           </div>
 
-          <span className={styles.bookBtn}>Reservar</span>
+          <span className={styles.bookBtn}>{t('courts.book')}</span>
         </div>
       </article>
     </Link>

@@ -26,12 +26,12 @@ export default function Login() {
 
   useEffect(() => {
     if (registered === '1') {
-      setNotice('Registro completado. Revisa tu correo para verificar la cuenta.');
+      setNotice(t('login.registered_notice'));
     }
   }, [registered]);
 
   useEffect(() => {
-    setShowResend(Boolean(error?.includes('Verifica tu correo')));
+    setShowResend(Boolean(error && /verif/i.test(error)));
   }, [error]);
 
   const handleResend = async () => {
