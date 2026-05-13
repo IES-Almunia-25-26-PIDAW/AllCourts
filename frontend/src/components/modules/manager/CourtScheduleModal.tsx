@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCourtSchedules, saveCourtSchedules, selectSchedulesByCourtId } from '@/store/slices/managerSlice';
 import type { Court } from '@/types/court';
-import { DAY_LABELS, type DayOfWeek } from '@/types/courtSchedule';
+import { DAY_KEYS, type DayOfWeek } from '@/types/courtSchedule';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './CourtScheduleModal.module.scss';
 
 type DaySchedule = {
@@ -27,6 +28,7 @@ type CourtScheduleModalProps = {
 };
 
 export default function CourtScheduleModal({ isOpen, onClose, court }: CourtScheduleModalProps) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const schedulesByCourtId = useAppSelector(selectSchedulesByCourtId);
   const existingSchedules = schedulesByCourtId[court.id] ?? [];
@@ -74,9 +76,9 @@ export default function CourtScheduleModal({ isOpen, onClose, court }: CourtSche
     setSuccessMsg(null);
     try {
       await dispatch(saveCourtSchedules({ courtId: court.id, schedules: rows })).unwrap();
-      setSuccessMsg('Horarios guardados correctamente');
+      setSuccessMsg(t('manager.schedule_saved'));
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'No se pudieron guardar los horarios');
+      setFormError(err instanceof Error ? err.message : t('manager.schedule_save_error'));
     } finally {
       setSubmitting(false);
     }
@@ -86,7 +88,7 @@ export default function CourtScheduleModal({ isOpen, onClose, court }: CourtSche
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>Horarios — {court.name}</h2>
+          <h2 className={styles.modalTitle}>{t('manager.schedule_title', { name: court.name })}</h2>
           <button className={styles.closeBtn} onClick={onClose} type="button">
             ✕
           </button>
@@ -100,16 +102,16 @@ export default function CourtScheduleModal({ isOpen, onClose, court }: CourtSche
             <table className={styles.scheduleTable}>
               <thead>
                 <tr>
-                  <th>Día</th>
-                  <th>Apertura</th>
-                  <th>Cierre</th>
-                  <th>Cerrado</th>
+                  <th>{t('manager.table.day')}</th>
+                  <th>{t('manager.table.open')}</th>
+                  <th>{t('manager.table.close')}</th>
+                  <th>{t('manager.table.closed')}</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => (
                   <tr key={row.day_of_week} className={row.is_closed ? styles.rowClosed : ''}>
-                    <td className={styles.dayLabel}>{DAY_LABELS[row.day_of_week]}</td>
+                    <td className={styles.dayLabel}>{t(DAY_KEYS[row.day_of_week])}</td>
                     <td>
                       <input
                         className={styles.timeInput}
@@ -143,10 +145,10 @@ export default function CourtScheduleModal({ isOpen, onClose, court }: CourtSche
 
           <div className={styles.modalFooter}>
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>
-              Cancelar
+              {t('manager.cancel')}
             </button>
             <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-              {submitting ? 'Guardando...' : 'Guardar horarios'}
+              {submitting ? t('manager.saving') : t('manager.save_schedules')}
             </button>
           </div>
         </form>

@@ -1,4 +1,4 @@
-export type BookingStatus = "pending" | "confirmed" | "cancelled";
+export type BookingStatus = 'pending' | 'confirmed' | 'cancelled';
 
 export interface Booking {
   id: number;
@@ -59,7 +59,7 @@ export interface UpdateBookingDTO {
 }
 
 export const BOOKING_STATUS_LABELS: Record<BookingStatus, string> = {
-  pending: "Pendiente",
-  confirmed: "Confirmada",
-  cancelled: "Cancelada",
+  pending: 'booking.status_pending_short',
+  confirmed: 'booking.status_confirmed_short',
+  cancelled: 'booking.status_cancelled_short'
 };

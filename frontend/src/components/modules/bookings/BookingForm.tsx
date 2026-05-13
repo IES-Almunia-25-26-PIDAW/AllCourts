@@ -1,20 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
-import { useAppSelector } from "@/store/hooks";
-import { useAppDispatch } from "@/store/hooks";
-import { createBooking } from "@/store/slices/bookingSlice";
-import type { CourtWithClub } from "@/types/court";
-import type { BookingAvailabilitySlot } from "@/types/booking";
-import BookingCalendar from "./BookingCalendar";
-import styles from "./BookingForm.module.scss";
-import { useBookingAvailability } from "@/hooks/useBookingAvailability";
+import { useBookingAvailability } from '@/hooks/useBookingAvailability';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { createBooking } from '@/store/slices/bookingSlice';
+import type { BookingAvailabilitySlot } from '@/types/booking';
+import type { CourtWithClub } from '@/types/court';
 import {
   calculateEstimatedPrice,
   formatDurationMinutes,
   formatPrice,
   formatTimeRange,
-  getDurationOptions,
-} from "@/utils/formatters";
+  getDurationOptions
+} from '@/utils/formatters';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import BookingCalendar from './BookingCalendar';
+import styles from './BookingForm.module.scss';
 
 type BookingFormProps = {
   court: CourtWithClub;
@@ -23,37 +23,32 @@ type BookingFormProps = {
 export default function BookingForm({ court }: BookingFormProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const user = useAppSelector((state) => state.auth.user);
 
-  const durationOptions = useMemo(
-    () => getDurationOptions(Number(court.min_unit_min) || 30),
-    [court.min_unit_min],
-  );
+  const durationOptions = useMemo(() => getDurationOptions(Number(court.min_unit_min) || 30), [court.min_unit_min]);
 
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedDuration, setSelectedDuration] = useState<number>(
-    durationOptions[0] ?? 60,
-  );
-  const [selectedSlot, setSelectedSlot] =
-    useState<BookingAvailabilitySlot | null>(null);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDuration, setSelectedDuration] = useState<number>(durationOptions[0] ?? 60);
+  const [selectedSlot, setSelectedSlot] = useState<BookingAvailabilitySlot | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { availability, loading: loadingAvailability, error: availabilityError } = useBookingAvailability(
-    court.id,
-    selectedDate,
-    selectedDuration,
-  );
+  const {
+    availability,
+    loading: loadingAvailability,
+    error: availabilityError
+  } = useBookingAvailability(court.id, selectedDate, selectedDuration);
 
   const estimatedPrice = calculateEstimatedPrice(
     Number(court.price_60),
     Number(court.price_90),
     Number(court.price_120),
-    selectedDuration,
+    selectedDuration
   );
 
   useEffect(() => {
     setSelectedDuration(durationOptions[0] ?? 60);
-    setSelectedDate("");
+    setSelectedDate('');
     setSelectedSlot(null);
     setSubmitting(false);
     setError(null);
@@ -63,19 +58,20 @@ export default function BookingForm({ court }: BookingFormProps) {
   const selectedSlotIsAvailable = selectedSlot
     ? slots.some(
         (slot) =>
-          slot.start_time === selectedSlot.start_time &&
-          slot.end_time === selectedSlot.end_time &&
-          slot.available,
+          slot.start_time === selectedSlot.start_time && slot.end_time === selectedSlot.end_time && slot.available
       )
     : false;
 
   const scheduleLabel = availability?.is_closed
     ? availability.schedule_found
-      ? "La pista está cerrada ese día"
-      : "No hay horario configurado para ese día"
+      ? t('booking.schedule_closed')
+      : t('booking.schedule_missing')
     : availability
-      ? `Horario ${availability.opening_time?.slice(0, 5)} - ${availability.closing_time?.slice(0, 5)}`
-      : "Selecciona un día para ver los horarios";
+      ? t('booking.schedule_range', {
+          opening: availability.opening_time?.slice(0, 5),
+          closing: availability.closing_time?.slice(0, 5)
+        })
+      : t('booking.select_day_hint');
 
   const reserveDisabled =
     !selectedDate ||
@@ -87,7 +83,7 @@ export default function BookingForm({ court }: BookingFormProps) {
 
   const handleReserve = async () => {
     if (!selectedDate || !selectedSlot) {
-      setError("Selecciona un día y una hora disponibles.");
+      setError(t('booking.error_select_slot'));
       return;
     }
 
@@ -107,28 +103,26 @@ export default function BookingForm({ court }: BookingFormProps) {
           date: selectedDate,
           start_time: selectedSlot.start_time,
           end_time: selectedSlot.end_time,
-          duration_min: selectedDuration,
-        }),
+          duration_min: selectedDuration
+        })
       ).unwrap();
 
       await router.push({
-        pathname: "/booking/payment",
+        pathname: '/booking/payment',
         query: {
           bookingId: String(response.id),
           courtId: String(court.id),
           courtName: court.name,
-          clubName: court.club_name ?? "",
+          clubName: court.club_name ?? '',
           date: selectedDate,
           startTime: selectedSlot.start_time,
           endTime: selectedSlot.end_time,
           duration: String(selectedDuration),
-          totalPrice: String(response.total_price),
-        },
+          totalPrice: String(response.total_price)
+        }
       });
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "No se pudo crear la reserva.",
-      );
+      setError(err instanceof Error ? err.message : t('booking.error_create_failed'));
     } finally {
       setSubmitting(false);
     }
@@ -138,15 +132,12 @@ export default function BookingForm({ court }: BookingFormProps) {
     <section className={styles.card}>
       <div className={styles.header}>
         <div className={styles.titleGroup}>
-          <p className={styles.eyebrow}>Reserva rápida</p>
-          <h2 className={styles.title}>Elige día, hora y duración</h2>
-          <p className={styles.subtitle}>
-            Primero seleccionas el día. Después se muestran todos los huecos, y
-            los no disponibles quedan desactivados.
-          </p>
+          <p className={styles.eyebrow}>{t('booking.quick_reserve')}</p>
+          <h2 className={styles.title}>{t('booking.title')}</h2>
+          <p className={styles.subtitle}>{t('booking.subtitle')}</p>
         </div>
 
-        <div className={styles.priceTag}>Desde {formatPrice(estimatedPrice)}</div>
+        <div className={styles.priceTag}>{t('booking.from', { price: formatPrice(estimatedPrice) })}</div>
       </div>
 
       <div className={styles.grid}>
@@ -155,13 +146,13 @@ export default function BookingForm({ court }: BookingFormProps) {
         <div className={styles.field}>
           <div className={styles.slotsHeader}>
             <div>
-              <p className={styles.label}>Duración</p>
+              <p className={styles.label}>{t('booking.duration_label')}</p>
               <p className={styles.hint}>
-                Duración mínima de la pista: {formatDurationMinutes(court.min_unit_min)}
+                {t('booking.duration_hint', { min: formatDurationMinutes(court.min_unit_min) })}
               </p>
             </div>
             <p className={styles.slotsMeta}>
-              Precio estimado: {formatPrice(estimatedPrice)}
+              {t('booking.estimated_price')}: {formatPrice(estimatedPrice)}
             </p>
           </div>
 
@@ -170,7 +161,7 @@ export default function BookingForm({ court }: BookingFormProps) {
               <button
                 key={duration}
                 type="button"
-                className={`${styles.chipButton} ${selectedDuration === duration ? styles.chipButtonActive : ""}`}
+                className={`${styles.chipButton} ${selectedDuration === duration ? styles.chipButtonActive : ''}`}
                 onClick={() => setSelectedDuration(duration)}
               >
                 {formatDurationMinutes(duration)}
@@ -181,22 +172,19 @@ export default function BookingForm({ court }: BookingFormProps) {
 
         <div className={styles.summaryRow}>
           <div className={styles.summaryCard}>
-            <p className={styles.summaryLabel}>Club</p>
-            <p className={styles.summaryValue}>{court.club_name ?? "Club"}</p>
+            <p className={styles.summaryLabel}>{t('booking.summary.club')}</p>
+            <p className={styles.summaryValue}>{court.club_name ?? t('booking.summary.club_fallback')}</p>
           </div>
           <div className={styles.summaryCard}>
-            <p className={styles.summaryLabel}>Hora elegida</p>
+            <p className={styles.summaryLabel}>{t('booking.summary.chosen_time')}</p>
             <p className={styles.summaryValue}>
               {selectedSlot
-                ? formatTimeRange(
-                    selectedSlot.start_time,
-                    selectedSlot.end_time,
-                  )
-                : "Pendiente"}
+                ? formatTimeRange(selectedSlot.start_time, selectedSlot.end_time)
+                : t('booking.summary.pending')}
             </p>
           </div>
           <div className={styles.summaryCard}>
-            <p className={styles.summaryLabel}>Total</p>
+            <p className={styles.summaryLabel}>{t('booking.summary.total')}</p>
             <p className={styles.summaryValue}>{formatPrice(estimatedPrice)}</p>
           </div>
         </div>
@@ -204,40 +192,33 @@ export default function BookingForm({ court }: BookingFormProps) {
         <div className={styles.field}>
           <div className={styles.slotsHeader}>
             <div>
-              <p className={styles.label}>Horas disponibles</p>
+              <p className={styles.label}>{t('booking.available_hours')}</p>
               <p className={styles.hint}>{scheduleLabel}</p>
             </div>
             <p className={styles.slotsMeta}>
-              {availability
-                ? `${slots.length} horas cargadas`
-                : "Sin seleccionar"}
+              {availability ? t('booking.slots_count', { count: slots.length }) : t('booking.not_selected')}
             </p>
           </div>
 
-          {selectedDate && loadingAvailability ? (
-            <p className={styles.notice}>Buscando horarios...</p>
-          ) : null}
+          {selectedDate && loadingAvailability ? <p className={styles.notice}>{t('booking.searching_slots')}</p> : null}
 
           {selectedDate && availability && !availability.is_closed ? (
             <div className={styles.slotGrid}>
               {slots.map((slot) => {
                 const isActive =
-                  selectedSlot?.start_time === slot.start_time &&
-                  selectedSlot?.end_time === slot.end_time;
+                  selectedSlot?.start_time === slot.start_time && selectedSlot?.end_time === slot.end_time;
 
                 return (
                   <button
                     key={`${slot.start_time}-${slot.end_time}`}
                     type="button"
                     disabled={!slot.available}
-                    className={`${styles.slotButton} ${isActive ? styles.slotButtonActive : ""}`}
+                    className={`${styles.slotButton} ${isActive ? styles.slotButtonActive : ''}`}
                     onClick={() => setSelectedSlot(slot)}
                   >
-                    <span className={styles.slotTime}>
-                      {formatTimeRange(slot.start_time, slot.end_time)}
-                    </span>
+                    <span className={styles.slotTime}>{formatTimeRange(slot.start_time, slot.end_time)}</span>
                     <span className={styles.slotState}>
-                      {slot.available ? "Disponible" : "No disponible"}
+                      {slot.available ? t('booking.slot_available') : t('booking.slot_unavailable')}
                     </span>
                   </button>
                 );
@@ -246,10 +227,7 @@ export default function BookingForm({ court }: BookingFormProps) {
           ) : null}
 
           {selectedDate && availability && availability.is_closed ? (
-            <p className={styles.notice}>
-              No hay reservas posibles en ese día porque la pista está cerrada o
-              no tiene horario configurado.
-            </p>
+            <p className={styles.notice}>{t('booking.no_reservations_possible')}</p>
           ) : null}
         </div>
 
@@ -257,19 +235,11 @@ export default function BookingForm({ court }: BookingFormProps) {
         {error ? <p className={styles.errorText}>{error}</p> : null}
 
         <div className={styles.buttonRow}>
-          <button
-            type="button"
-            className={styles.reserveButton}
-            onClick={handleReserve}
-            disabled={reserveDisabled}
-          >
-            {submitting ? "Creando reserva..." : "Reservar y continuar al pago"}
+          <button type="button" className={styles.reserveButton} onClick={handleReserve} disabled={reserveDisabled}>
+            {submitting ? t('booking.creating') : t('booking.reserve_continue')}
           </button>
 
-          <p className={styles.notice}>
-            Al reservar se crea una reserva pendiente y luego irás a la carta de
-            pago.
-          </p>
+          <p className={styles.notice}>{t('booking.reserve_note')}</p>
         </div>
       </div>
     </section>

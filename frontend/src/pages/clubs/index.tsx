@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
-import ClubCard from "@/components/modules/clubs/ClubCard";
-import { useClubs } from "@/hooks/useClubs";
-import styles from "./index.module.scss";
+import ClubCard from '@/components/modules/clubs/ClubCard';
+import { useClubs } from '@/hooks/useClubs';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styles from './index.module.scss';
 
 //#region DOCUMENTATION
 /**
@@ -23,7 +24,8 @@ import styles from "./index.module.scss";
 
 //#region FUNCTIONS
 export default function ClubsPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
+  const { t } = useTranslation();
   const { clubs, loading, error } = useClubs();
 
   const filteredClubs = useMemo(() => {
@@ -34,10 +36,7 @@ export default function ClubsPage() {
     }
 
     return clubs.filter((club) => {
-      const haystack = [club.name, club.address, club.city, club.description]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+      const haystack = [club.name, club.address, club.city, club.description].filter(Boolean).join(' ').toLowerCase();
 
       return haystack.includes(normalizedQuery);
     });
@@ -46,35 +45,28 @@ export default function ClubsPage() {
   return (
     <main className={styles.page}>
       <section className={styles.section}>
-        <p className={styles.sectionTag}>Clubes</p>
-        <h1 className={styles.title}>Encuentra tu club</h1>
-        <p className={styles.subtitle}>
-          Busca por nombre, ciudad o descripción y entra al club para ver sus
-          pistas.
-        </p>
+        <p className={styles.sectionTag}>{t('clubs.page_tag')}</p>
+        <h1 className={styles.title}>{t('clubs.title')}</h1>
+        <p className={styles.subtitle}>{t('clubs.subtitle')}</p>
 
         <input
           type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Buscar clubes..."
+          placeholder={t('clubs.search_placeholder')}
           className={styles.searchBox}
         />
       </section>
 
-      {loading ? <p className={styles.status}>Cargando clubes...</p> : null}
+      {loading ? <p className={styles.status}>{t('clubs.loading')}</p> : null}
       {error ? <p className={styles.errorText}>{error}</p> : null}
 
-      {!loading && !error && filteredClubs.length === 0 ? (
-        <p>No hay clubes que coincidan con la búsqueda.</p>
-      ) : null}
+      {!loading && !error && filteredClubs.length === 0 ? <p>{t('clubs.empty')}</p> : null}
 
       {!loading && !error ? (
         <section className={styles.resultsGrid}>
           {filteredClubs.map((club) => {
-            return (
-              <ClubCard key={club.id} club={club} href={`/clubs/${club.id}`} />
-            );
+            return <ClubCard key={club.id} club={club} href={`/clubs/${club.id}`} />;
           })}
         </section>
       ) : null}

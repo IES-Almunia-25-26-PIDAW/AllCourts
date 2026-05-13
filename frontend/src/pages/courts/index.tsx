@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
-import Link from "next/link";
-import type { CourtWithClub, Sport, SurfaceType } from "@/types/court";
-import { SPORT_LABELS, SURFACE_LABELS } from "@/types/court";
-import CourtCard from "@/components/modules/courts/CourtCard";
-import { useCourts } from "@/hooks/useCourts";
-import styles from "./index.module.scss";
+import CourtCard from '@/components/modules/courts/CourtCard';
+import { useCourts } from '@/hooks/useCourts';
+import type { Sport, SurfaceType } from '@/types/court';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styles from './index.module.scss';
 
 //#region DOCUMENTATION
 /**
@@ -26,28 +26,47 @@ import styles from "./index.module.scss";
 
 //#region FUNCTIONS
 export default function CourtPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
   const [selectedSurface, setSelectedSurface] = useState<SurfaceType | null>(null);
   const [selectedIndoor, setSelectedIndoor] = useState<boolean | null>(null);
+  const { t } = useTranslation();
   const { courts, loading, error } = useCourts();
+
+  const translatedSportLabels: Record<Sport, string> = {
+    tenis: t('courts.sport_tenis'),
+    padel: t('courts.sport_padel'),
+    pickleball: t('courts.sport_pickleball'),
+    baloncesto_3x3: t('courts.sport_baloncesto_3x3'),
+    baloncesto_5x5: t('courts.sport_baloncesto_5x5'),
+    futbol_5: t('courts.sport_futbol_5'),
+    futbol_7: t('courts.sport_futbol_7'),
+    futbol_11: t('courts.sport_futbol_11'),
+    voley: t('courts.sport_voley'),
+    balonmano: t('courts.sport_balonmano')
+  };
+
+  const translatedSurfaceLabels: Record<SurfaceType, string> = {
+    tierra_batida: t('courts.surface_tierra_batida'),
+    cesped_natural: t('courts.surface_cesped_natural'),
+    cesped_artificial: t('courts.surface_cesped_artificial'),
+    dura: t('courts.surface_dura'),
+    arena: t('courts.surface_arena'),
+    parque: t('courts.surface_parque')
+  };
 
   const filteredCourts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
     return courts.filter((court) => {
       // Text filter
-      const matchesQuery = !normalizedQuery || [
-        court.name,
-        court.club_name,
-        court.city,
-        court.sport,
-        court.surface_type,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-        .includes(normalizedQuery);
+      const matchesQuery =
+        !normalizedQuery ||
+        [court.name, court.club_name, court.city, court.sport, court.surface_type]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(normalizedQuery);
 
       // Sport filter
       const matchesSport = selectedSport === null || court.sport === selectedSport;
@@ -67,32 +86,30 @@ export default function CourtPage() {
     <main className={styles.page}>
       <div className={styles.backWrap}>
         <Link href="/clubs" className={styles.backLink}>
-          ← Volver a clubes
+          {t('courts.back_to_clubs')}
         </Link>
       </div>
 
       <section className={styles.section}>
-        <p className={styles.sectionTag}>Pistas</p>
-        <h1 className={styles.title}>Encuentra tu pista</h1>
-        <p className={styles.subtitle}>
-          Busca por nombre, club, ciudad, deporte o superficie.
-        </p>
+        <p className={styles.sectionTag}>{t('courts.page_tag')}</p>
+        <h1 className={styles.title}>{t('courts.title')}</h1>
+        <p className={styles.subtitle}>{t('courts.subtitle')}</p>
 
         <input
           type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Buscar pistas..."
+          placeholder={t('courts.search_placeholder')}
           className={styles.searchBox}
         />
 
         <div className={styles.filtersBlock}>
-          {Object.entries(SPORT_LABELS).map(([sport, label]) => (
+          {Object.entries(translatedSportLabels).map(([sport, label]) => (
             <button
               key={sport}
               type="button"
               className={selectedSport === sport ? styles.chipActive : styles.chip}
-              onClick={() => setSelectedSport(selectedSport === sport ? null : sport as Sport)}
+              onClick={() => setSelectedSport(selectedSport === sport ? null : (sport as Sport))}
             >
               {label}
             </button>
@@ -100,12 +117,12 @@ export default function CourtPage() {
         </div>
 
         <div className={styles.filtersBlock}>
-          {Object.entries(SURFACE_LABELS).map(([surface, label]) => (
+          {Object.entries(translatedSurfaceLabels).map(([surface, label]) => (
             <button
               key={surface}
               type="button"
               className={selectedSurface === surface ? styles.chipActive : styles.chip}
-              onClick={() => setSelectedSurface(selectedSurface === surface ? null : surface as SurfaceType)}
+              onClick={() => setSelectedSurface(selectedSurface === surface ? null : (surface as SurfaceType))}
             >
               {label}
             </button>
@@ -114,9 +131,9 @@ export default function CourtPage() {
 
         <div className={styles.filtersBlock}>
           {[
-            { label: 'Todos', value: null },
-            { label: 'Cubierta', value: true },
-            { label: 'Exterior', value: false },
+            { label: t('courts.all'), value: null },
+            { label: t('courts.covered'), value: true },
+            { label: t('courts.outdoor'), value: false }
           ].map((option) => (
             <button
               key={option.label}
@@ -140,17 +157,15 @@ export default function CourtPage() {
               setSelectedIndoor(null);
             }}
           >
-            Limpiar filtros
+            {t('courts.clear_filters')}
           </button>
         )}
       </section>
 
-      {loading ? <p className={styles.status}>Cargando pistas...</p> : null}
+      {loading ? <p className={styles.status}>{t('courts.loading')}</p> : null}
       {error ? <p className={styles.errorText}>{error}</p> : null}
 
-      {!loading && !error && filteredCourts.length === 0 ? (
-        <p>No hay pistas que coincidan con la búsqueda.</p>
-      ) : null}
+      {!loading && !error && filteredCourts.length === 0 ? <p>{t('courts.no_results')}</p> : null}
 
       {!loading && !error ? (
         <section className={styles.resultsGrid}>
@@ -160,7 +175,7 @@ export default function CourtPage() {
                 key={court.id}
                 court={{
                   ...court,
-                  image_url: court.image_url || "/logoallcourts.png",
+                  image_url: court.image_url || '/logoallcourts.png'
                 }}
               />
             );

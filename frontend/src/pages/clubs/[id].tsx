@@ -1,8 +1,9 @@
-import Link from "next/link";
-import ClubDetail from "../../components/modules/clubs/ClubDetail";
-import { useClubDetail } from "@/hooks/useClubDetail";
-import { useRouteQueryParam } from "@/hooks/useRouteQueryParam";
-import styles from "./[id].module.scss";
+import { useClubDetail } from '@/hooks/useClubDetail';
+import { useRouteQueryParam } from '@/hooks/useRouteQueryParam';
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import ClubDetail from '../../components/modules/clubs/ClubDetail';
+import styles from './[id].module.scss';
 
 //#region DOCUMENTATION
 /**
@@ -19,38 +20,39 @@ import styles from "./[id].module.scss";
 
 //#region FUNCTIONS
 export default function ClubDetailPage() {
-	const { value: clubId } = useRouteQueryParam("id");
-	const { club, loading, error } = useClubDetail(typeof clubId === "string" ? clubId : undefined);
+  const { t } = useTranslation();
+  const { value: clubId } = useRouteQueryParam('id');
+  const { club, loading, error } = useClubDetail(typeof clubId === 'string' ? clubId : undefined);
 
-	if (loading) {
-		return (
-			<main className={styles.page}>
-				<p className={styles.status}>Cargando club...</p>
-			</main>
-		);
-	}
+  if (loading) {
+    return (
+      <main className={styles.page}>
+        <p className={styles.status}>{t('clubs.loading')}</p>
+      </main>
+    );
+  }
 
-	if (error || !club) {
-		return (
-			<main className={styles.page}>
-				<p className={styles.errorText}>{error}</p>
-				<a href="/clubs" className={styles.backLink}>
-					Volver al listado
-				</a>
-			</main>
-		);
-	}
+  if (error || !club) {
+    return (
+      <main className={styles.page}>
+        <p className={styles.errorText}>{error}</p>
+        <a href="/clubs" className={styles.backLink}>
+          {t('clubs.back_to_list')}
+        </a>
+      </main>
+    );
+  }
 
-	return (
-		<main className={styles.page}>
-			<div className={styles.detailNav}>
-				<Link href="/clubs" className={styles.backLink}>
-					← Volver a clubes
-				</Link>
-			</div>
+  return (
+    <main className={styles.page}>
+      <div className={styles.detailNav}>
+        <Link href="/clubs" className={styles.backLink}>
+          {t('clubs.back_to_clubs')}
+        </Link>
+      </div>
 
-			<ClubDetail club={club} />
-		</main>
-	);
+      <ClubDetail club={club} />
+    </main>
+  );
 }
 //#endregion

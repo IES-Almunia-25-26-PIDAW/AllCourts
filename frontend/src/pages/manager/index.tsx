@@ -5,10 +5,12 @@ import CourtScheduleModal from '@/components/modules/manager/CourtScheduleModal'
 import { useManagerDashboard } from '@/hooks/useManagerDashboard';
 import { useAppDispatch } from '@/store/hooks';
 import { deleteClub, deleteCourt } from '@/store/slices/managerSlice';
+import { BOOKING_STATUS_LABELS } from '@/types/booking';
 import type { Club } from '@/types/club';
-import type { Court } from '@/types/court';
+import { SPORT_LABELS, SURFACE_LABELS, type Court } from '@/types/court';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './index.module.scss';
 
 /**
@@ -16,6 +18,7 @@ import styles from './index.module.scss';
  * Panel de control para managers con métricas y listados.
  */
 export default function ManagerPage() {
+  const { t, i18n } = useTranslation();
   const { user, manager, stats, courts, clubs, bookings, loading, error, isManager } = useManagerDashboard();
   const dispatch = useAppDispatch();
   const [clubModal, setClubModal] = useState<{ open: boolean; club?: Club }>({ open: false });
@@ -23,59 +26,61 @@ export default function ManagerPage() {
   const [scheduleModal, setScheduleModal] = useState<{ open: boolean; court?: Court }>({ open: false });
 
   const handleDeleteClub = (id: number) => {
-    if (window.confirm('¿Seguro que quieres eliminar este club? También se eliminarán sus pistas.')) {
+    if (window.confirm(t('manager.confirm_delete_club'))) {
       void dispatch(deleteClub(id));
     }
   };
 
   const handleDeleteCourt = (id: number) => {
-    if (window.confirm('¿Seguro que quieres eliminar esta pista?')) {
+    if (window.confirm(t('manager.confirm_delete_court'))) {
       void dispatch(deleteCourt(id));
     }
   };
 
   if (!user || !isManager) {
-    return <div className={styles.loading}>Cargando...</div>;
+    return <div className={styles.loading}>{t('manager.loading')}</div>;
   }
+
+  const currencyLocale = i18n.language.startsWith('en') ? 'en-US' : 'es-ES';
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <h1>Bienvenido, {user.name}</h1>
+          <h1>{t('manager.welcome', { name: user.name })}</h1>
           <div className={styles.email}>{user.email}</div>
         </div>
         <div>
           {manager ? (
             <div className={styles.headerActions}>
               <div className={`${styles.badge} ${manager.subscription_active ? styles.active : styles.inactive}`}>
-                {manager.subscription_active ? 'Suscripción activa' : 'Suscripción inactiva'}
+                {manager.subscription_active ? t('manager.subscription_active') : t('manager.subscription_inactive')}
               </div>
               <Link href="/subscription" className={styles.subscriptionLink}>
-                {manager.subscription_active ? 'Gestionar suscripción' : 'Activar suscripción'}
+                {manager.subscription_active ? t('manager.subscription_manage') : t('manager.subscription_activate')}
               </Link>
             </div>
           ) : (
-            <div className={styles.badge + ' ' + styles.inactive}>Sin perfil</div>
+            <div className={styles.badge + ' ' + styles.inactive}>{t('manager.no_profile')}</div>
           )}
         </div>
       </div>
 
       {loading ? (
-        <div className={styles.loading}>Cargando datos del panel...</div>
+        <div className={styles.loading}>{t('manager.loading_panel')}</div>
       ) : (
         <>
           <div className={styles.statsGrid}>
             <div className={styles.card}>
-              <DashboardCard title="Pistas" value={stats?.total_courts ?? 0} />
+              <DashboardCard title={t('manager.stat_courts')} value={stats?.total_courts ?? 0} />
             </div>
             <div className={styles.card}>
-              <DashboardCard title="Reservas" value={stats?.total_bookings ?? 0} />
+              <DashboardCard title={t('manager.stat_bookings')} value={stats?.total_bookings ?? 0} />
             </div>
             <div className={styles.card}>
               <DashboardCard
-                title="Ingresos"
-                value={new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(
+                title={t('manager.stat_revenue')}
+                value={new Intl.NumberFormat(currencyLocale, { style: 'currency', currency: 'EUR' }).format(
                   stats?.total_revenue ?? 0
                 )}
               />
@@ -84,18 +89,18 @@ export default function ManagerPage() {
 
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>Mis Clubs</span>
+              <span className={styles.sectionTitle}>{t('manager.clubs_title')}</span>
               <button className={styles.btnPrimary} onClick={() => setClubModal({ open: true })} type="button">
-                + Nuevo club
+                {t('manager.clubs_new')}
               </button>
             </div>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Ciudad</th>
-                  <th>Dirección</th>
-                  <th>Acciones</th>
+                  <th>{t('manager.col_name')}</th>
+                  <th>{t('manager.col_city')}</th>
+                  <th>{t('manager.col_address')}</th>
+                  <th>{t('manager.col_actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -110,10 +115,10 @@ export default function ManagerPage() {
                         onClick={() => setClubModal({ open: true, club: c })}
                         type="button"
                       >
-                        Editar
+                        {t('manager.btn_edit')}
                       </button>
                       <button className={styles.btnDelete} onClick={() => handleDeleteClub(c.id)} type="button">
-                        Eliminar
+                        {t('manager.btn_delete')}
                       </button>
                     </td>
                   </tr>
@@ -124,27 +129,27 @@ export default function ManagerPage() {
 
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>Mis Pistas</span>
+              <span className={styles.sectionTitle}>{t('manager.courts_title')}</span>
               <button className={styles.btnPrimary} onClick={() => setCourtModal({ open: true })} type="button">
-                + Nueva pista
+                {t('manager.courts_new')}
               </button>
             </div>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Deporte</th>
-                  <th>Superficie</th>
-                  <th>Precio 60min</th>
-                  <th>Acciones</th>
+                  <th>{t('manager.col_name')}</th>
+                  <th>{t('manager.col_sport')}</th>
+                  <th>{t('manager.col_surface')}</th>
+                  <th>{t('manager.col_price_60')}</th>
+                  <th>{t('manager.col_actions')}</th>
                 </tr>
               </thead>
               <tbody>
                 {courts.map((p) => (
                   <tr key={p.id}>
                     <td>{p.name}</td>
-                    <td>{p.sport}</td>
-                    <td>{p.surface_type}</td>
+                    <td>{t(SPORT_LABELS[p.sport])}</td>
+                    <td>{t(SURFACE_LABELS[p.surface_type])}</td>
                     <td>{p.price_60}€</td>
                     <td>
                       <button
@@ -152,17 +157,17 @@ export default function ManagerPage() {
                         onClick={() => setCourtModal({ open: true, court: p })}
                         type="button"
                       >
-                        Editar
+                        {t('manager.btn_edit')}
                       </button>
                       <button
                         className={styles.btnSchedule}
                         onClick={() => setScheduleModal({ open: true, court: p })}
                         type="button"
                       >
-                        Horario
+                        {t('manager.btn_schedule')}
                       </button>
                       <button className={styles.btnDelete} onClick={() => handleDeleteCourt(p.id)} type="button">
-                        Eliminar
+                        {t('manager.btn_delete')}
                       </button>
                     </td>
                   </tr>
@@ -172,15 +177,15 @@ export default function ManagerPage() {
           </div>
 
           <div className={styles.section}>
-            <div className={styles.sectionTitle}>Reservas</div>
+            <div className={styles.sectionTitle}>{t('manager.bookings_title')}</div>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Fecha</th>
-                  <th>Pista</th>
-                  <th>Usuario</th>
-                  <th>Estado</th>
-                  <th>Precio</th>
+                  <th>{t('manager.col_date')}</th>
+                  <th>{t('manager.col_court')}</th>
+                  <th>{t('manager.col_user')}</th>
+                  <th>{t('manager.col_status')}</th>
+                  <th>{t('manager.col_price')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -192,7 +197,9 @@ export default function ManagerPage() {
                     <td>{b.court_name}</td>
                     <td>{b.user_name}</td>
                     <td>
-                      <span className={`${styles.statusBadge} ${styles[b.status]}`}>{b.status}</span>
+                      <span className={`${styles.statusBadge} ${styles[b.status]}`}>
+                        {t(BOOKING_STATUS_LABELS[b.status])}
+                      </span>
                     </td>
                     <td>{b.total_price}€</td>
                   </tr>

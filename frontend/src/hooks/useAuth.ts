@@ -1,79 +1,110 @@
-import * as authApi from "@/api/authApi";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { clearAuth, selectAuthError, selectAuthLoading, selectIsAuthenticated, selectUser, setAuth, setAuthError, setAuthLoading } from "@/store/slices/authSlice";
-import type { CreateUserDTO, LoginCredentials } from "@/types/user";
-import { useRouter } from "next/router";
+import * as authApi from '@/api/authApi';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+  clearAuth,
+  selectAuthError,
+  selectAuthLoading,
+  selectIsAuthenticated,
+  selectUser,
+  setAuth,
+  setAuthError,
+  setAuthLoading
+} from '@/store/slices/authSlice';
+import type { CreateUserDTO, LoginCredentials } from '@/types/user';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 export function useAuth() {
-	const dispatch = useAppDispatch();
-	const router = useRouter();
-	const user = useAppSelector(selectUser);
-	const isAuthenticated = useAppSelector(selectIsAuthenticated);
-	const loading = useAppSelector(selectAuthLoading);
-	const error = useAppSelector(selectAuthError);
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const user = useAppSelector(selectUser);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const loading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
 
-	const login = async (credentials: LoginCredentials, redirectFrom?: string) => {
-		dispatch(setAuthLoading(true));
-		dispatch(setAuthError(null));
-		try {
-			const { user } = await authApi.login(credentials);
-			dispatch(setAuth(user));
-			const roleTarget = user.role === "manager" ? "/manager" : "/clubs";
-			router.push(redirectFrom ?? roleTarget);
-		} catch (err) {
-			dispatch(setAuthError(err instanceof Error ? err.message : "Login failed"));
-		} finally {
-			dispatch(setAuthLoading(false));
-		}
-	};
+  const login = async (credentials: LoginCredentials, redirectFrom?: string) => {
+    dispatch(setAuthLoading(true));
+    dispatch(setAuthError(null));
+    try {
+      const { user } = await authApi.login(credentials);
+      dispatch(setAuth(user));
+      const roleTarget = user.role === 'manager' ? '/manager' : '/clubs';
+      router.push(redirectFrom ?? roleTarget);
+    } catch (err) {
+      const raw = err instanceof Error ? err.message : '';
+      const mapped = mapServerError(raw, t);
+      dispatch(setAuthError(mapped || raw || t('login.error_generic')));
+    } finally {
+      dispatch(setAuthLoading(false));
+    }
+  };
 
-	const register = async (userData: CreateUserDTO): Promise<boolean> => {
-		try {
-			await authApi.register(userData);
-			router.push("/login?registered=1");
-			return true;
-		} catch (err) {
-			throw err;
-		}
-	};
+  const register = async (userData: CreateUserDTO): Promise<boolean> => {
+    try {
+      await authApi.register(userData);
+      router.push('/login?registered=1');
+      return true;
+    } catch (err) {
+      const raw = err instanceof Error ? err.message : '';
+      const mapped = mapServerError(raw, t);
+      throw new Error(mapped || raw || t('register.error_generic'));
+    }
+  };
 
-	const verifyEmail = async (token: string): Promise<void> => {
-		await authApi.verifyEmail(token);
-	};
+  // Map some common backend messages to i18n keys. Falls back to raw message if unknown.
+  function mapServerError(msg: string | undefined, t: (k: string) => string) {
+    if (!msg) return null;
+    const m = msg.toLowerCase();
+    if (m.includes('credencial') || m.includes('invalid credentials')) return t('login.error_invalid_credentials');
+    if (
+      m.includes('password no cumple') ||
+      m.includes('contraseña debe') ||
+      m.includes('password does not meet') ||
+      m.includes('must be at least')
+    )
+      return t('register.error_password_requirements');
+    if (m.includes('token') && m.includes('no se encontró')) return t('resetPassword.error_token_missing');
+    return null;
+  }
 
-	const forgotPassword = async (email: string): Promise<void> => {
-		await authApi.forgotPassword(email);
-	};
+  const verifyEmail = async (token: string): Promise<void> => {
+    await authApi.verifyEmail(token);
+  };
 
-	const resetPassword = async (token: string, newPassword: string): Promise<void> => {
-		await authApi.resetPassword(token, newPassword);
-	};
+  const forgotPassword = async (email: string): Promise<void> => {
+    await authApi.forgotPassword(email);
+  };
 
-	const resendVerification = async (email: string): Promise<void> => {
-		await authApi.resendVerification(email);
-	};
+  const resetPassword = async (token: string, newPassword: string): Promise<void> => {
+    await authApi.resetPassword(token, newPassword);
+  };
 
-	const logout = async () => {
-		try {
-			await authApi.logout();
-		} catch {}
-		document.cookie = "allcourts_token=; Max-Age=0; path=/";
-		document.cookie = "token=; Max-Age=0; path=/";
-		dispatch(clearAuth());
-		window.location.replace("/login");
-	};
+  const resendVerification = async (email: string): Promise<void> => {
+    await authApi.resendVerification(email);
+  };
 
-	return {
-		user,
-		isAuthenticated,
-		loading,
-		error,
-		login,
-		register,
-		verifyEmail,
-		forgotPassword,
-		resetPassword,
-		resendVerification,
-		logout,
-	};
+  const logout = async () => {
+    try {
+      await authApi.logout();
+    } catch {}
+    document.cookie = 'allcourts_token=; Max-Age=0; path=/';
+    document.cookie = 'token=; Max-Age=0; path=/';
+    dispatch(clearAuth());
+    window.location.replace('/login');
+  };
+
+  return {
+    user,
+    isAuthenticated,
+    loading,
+    error,
+    login,
+    register,
+    verifyEmail,
+    forgotPassword,
+    resetPassword,
+    resendVerification,
+    logout
+  };
 }

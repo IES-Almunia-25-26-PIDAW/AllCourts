@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { cancelBooking } from "@/api/bookingApi";
-import { BOOKING_STATUS_LABELS } from "@/types/booking";
-import { formatLongDate, formatPrice, formatTimeRange } from "@/utils/formatters";
-import type { Booking } from "@/types/booking";
-import styles from "./BookingsSection.module.scss";
+import { cancelBooking } from '@/api/bookingApi';
+import type { Booking } from '@/types/booking';
+import { BOOKING_STATUS_LABELS } from '@/types/booking';
+import { formatLongDate, formatPrice, formatTimeRange } from '@/utils/formatters';
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styles from './BookingsSection.module.scss';
 
 type BookingsSectionProps = {
   title: string;
@@ -12,15 +12,23 @@ type BookingsSectionProps = {
   loading: boolean;
   error: string | null;
   emptyMessage: string;
-  variant: "active" | "past";
+  variant: 'active' | 'past';
   onBookingStatusChange?: (bookingId: number, updates: Partial<Booking>) => void;
 };
 
 const INITIAL_DISPLAY_COUNT = 2;
 
-export default function BookingsSection({ title, bookings, loading, error, emptyMessage, variant, onBookingStatusChange }: BookingsSectionProps) {
-  const { i18n } = useTranslation();
-  const locale = i18n.language.startsWith("en") ? "en-US" : "es-ES";
+export default function BookingsSection({
+  title,
+  bookings,
+  loading,
+  error,
+  emptyMessage,
+  variant,
+  onBookingStatusChange
+}: BookingsSectionProps) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language.startsWith('en') ? 'en-US' : 'es-ES';
   const [expanded, setExpanded] = useState(false);
   const [localBookings, setLocalBookings] = useState<Booking[]>(bookings);
   const [cancelingId, setCancelingId] = useState<number | null>(null);
@@ -37,17 +45,17 @@ export default function BookingsSection({ title, bookings, loading, error, empty
     try {
       await cancelBooking(bookingId, cancelReasonMap[bookingId]);
       onBookingStatusChange?.(bookingId, {
-        status: "cancelled",
-        cancel_reason: cancelReasonMap[bookingId] || undefined,
+        status: 'cancelled',
+        cancel_reason: cancelReasonMap[bookingId] || undefined
       });
-      setLocalBookings(prev =>
-        prev.map(b =>
+      setLocalBookings((prev) =>
+        prev.map((b) =>
           b.id === bookingId
-            ? { ...b, status: "cancelled" as const, cancel_reason: cancelReasonMap[bookingId] || undefined }
+            ? { ...b, status: 'cancelled' as const, cancel_reason: cancelReasonMap[bookingId] || undefined }
             : b
         )
       );
-      setCancelReasonMap(prev => ({ ...prev, [bookingId]: "" }));
+      setCancelReasonMap((prev) => ({ ...prev, [bookingId]: '' }));
     } catch {
       setCancelErrorId(bookingId);
     } finally {
@@ -62,8 +70,8 @@ export default function BookingsSection({ title, bookings, loading, error, empty
     return localBookings.filter((booking) => {
       const bookingDate = new Date(`${booking.date}T00:00:00`);
       const isPastBooking = Number.isNaN(bookingDate.getTime()) || bookingDate < todayStart;
-      const isActive = booking.status !== "cancelled" && !isPastBooking;
-      return variant === "active" ? isActive : !isActive;
+      const isActive = booking.status !== 'cancelled' && !isPastBooking;
+      return variant === 'active' ? isActive : !isActive;
     });
   }, [localBookings, variant]);
 
@@ -76,11 +84,9 @@ export default function BookingsSection({ title, bookings, loading, error, empty
         <span className={styles.count}>{visibleBookings.length}</span>
       </div>
 
-      {loading ? <p className={styles.state}>Cargando reservas...</p> : null}
+      {loading ? <p className={styles.state}>{t('profile.bookings_loading')}</p> : null}
       {error ? <p className={styles.error}>{error}</p> : null}
-      {!loading && !error && visibleBookings.length === 0 ? (
-        <p className={styles.empty}>{emptyMessage}</p>
-      ) : null}
+      {!loading && !error && visibleBookings.length === 0 ? <p className={styles.empty}>{emptyMessage}</p> : null}
 
       {!loading && !error && visibleBookings.length > 0 ? (
         <>
@@ -89,43 +95,38 @@ export default function BookingsSection({ title, bookings, loading, error, empty
               <article key={booking.id} className={styles.card}>
                 <div className={styles.cardTop}>
                   <div>
-                    <p className={styles.courtName}>
-                      {booking.court_name || "Pista"}
-                    </p>
+                    <p className={styles.courtName}>{booking.court_name || t('profile.court_name_fallback')}</p>
                     <p className={styles.courtMeta}>
-                      {booking.court_city ? `${booking.court_city}` : "Sin ubicación"}
-                      {booking.court_address ? ` · ${booking.court_address}` : ""}
+                      {booking.court_city ? `${booking.court_city}` : t('profile.court_location_fallback')}
+                      {booking.court_address ? ` · ${booking.court_address}` : ''}
                     </p>
                   </div>
 
                   <span className={`${styles.status} ${styles[booking.status]}`}>
-                    {BOOKING_STATUS_LABELS[booking.status]}
+                    {t(BOOKING_STATUS_LABELS[booking.status])}
                   </span>
                 </div>
 
                 <div className={styles.details}>
-                  <span>
-                    {formatLongDate(booking.date, locale, "Fecha no disponible")}
-                  </span>
+                  <span>{formatLongDate(booking.date, locale, t('profile.date_not_available'))}</span>
                   <span>{formatTimeRange(booking.start_time, booking.end_time)}</span>
                   <span>{formatPrice(Number(booking.total_price))}</span>
                 </div>
 
                 {booking.cancel_reason ? (
                   <p className={styles.cancelReason}>
-                    Motivo: {booking.cancel_reason}
+                    {t('profile.cancel_reason_prefix')}
+                    {booking.cancel_reason}
                   </p>
                 ) : null}
 
-                {variant === "active" && booking.status !== "cancelled" && (
+                {variant === 'active' && booking.status !== 'cancelled' && (
                   <>
                     <input
                       type="text"
-                      value={cancelReasonMap[booking.id] || ""}
-                      onChange={(e) =>
-                        setCancelReasonMap(prev => ({ ...prev, [booking.id]: e.target.value }))
-                      }
-                      placeholder="Motivo (opcional)"
+                      value={cancelReasonMap[booking.id] || ''}
+                      onChange={(e) => setCancelReasonMap((prev) => ({ ...prev, [booking.id]: e.target.value }))}
+                      placeholder={t('profile.cancel_reason_placeholder')}
                       className={styles.cancelInput}
                     />
                     <button
@@ -133,13 +134,9 @@ export default function BookingsSection({ title, bookings, loading, error, empty
                       disabled={cancelingId === booking.id}
                       className={styles.cancelBtn}
                     >
-                      {cancelingId === booking.id ? "Cancelando..." : "Cancelar reserva"}
+                      {cancelingId === booking.id ? t('profile.canceling') : t('profile.cancel_booking')}
                     </button>
-                    {cancelErrorId === booking.id && (
-                      <p className={styles.cancelError}>
-                        Error al cancelar. Inténtalo de nuevo.
-                      </p>
-                    )}
+                    {cancelErrorId === booking.id && <p className={styles.cancelError}>{t('profile.cancel_error')}</p>}
                   </>
                 )}
               </article>
@@ -147,11 +144,10 @@ export default function BookingsSection({ title, bookings, loading, error, empty
           </div>
 
           {visibleBookings.length > INITIAL_DISPLAY_COUNT && (
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className={styles.expandBtn}
-            >
-              {expanded ? "Ver menos" : `Ver más (${visibleBookings.length - INITIAL_DISPLAY_COUNT})`}
+            <button onClick={() => setExpanded(!expanded)} className={styles.expandBtn}>
+              {expanded
+                ? t('profile.show_less')
+                : t('profile.show_more', { count: visibleBookings.length - INITIAL_DISPLAY_COUNT })}
             </button>
           )}
         </>

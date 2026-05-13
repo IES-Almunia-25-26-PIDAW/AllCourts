@@ -4,6 +4,7 @@ import type { Club } from '@/types/club';
 import type { Court, CreateCourtDTO, Sport, SurfaceType, UpdateCourtDTO } from '@/types/court';
 import { SPORT_LABELS, SURFACE_LABELS } from '@/types/court';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './CourtFormModal.module.scss';
 
 type CourtFormModalProps = {
@@ -15,6 +16,7 @@ type CourtFormModalProps = {
 
 export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtFormModalProps) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [clubId, setClubId] = useState<number>(clubs[0]?.id ?? court?.club_id ?? 0);
   const [sport, setSport] = useState<Sport>('padel');
@@ -63,6 +65,28 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
     return null;
   }
 
+  const sportLabels: Record<keyof typeof SPORT_LABELS, string> = {
+    tenis: t('courts.sport_tenis'),
+    padel: t('courts.sport_padel'),
+    pickleball: t('courts.sport_pickleball'),
+    baloncesto_3x3: t('courts.sport_baloncesto_3x3'),
+    baloncesto_5x5: t('courts.sport_baloncesto_5x5'),
+    futbol_5: t('courts.sport_futbol_5'),
+    futbol_7: t('courts.sport_futbol_7'),
+    futbol_11: t('courts.sport_futbol_11'),
+    voley: t('courts.sport_voley'),
+    balonmano: t('courts.sport_balonmano')
+  };
+
+  const surfaceLabels: Record<keyof typeof SURFACE_LABELS, string> = {
+    tierra_batida: t('courts.surface_tierra_batida'),
+    cesped_natural: t('courts.surface_cesped_natural'),
+    cesped_artificial: t('courts.surface_cesped_artificial'),
+    dura: t('courts.surface_dura'),
+    arena: t('courts.surface_arena'),
+    parque: t('courts.surface_parque')
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
@@ -101,7 +125,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
       }
       onClose();
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'No se pudo guardar la pista';
+      const message = error instanceof Error ? error.message : t('courts.form_error_save');
       setFormError(message);
     } finally {
       setSubmitting(false);
@@ -112,7 +136,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>{court ? 'Editar pista' : 'Nueva pista'}</h2>
+          <h2 className={styles.modalTitle}>{court ? t('courts.form_edit_title') : t('courts.form_new_title')}</h2>
           <button className={styles.closeBtn} onClick={onClose} type="button">
             ✕
           </button>
@@ -121,7 +145,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-name">
-              Nombre
+              {t('courts.form_name')}
             </label>
             <input
               id="court-name"
@@ -136,7 +160,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
           {!court && (
             <div className={styles.field}>
               <label className={styles.label} htmlFor="court-club">
-                Club
+                {t('courts.form_club')}
               </label>
               <select
                 id="court-club"
@@ -156,7 +180,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-sport">
-              Deporte
+              {t('courts.form_sport')}
             </label>
             <select
               id="court-sport"
@@ -164,7 +188,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
               value={sport}
               onChange={(event) => setSport(event.target.value as Sport)}
             >
-              {Object.entries(SPORT_LABELS).map(([value, label]) => (
+              {Object.entries(sportLabels).map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
                 </option>
@@ -174,7 +198,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-surface">
-              Superficie
+              {t('courts.form_surface')}
             </label>
             <select
               id="court-surface"
@@ -182,7 +206,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
               value={surfaceType}
               onChange={(event) => setSurfaceType(event.target.value as SurfaceType)}
             >
-              {Object.entries(SURFACE_LABELS).map(([value, label]) => (
+              {Object.entries(surfaceLabels).map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
                 </option>
@@ -192,7 +216,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-indoor">
-              Tipo de pista
+              {t('courts.form_type')}
             </label>
             <select
               id="court-indoor"
@@ -200,14 +224,14 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
               value={isIndoor ? 'true' : 'false'}
               onChange={(event) => setIsIndoor(event.target.value === 'true')}
             >
-              <option value="false">Exterior</option>
-              <option value="true">Cubierta</option>
+              <option value="false">{t('courts.form_outdoor')}</option>
+              <option value="true">{t('courts.form_indoor')}</option>
             </select>
           </div>
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-price-60">
-              Precio 60 min €
+              {t('courts.form_price_60')}
             </label>
             <input
               id="court-price-60"
@@ -222,7 +246,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-price-90">
-              Precio 90 min €
+              {t('courts.form_price_90')}
             </label>
             <input
               id="court-price-90"
@@ -237,7 +261,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-price-120">
-              Precio 120 min €
+              {t('courts.form_price_120')}
             </label>
             <input
               id="court-price-120"
@@ -252,7 +276,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-min-unit">
-              Unidad mínima
+              {t('courts.form_min_unit')}
             </label>
             <select
               id="court-min-unit"
@@ -268,7 +292,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-image">
-              URL imagen
+              {t('courts.form_image')}
             </label>
             <input
               id="court-image"
@@ -281,7 +305,7 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="court-description">
-              Descripción
+              {t('courts.form_description')}
             </label>
             <textarea
               id="court-description"
@@ -293,10 +317,10 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
 
           <div className={styles.modalFooter}>
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>
-              Cancelar
+              {t('courts.form_cancel')}
             </button>
             <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-              {submitting ? 'Guardando...' : court ? 'Guardar cambios' : 'Crear pista'}
+              {submitting ? t('courts.form_saving') : court ? t('courts.form_save') : t('courts.form_create')}
             </button>
           </div>
         </form>

@@ -1,22 +1,24 @@
-import { useCallback } from "react";
-import { getCourtById } from "@/api/courtApi";
-import type { CourtWithClub } from "@/types/court";
-import { useAsyncResource } from "./useAsyncResource";
+import { getCourtById } from '@/api/courtApi';
+import type { CourtWithClub } from '@/types/court';
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAsyncResource } from './useAsyncResource';
 
 export function useCourtDetail(courtId?: string) {
-	const loadCourt = useCallback(async () => {
-		if (!courtId) {
-			throw new Error("No se encontró la pista.");
-		}
+  const { t } = useTranslation();
+  const loadCourt = useCallback(async () => {
+    if (!courtId) {
+      throw new Error(t('courts.error_not_found'));
+    }
 
-		return getCourtById(courtId);
-	}, [courtId]);
+    return getCourtById(courtId);
+  }, [courtId]);
 
-	const { data, loading, error } = useAsyncResource<CourtWithClub>(loadCourt, Boolean(courtId));
+  const { data, loading, error } = useAsyncResource<CourtWithClub>(loadCourt, Boolean(courtId));
 
-	return {
-		court: data,
-		loading,
-		error,
-	};
+  return {
+    court: data,
+    loading,
+    error
+  };
 }
