@@ -1,6 +1,7 @@
 import type { CourtWithClub } from '@/types/court';
 import { SPORT_LABELS, SURFACE_LABELS } from '@/types/court';
 import { formatPrice } from '@/utils/formatters';
+import { resolveImageUrl } from '@/utils/imageUrl';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import styles from './CourtDetail.module.scss';
@@ -11,7 +12,7 @@ interface CourtDetailProps {
 
 export default function CourtDetail({ court }: CourtDetailProps) {
   const { t } = useTranslation();
-  const coverImage = court.image_url || '/logoallcourts.png';
+  const coverImage = resolveImageUrl(court.image_url);
   const sportLabels: Record<keyof typeof SPORT_LABELS, string> = {
     tenis: t('courts.sport_tenis'),
     padel: t('courts.sport_padel'),

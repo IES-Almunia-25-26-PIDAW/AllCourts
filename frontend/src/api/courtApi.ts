@@ -1,6 +1,7 @@
 //#region MODULES
 import { request } from '@/api/http';
 import type { Court, CourtWithClub, CreateCourtDTO, UpdateCourtDTO } from '@/types/court';
+import { getApiUrl } from '@/utils/runtimeConfig';
 //#endregion
 
 //#region DOCUMENTATION
@@ -77,4 +78,25 @@ export async function updateCourt(id: number, data: UpdateCourtDTO): Promise<Cou
 
 export async function deleteCourt(id: number): Promise<void> {
   return request<void>(`/courts/${id}`, { method: 'DELETE' });
+}
+
+export async function uploadCourtImage(file: File): Promise<{ url: string; fullUrl: string }> {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch(`${getApiUrl()}/courts/upload`, {
+    method: 'POST',
+    credentials: 'include',
+    body: formData
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Upload failed: ${res.status} ${text}`);
+  }
+
+  const body = (await res.json()) as { url: string; fullUrl?: string };
+  const url = body.url;
+  const fullUrl = body.fullUrl || (url.startsWith('http') ? url : `${getApiUrl()}${url}`);
+  return { url, fullUrl };
 }

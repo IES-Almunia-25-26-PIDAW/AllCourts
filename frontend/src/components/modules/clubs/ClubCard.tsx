@@ -1,5 +1,6 @@
 //#region MODULES
 import type { ClubWithManager } from '@/types/club';
+import { resolveImageUrl } from '@/utils/imageUrl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +36,7 @@ interface ClubCardProps {
 //#region FUNCTIONS
 const ClubCard = ({ club, href, courtCount, variant = 'default' }: ClubCardProps) => {
   const { t } = useTranslation();
-  const coverImage = club.logo_url || '/logoallcourts.png';
+  const coverImage = resolveImageUrl(club.logo_url);
   const description = club.description || t('clubs.no_description');
   const CardContent = (
     <div className={`${styles.clubCard} ${variant === 'detail' ? styles.detailCard : ''}`}>
@@ -44,6 +45,7 @@ const ClubCard = ({ club, href, courtCount, variant = 'default' }: ClubCardProps
           src={coverImage}
           alt={club.name}
           fill
+          unoptimized
           className={styles.image}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />

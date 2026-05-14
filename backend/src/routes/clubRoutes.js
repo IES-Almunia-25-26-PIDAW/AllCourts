@@ -6,6 +6,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const handleValidation = require('../middlewares/handleValidation');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 const { requireManagerOwnClub, requireActiveManagerSubscription } = require('../middlewares/ownershipMiddleware');
+const { uploadClub } = require('../middlewares/uploadMiddleware');
 //#endregion
 
 /**
@@ -68,5 +69,13 @@ router.put(
   clubController.update
 );
 router.delete('/:id', authMiddleware, roleMiddleware('manager'), requireManagerOwnClub, clubController.delete);
+
+// Upload club image
+router.post('/upload', authMiddleware, roleMiddleware('manager'), uploadClub.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+  const url = '/uploads/clubs/' + req.file.filename;
+  const fullUrl = `${req.protocol}://${req.get('host')}${url}`;
+  res.json({ url, fullUrl });
+});
 
 module.exports = router;

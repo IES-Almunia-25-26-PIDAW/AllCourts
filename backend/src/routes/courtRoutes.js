@@ -10,6 +10,7 @@ const {
   requireManagerOwnClubFromBody,
   requireActiveManagerSubscription
 } = require('../middlewares/ownershipMiddleware');
+const { uploadCourt } = require('../middlewares/uploadMiddleware');
 //#endregion
 
 /**
@@ -108,5 +109,13 @@ router.put(
   courtController.update
 );
 router.delete('/:id', authMiddleware, roleMiddleware('manager'), requireManagerOwnCourt, courtController.delete);
+
+// Upload court image
+router.post('/upload', authMiddleware, roleMiddleware('manager'), uploadCourt.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+  const url = '/uploads/courts/' + req.file.filename;
+  const fullUrl = `${req.protocol}://${req.get('host')}${url}`;
+  res.json({ url, fullUrl });
+});
 
 module.exports = router;

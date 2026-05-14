@@ -1,5 +1,5 @@
 //#region MODULES
-const { pool } = require("../config/db");
+const { pool } = require('../config/db');
 //#endregion
 
 /**
@@ -30,9 +30,9 @@ const Court = {
       court.price_90,
       court.price_120,
       court.min_unit_min || 30,
-      court.image_url,
-      court.description,
-      court.is_indoor ?? false,
+      court.image_url ?? null,
+      court.description ?? null,
+      court.is_indoor ?? false
     ]);
   },
 
@@ -41,21 +41,21 @@ const Court = {
     const params = [];
 
     if (filters.sport !== undefined) {
-      conditions.push("c.sport = ?");
+      conditions.push('c.sport = ?');
       params.push(filters.sport);
     }
 
     if (filters.surface_type !== undefined) {
-      conditions.push("c.surface_type = ?");
+      conditions.push('c.surface_type = ?');
       params.push(filters.surface_type);
     }
 
     if (filters.is_indoor !== undefined) {
-      conditions.push("c.is_indoor = ?");
+      conditions.push('c.is_indoor = ?');
       params.push(filters.is_indoor);
     }
 
-    const whereClause = conditions.length > 0 ? ` WHERE ${conditions.join(" AND ")}` : "";
+    const whereClause = conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : '';
     const sql = `SELECT c.*, cl.name as club_name, cl.address, cl.city, cl.logo_url
             FROM courts c
             JOIN clubs cl ON c.club_id = cl.id${whereClause}`;
@@ -71,7 +71,7 @@ const Court = {
   },
 
   getByClubId: (clubId) => {
-    const sql = "SELECT * FROM courts WHERE club_id = ?";
+    const sql = 'SELECT * FROM courts WHERE club_id = ?';
     return pool.execute(sql, [clubId]);
   },
 
@@ -94,18 +94,18 @@ const Court = {
       data.price_60,
       data.price_90,
       data.price_120,
-      data.min_unit_min,
-      data.image_url,
-      data.description,
-      data.is_indoor,
-      id,
+      data.min_unit_min ?? null,
+      data.image_url ?? null,
+      data.description ?? null,
+      data.is_indoor ?? null,
+      id
     ]);
   },
 
   delete: (id) => {
-    const sql = "DELETE FROM courts WHERE id = ?";
+    const sql = 'DELETE FROM courts WHERE id = ?';
     return pool.execute(sql, [id]);
-  },
+  }
 };
 
 module.exports = Court;

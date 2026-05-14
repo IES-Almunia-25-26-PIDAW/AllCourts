@@ -67,7 +67,7 @@ export interface CreateCourtDTO {
   price_120: number;
   min_unit_min?: number;
   image_url: string;
-  description: string;
+  description?: string;
   is_indoor?: boolean;
 }
 
