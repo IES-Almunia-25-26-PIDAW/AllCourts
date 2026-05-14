@@ -1,8 +1,10 @@
+import { uploadCourtImage } from '@/api/courtApi';
 import { useAppDispatch } from '@/store/hooks';
 import { createCourt, updateCourt } from '@/store/slices/managerSlice';
 import type { Club } from '@/types/club';
 import type { Court, CreateCourtDTO, Sport, SurfaceType, UpdateCourtDTO } from '@/types/court';
 import { SPORT_LABELS, SURFACE_LABELS } from '@/types/court';
+import { getApiUrl } from '@/utils/runtimeConfig';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './CourtFormModal.module.scss';
@@ -28,6 +30,9 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
   const [minUnit, setMinUnit] = useState('60');
   const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -59,7 +64,37 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
     }
     setFormError(null);
     setSubmitting(false);
+    setImageFile(null);
+    setPreviewUrl(
+      court?.image_url
+        ? court.image_url.startsWith('http')
+          ? court.image_url
+          : `${getApiUrl()}${court.image_url}`
+        : null
+    );
   }, [court, clubs, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  // Revoke object URL when preview changes to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   if (!isOpen) {
     return null;
@@ -93,6 +128,36 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
     setFormError(null);
 
     try {
+      // Basic client-side validation
+      if (!name.trim()) {
+        throw new Error(t('courts.form_error_name_required'));
+      }
+      if (!clubId || clubId <= 0) {
+        throw new Error(t('courts.form_error_club_required'));
+      }
+      const p60 = parseFloat(price60);
+      const p90 = parseFloat(price90);
+      const p120 = parseFloat(price120);
+      if (Number.isNaN(p60) || Number.isNaN(p90) || Number.isNaN(p120)) {
+        throw new Error(t('courts.form_error_price_invalid'));
+      }
+      const minUnitInt = parseInt(minUnit);
+      if (Number.isNaN(minUnitInt) || minUnitInt < 15 || minUnitInt > 120) {
+        throw new Error(t('courts.form_error_min_unit_invalid'));
+      }
+      let finalImageUrl = imageUrl;
+      if (imageFile !== null) {
+        setUploadingImage(true);
+        try {
+          const res = await uploadCourtImage(imageFile);
+          finalImageUrl = res.url;
+          setImageUrl(res.url);
+          setPreviewUrl(res.fullUrl);
+        } finally {
+          setUploadingImage(false);
+        }
+      }
+      const finalDescription = description.trim() === '' ? undefined : description.trim();
       if (court) {
         const data: UpdateCourtDTO = {
           name,
@@ -102,8 +167,8 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
           price_90: parseFloat(price90),
           price_120: parseFloat(price120),
           min_unit_min: parseInt(minUnit),
-          image_url: imageUrl,
-          description,
+          image_url: finalImageUrl,
+          description: finalDescription,
           is_indoor: isIndoor
         };
         await dispatch(updateCourt({ id: court.id, data })).unwrap();
@@ -117,8 +182,8 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
           price_90: parseFloat(price90),
           price_120: parseFloat(price120),
           min_unit_min: parseInt(minUnit),
-          image_url: imageUrl,
-          description,
+          image_url: finalImageUrl,
+          description: finalDescription,
           is_indoor: isIndoor
         };
         await dispatch(createCourt(data)).unwrap();
@@ -297,10 +362,32 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
             <input
               id="court-image"
               className={styles.input}
-              type="text"
-              value={imageUrl}
-              onChange={(event) => setImageUrl(event.target.value)}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                setImageFile(file);
+                if (file) {
+                  const obj = URL.createObjectURL(file);
+                  setPreviewUrl(obj);
+                } else {
+                  setPreviewUrl(
+                    court?.image_url
+                      ? court.image_url.startsWith('http')
+                        ? court.image_url
+                        : `${getApiUrl()}${court.image_url}`
+                      : null
+                  );
+                }
+              }}
             />
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="court-preview"
+                style={{ width: '100%', maxHeight: '150px', objectFit: 'cover', marginTop: 8, borderRadius: 6 }}
+              />
+            )}
           </div>
 
           <div className={styles.field}>
@@ -319,8 +406,12 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>
               {t('courts.form_cancel')}
             </button>
-            <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-              {submitting ? t('courts.form_saving') : court ? t('courts.form_save') : t('courts.form_create')}
+            <button type="submit" className={styles.btnPrimary} disabled={submitting || uploadingImage}>
+              {submitting || uploadingImage
+                ? t('courts.form_saving')
+                : court
+                  ? t('courts.form_save')
+                  : t('courts.form_create')}
             </button>
           </div>
         </form>

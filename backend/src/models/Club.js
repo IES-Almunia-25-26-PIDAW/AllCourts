@@ -1,5 +1,5 @@
 //#region MODULES
-const { pool } = require("../config/db");
+const { pool } = require('../config/db');
 //#endregion
 
 /**
@@ -24,8 +24,8 @@ const Club = {
       club.name,
       club.address,
       club.city,
-      club.logo_url,
-      club.description,
+      club.logo_url ?? null,
+      club.description ?? null
     ]);
   },
 
@@ -47,12 +47,12 @@ const Club = {
   },
 
   getByManagerId: (managerId) => {
-    const sql = "SELECT * FROM clubs WHERE manager_id = ?";
+    const sql = 'SELECT * FROM clubs WHERE manager_id = ?';
     return pool.execute(sql, [managerId]);
   },
 
   getByCity: (city) => {
-    const sql = "SELECT * FROM clubs WHERE city = ?";
+    const sql = 'SELECT * FROM clubs WHERE city = ?';
     return pool.execute(sql, [city]);
   },
 
@@ -60,20 +60,13 @@ const Club = {
     const sql = `UPDATE clubs
         SET name = ?, address = ?, city = ?, logo_url = ?, description = ?
         WHERE id = ?`;
-    return pool.execute(sql, [
-      data.name,
-      data.address,
-      data.city,
-      data.logo_url,
-      data.description,
-      id,
-    ]);
+    return pool.execute(sql, [data.name, data.address, data.city, data.logo_url ?? null, data.description ?? null, id]);
   },
 
   delete: (id) => {
-    const sql = "DELETE FROM clubs WHERE id = ?";
+    const sql = 'DELETE FROM clubs WHERE id = ?';
     return pool.execute(sql, [id]);
-  },
+  }
 };
 
 module.exports = Club;

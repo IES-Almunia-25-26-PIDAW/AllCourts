@@ -1,6 +1,7 @@
 //#region MODULES
 import { Court, SPORT_LABELS, SURFACE_LABELS } from '@/types/court';
 import { formatPrice } from '@/utils/formatters';
+import { resolveImageUrl } from '@/utils/imageUrl';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -75,9 +76,10 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
       <article className={styles.courtCard}>
         <div className={styles.imageContainer}>
           <Image
-            src={court.image_url}
+            src={resolveImageUrl(court.image_url)}
             alt={court.name}
             fill
+            unoptimized
             className={styles.image}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
@@ -93,7 +95,11 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
           <p className={styles.surface}>{surfaceLabels[court.surface_type]}</p>
 
           <p className={styles.desc}>
-            {court.description.length > 80 ? `${court.description.slice(0, 80)}...` : court.description}
+            {court.description
+              ? court.description.length > 80
+                ? `${court.description.slice(0, 80)}...`
+                : court.description
+              : ''}
           </p>
 
           <div className={styles.prices}>

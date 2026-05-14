@@ -1,6 +1,8 @@
+import { uploadClubImage } from '@/api/clubApi';
 import { useAppDispatch } from '@/store/hooks';
 import { createClub, updateClub } from '@/store/slices/managerSlice';
 import type { Club, CreateClubDTO, UpdateClubDTO } from '@/types/club';
+import { getApiUrl } from '@/utils/runtimeConfig';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './ClubFormModal.module.scss';
@@ -20,6 +22,9 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
   const [city, setCity] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [description, setDescription] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -30,16 +35,43 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
       setCity(club.city ?? '');
       setLogoUrl(club.logo_url ?? '');
       setDescription(club.description ?? '');
+      setPreviewUrl(
+        club?.logo_url ? (club.logo_url.startsWith('http') ? club.logo_url : `${getApiUrl()}${club.logo_url}`) : null
+      );
     } else {
       setName('');
       setAddress('');
       setCity('');
       setLogoUrl('');
       setDescription('');
+      setPreviewUrl(null);
     }
     setFormError(null);
     setSubmitting(false);
+    setImageFile(null);
   }, [club, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  // Revoke object URL when preview changes to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   if (!isOpen) {
     return null;
@@ -51,11 +83,36 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
     setFormError(null);
 
     try {
+      let finalLogoUrl = logoUrl;
+      if (imageFile !== null) {
+        setUploadingImage(true);
+        try {
+          const res = await uploadClubImage(imageFile);
+          finalLogoUrl = res.url;
+          setLogoUrl(res.url);
+          setPreviewUrl(res.fullUrl);
+        } finally {
+          setUploadingImage(false);
+        }
+      }
       if (club) {
-        const data: UpdateClubDTO = { name, address, city, logo_url: logoUrl, description };
+        const data: UpdateClubDTO = {
+          name,
+          address,
+          city,
+          logo_url: finalLogoUrl,
+          description: description.trim() === '' ? undefined : description.trim()
+        };
         await dispatch(updateClub({ id: club.id, data })).unwrap();
       } else {
-        const data: CreateClubDTO = { manager_id: managerId, name, address, city, logo_url: logoUrl, description };
+        const data: CreateClubDTO = {
+          manager_id: managerId,
+          name,
+          address,
+          city,
+          logo_url: finalLogoUrl,
+          description: description.trim() === '' ? undefined : description.trim()
+        };
         await dispatch(createClub(data)).unwrap();
       }
       onClose();
@@ -129,10 +186,32 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
             <input
               id="club-logo"
               className={styles.input}
-              type="text"
-              value={logoUrl}
-              onChange={(event) => setLogoUrl(event.target.value)}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                setImageFile(file);
+                if (file) {
+                  const obj = URL.createObjectURL(file);
+                  setPreviewUrl(obj);
+                } else {
+                  setPreviewUrl(
+                    club?.logo_url
+                      ? club.logo_url.startsWith('http')
+                        ? club.logo_url
+                        : `${getApiUrl()}${club.logo_url}`
+                      : null
+                  );
+                }
+              }}
             />
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="logo-preview"
+                style={{ width: '100%', maxHeight: '150px', objectFit: 'cover', marginTop: 8, borderRadius: 6 }}
+              />
+            )}
           </div>
 
           <div className={styles.field}>
@@ -151,8 +230,12 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>
               {t('manager.cancel')}
             </button>
-            <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-              {submitting ? t('manager.saving') : club ? t('manager.club_form_save') : t('manager.club_form_create')}
+            <button type="submit" className={styles.btnPrimary} disabled={submitting || uploadingImage}>
+              {submitting || uploadingImage
+                ? t('manager.saving')
+                : club
+                  ? t('manager.club_form_save')
+                  : t('manager.club_form_create')}
             </button>
           </div>
         </form>

@@ -20,7 +20,7 @@ export interface CreateClubDTO {
   address: string;
   city: string;
   logo_url: string;
-  description: string;
+  description?: string;
 }
 
 export interface UpdateClubDTO {

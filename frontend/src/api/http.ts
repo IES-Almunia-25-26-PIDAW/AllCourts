@@ -2,10 +2,6 @@
 import { getApiUrl } from '@/utils/runtimeConfig';
 //#endregion
 
-//#region CONSTANTS
-const API_URL = getApiUrl();
-//#endregion
-
 //#region TYPES
 type ApiErrorResponse = {
   message?: string;
@@ -52,6 +48,7 @@ async function readJson<T>(response: Response): Promise<T> {
  */
 async function refreshSession(): Promise<boolean> {
   if (!refreshPromise) {
+    const API_URL = getApiUrl();
     refreshPromise = fetch(`${API_URL}/auth/refresh`, {
       method: 'POST',
       credentials: 'include',
@@ -78,6 +75,7 @@ async function refreshSession(): Promise<boolean> {
  */
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const execute = async () => {
+    const API_URL = getApiUrl();
     const response = await fetch(`${API_URL}${path}`, {
       ...init,
       credentials: 'include',
