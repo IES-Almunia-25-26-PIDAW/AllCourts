@@ -1,5 +1,6 @@
 import ClubCard from '@/components/modules/clubs/ClubCard';
 import { useClubs } from '@/hooks/useClubs';
+import { useCourts } from '@/hooks/useCourts';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './index.module.scss';
@@ -27,6 +28,7 @@ export default function ClubsPage() {
   const [query, setQuery] = useState('');
   const { t } = useTranslation();
   const { clubs, loading, error } = useClubs();
+  const { courts } = useCourts();
 
   const filteredClubs = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -66,7 +68,8 @@ export default function ClubsPage() {
       {!loading && !error ? (
         <section className={styles.resultsGrid}>
           {filteredClubs.map((club) => {
-            return <ClubCard key={club.id} club={club} href={`/clubs/${club.id}`} />;
+            const clubCourtsCount = courts.filter((c) => c.club_id === club.id).length;
+            return <ClubCard key={club.id} club={club} href={`/clubs/${club.id}`} courtCount={clubCourtsCount} />;
           })}
         </section>
       ) : null}
