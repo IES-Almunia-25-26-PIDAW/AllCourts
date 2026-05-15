@@ -1,6 +1,6 @@
 import { useBookingAvailability } from '@/hooks/useBookingAvailability';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { createBooking } from '@/store/slices/bookingSlice';
+import { clearLastCreated, createBooking } from '@/store/slices/bookingSlice';
 import type { BookingAvailabilitySlot } from '@/types/booking';
 import type { CourtWithClub } from '@/types/court';
 import {
@@ -121,6 +121,8 @@ export default function BookingForm({ court }: BookingFormProps) {
           totalPrice: String(response.total_price)
         }
       });
+
+      dispatch(clearLastCreated());
     } catch (err) {
       setError(err instanceof Error ? err.message : t('booking.error_create_failed'));
     } finally {
