@@ -88,8 +88,6 @@ export function useAuth() {
     try {
       await authApi.logout();
     } catch {}
-    document.cookie = 'allcourts_token=; Max-Age=0; path=/';
-    document.cookie = 'token=; Max-Age=0; path=/';
     dispatch(clearAuth());
     window.location.replace('/login');
   };
