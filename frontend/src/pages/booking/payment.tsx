@@ -1,6 +1,8 @@
 import { request } from '@/api/http';
 import CheckoutForm from '@/components/modules/payments/CheckoutForm';
 import { formatDurationMinutes, formatLongDate, formatPrice, formatTimeRange } from '@/utils/formatters';
+import { useAppDispatch } from '@/store/hooks';
+import { clearLastCreated } from '@/store/slices/bookingSlice';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Link from 'next/link';
@@ -37,6 +39,7 @@ interface PaymentIntentResponse {
 export default function BookingPaymentPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const bookingId = firstValue(router.query.bookingId);
   const courtId = firstValue(router.query.courtId);
@@ -76,6 +79,12 @@ export default function BookingPaymentPage() {
 
     fetchPaymentIntent();
   }, [bookingId, router.isReady]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearLastCreated());
+    };
+  }, [dispatch]);
 
   const stripeAppearance = {
     theme: 'stripe' as const,
