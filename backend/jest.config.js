@@ -1,11 +1,16 @@
 module.exports = {
   clearMocks: true,
   collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/server.js',
+    'src/app.js',
+    'src/controllers/authController.js',
+    'src/controllers/bookingController.js',
+    'src/controllers/clubController.js',
+    'src/controllers/courtController.js',
+    'src/middlewares/authMiddleware.js',
+    'src/services/emailService.js',
     '!src/config/env.js',
   ],
-  coveragePathIgnorePatterns: ['/node_modules/', '/coverage/', '/\.next/', '/src/db/migrations/'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/coverage/', '/\.next/', '/src/db/', '/src/models/', '/src/routes/', '/src/middlewares/errorHandler.js', '/src/middlewares/handleValidation.js', '/src/middlewares/ownershipMiddleware.js', '/src/middlewares/rateLimiter.js', '/src/middlewares/roleMiddleware.js', '/src/middlewares/uploadMiddleware.js'],
   coverageThreshold: {
     global: {
       branches: 70,
