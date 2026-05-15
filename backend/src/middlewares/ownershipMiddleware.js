@@ -164,6 +164,30 @@ async function requireManagerOwnCourt(req, res, next) {
   }
 }
 
+async function requireManagerOwnCourtFromBody(req, res, next) {
+  try {
+    const courtId = req.body.court_id;
+    const [courtRows] = await Court.getById(courtId);
+    if (courtRows.length === 0) {
+      return res.status(404).json({ message: "Court not found" });
+    }
+
+    const court = courtRows[0];
+    const [clubRows] = await Club.getById(court.club_id);
+    if (clubRows.length === 0) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+
+    if (!sameId(clubRows[0].manager_id, req.user?.id)) {
+      return forbidden(res);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 function requirePaymentAccessByParam(paramName, lookupType = "payment") {
   return async (req, res, next) => {
     try {
@@ -221,6 +245,7 @@ module.exports = {
   requireActiveManagerSubscription,
   requireBookingAccessByParam,
   requireManagerOwnCourt,
+  requireManagerOwnCourtFromBody,
   requirePaymentAccessByParam,
   requirePaymentCreateAccess,
 };
