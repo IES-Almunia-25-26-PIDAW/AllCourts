@@ -55,7 +55,7 @@ const paymentController = {
      */
     getAll: async (req, res, next) => {
         try {
-            const [rows] = await Payment.getAll();
+            const [rows] = await Payment.getAll(req.user.id);
             res.json(rows);
         } catch (err) {
             next(err);

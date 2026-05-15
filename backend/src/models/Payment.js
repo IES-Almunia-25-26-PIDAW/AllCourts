@@ -32,7 +32,7 @@ const Payment = {
 		]);
 	},
 
-	getAll: () => {
+	getAll: (managerId) => {
 		const sql = `SELECT p.*, 
             b.date as booking_date, b.start_time, b.end_time,
             u.name as user_name, u.email as user_email,
@@ -41,8 +41,10 @@ const Payment = {
             JOIN bookings b ON p.booking_id = b.id
             JOIN users u ON b.user_id = u.id
             JOIN courts c ON b.court_id = c.id
+		JOIN clubs cl ON c.club_id = cl.id
+		WHERE cl.manager_id = ?
             ORDER BY p.payment_date DESC`;
-		return pool.execute(sql);
+		return pool.execute(sql, [managerId]);
 	},
 
 	getById: (id) => {
