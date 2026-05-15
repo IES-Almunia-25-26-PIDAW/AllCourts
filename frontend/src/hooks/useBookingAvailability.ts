@@ -18,6 +18,12 @@ export function useBookingAvailability(
 	const loading = useAppSelector(selectBookingLoading);
 	const error = useAppSelector(selectBookingError);
 	const isEnabled = Boolean(courtId) && Boolean(date) && Boolean(durationMin);
+	const isCurrentAvailability =
+		isEnabled &&
+		availability !== null &&
+		String(availability.court_id) === String(courtId) &&
+		availability.date === date &&
+		availability.duration_min === durationMin;
 
 	useEffect(() => {
 		if (!isEnabled) {
@@ -35,8 +41,8 @@ export function useBookingAvailability(
 	}, [dispatch, isEnabled, courtId, date, durationMin]);
 
 	return {
-		availability: isEnabled ? availability : null,
-		loading: isEnabled ? loading : false,
-		error: isEnabled ? error : null,
+		availability: isCurrentAvailability ? availability : null,
+		loading: isCurrentAvailability ? loading : false,
+		error: isCurrentAvailability ? error : null,
 	};
 }
