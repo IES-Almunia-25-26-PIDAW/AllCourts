@@ -201,206 +201,239 @@ export default function CourtFormModal({ isOpen, onClose, court, clubs }: CourtF
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>{court ? t('courts.form_edit_title') : t('courts.form_new_title')}</h2>
+          <div className={styles.modalHeaderInner}>
+            <h2 className={styles.modalTitle}>{court ? t('courts.form_edit_title') : t('courts.form_new_title')}</h2>
+            <p className={styles.modalSubtitle}>{t('courts.form_subtitle') || ''}</p>
+          </div>
           <button className={styles.closeBtn} onClick={onClose} type="button">
             ✕
           </button>
         </div>
         {formError && <p className={styles.errorMsg}>{formError}</p>}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-name">
-              {t('courts.form_name')}
-            </label>
-            <input
-              id="court-name"
-              className={styles.input}
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              required
-            />
-          </div>
-
-          {!court && (
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="court-club">
-                {t('courts.form_club')}
-              </label>
-              <select
-                id="court-club"
-                className={styles.input}
-                value={clubId}
-                onChange={(event) => setClubId(Number(event.target.value))}
-                required
-              >
-                {clubs.map((club) => (
-                  <option key={club.id} value={club.id}>
-                    {club.name}
-                  </option>
-                ))}
-              </select>
+          <section className={styles.section} aria-labelledby="general-info">
+            <div className={styles.sectionTitle} id="general-info">
+              {t('manager.general') || ''}
             </div>
-          )}
+            <div className={styles.sectionGrid}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-name">
+                  {t('courts.form_name')}
+                </label>
+                <input
+                  id="court-name"
+                  className={styles.input}
+                  type="text"
+                  placeholder={t('courts.form_name')}
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  required
+                />
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-sport">
-              {t('courts.form_sport')}
-            </label>
-            <select
-              id="court-sport"
-              className={styles.input}
-              value={sport}
-              onChange={(event) => setSport(event.target.value as Sport)}
-            >
-              {Object.entries(sportLabels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
+              {!court && (
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="court-club">
+                    {t('courts.form_club')}
+                  </label>
+                  <select
+                    id="court-club"
+                    className={styles.select}
+                    value={clubId}
+                    onChange={(event) => setClubId(Number(event.target.value))}
+                    required
+                  >
+                    {clubs.map((club) => (
+                      <option key={club.id} value={club.id}>
+                        {club.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          </section>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-surface">
-              {t('courts.form_surface')}
-            </label>
-            <select
-              id="court-surface"
-              className={styles.input}
-              value={surfaceType}
-              onChange={(event) => setSurfaceType(event.target.value as SurfaceType)}
-            >
-              {Object.entries(surfaceLabels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <section className={styles.section} aria-labelledby="config-info">
+            <div className={styles.sectionTitle} id="config-info">
+              {t('courts.configuration') || ''}
+            </div>
+            <div className={styles.sectionGrid}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-sport">
+                  {t('courts.form_sport')}
+                </label>
+                <select
+                  id="court-sport"
+                  className={styles.select}
+                  value={sport}
+                  onChange={(event) => setSport(event.target.value as Sport)}
+                >
+                  {Object.entries(sportLabels).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-indoor">
-              {t('courts.form_type')}
-            </label>
-            <select
-              id="court-indoor"
-              className={styles.input}
-              value={isIndoor ? 'true' : 'false'}
-              onChange={(event) => setIsIndoor(event.target.value === 'true')}
-            >
-              <option value="false">{t('courts.form_outdoor')}</option>
-              <option value="true">{t('courts.form_indoor')}</option>
-            </select>
-          </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-surface">
+                  {t('courts.form_surface')}
+                </label>
+                <select
+                  id="court-surface"
+                  className={styles.select}
+                  value={surfaceType}
+                  onChange={(event) => setSurfaceType(event.target.value as SurfaceType)}
+                >
+                  {Object.entries(surfaceLabels).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-price-60">
-              {t('courts.form_price_60')}
-            </label>
-            <input
-              id="court-price-60"
-              className={styles.input}
-              type="number"
-              step="0.01"
-              value={price60}
-              onChange={(event) => setPrice60(event.target.value)}
-              required
-            />
-          </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-indoor">
+                  {t('courts.form_type')}
+                </label>
+                <select
+                  id="court-indoor"
+                  className={styles.select}
+                  value={isIndoor ? 'true' : 'false'}
+                  onChange={(event) => setIsIndoor(event.target.value === 'true')}
+                >
+                  <option value="false">{t('courts.form_outdoor')}</option>
+                  <option value="true">{t('courts.form_indoor')}</option>
+                </select>
+              </div>
+            </div>
+          </section>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-price-90">
-              {t('courts.form_price_90')}
-            </label>
-            <input
-              id="court-price-90"
-              className={styles.input}
-              type="number"
-              step="0.01"
-              value={price90}
-              onChange={(event) => setPrice90(event.target.value)}
-              required
-            />
-          </div>
+          <section className={styles.section} aria-labelledby="pricing-info">
+            <div className={styles.sectionTitle} id="pricing-info">
+              {t('courts.pricing') || ''}
+            </div>
+            <div className={styles.sectionGrid}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-price-60">
+                  {t('courts.form_price_60')}
+                </label>
+                <input
+                  id="court-price-60"
+                  className={styles.input}
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={price60}
+                  onChange={(event) => setPrice60(event.target.value)}
+                  required
+                />
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-price-120">
-              {t('courts.form_price_120')}
-            </label>
-            <input
-              id="court-price-120"
-              className={styles.input}
-              type="number"
-              step="0.01"
-              value={price120}
-              onChange={(event) => setPrice120(event.target.value)}
-              required
-            />
-          </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-price-90">
+                  {t('courts.form_price_90')}
+                </label>
+                <input
+                  id="court-price-90"
+                  className={styles.input}
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={price90}
+                  onChange={(event) => setPrice90(event.target.value)}
+                  required
+                />
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-min-unit">
-              {t('courts.form_min_unit')}
-            </label>
-            <select
-              id="court-min-unit"
-              className={styles.input}
-              value={minUnit}
-              onChange={(event) => setMinUnit(event.target.value)}
-            >
-              <option value="30">30 min</option>
-              <option value="60">60 min</option>
-              <option value="90">90 min</option>
-            </select>
-          </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-price-120">
+                  {t('courts.form_price_120')}
+                </label>
+                <input
+                  id="court-price-120"
+                  className={styles.input}
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={price120}
+                  onChange={(event) => setPrice120(event.target.value)}
+                  required
+                />
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-image">
-              {t('courts.form_image')}
-            </label>
-            <input
-              id="court-image"
-              className={styles.input}
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              onChange={(event) => {
-                const file = event.target.files?.[0] ?? null;
-                setImageFile(file);
-                if (file) {
-                  const obj = URL.createObjectURL(file);
-                  setPreviewUrl(obj);
-                } else {
-                  setPreviewUrl(
-                    court?.image_url
-                      ? court.image_url.startsWith('http')
-                        ? court.image_url
-                        : `${getApiUrl()}${court.image_url}`
-                      : null
-                  );
-                }
-              }}
-            />
-            {previewUrl && (
-              <img
-                src={previewUrl}
-                alt="court-preview"
-                style={{ width: '100%', maxHeight: '150px', objectFit: 'cover', marginTop: 8, borderRadius: 6 }}
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="court-min-unit">
+                  {t('courts.form_min_unit')}
+                </label>
+                <select
+                  id="court-min-unit"
+                  className={styles.select}
+                  value={minUnit}
+                  onChange={(event) => setMinUnit(event.target.value)}
+                >
+                  <option value="30">30 min</option>
+                  <option value="60">60 min</option>
+                  <option value="90">90 min</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section className={styles.section} aria-labelledby="media-info">
+            <div className={styles.sectionTitle} id="media-info">
+              {t('manager.media') || ''}
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="court-image">
+                {t('courts.form_image')}
+              </label>
+              <input
+                id="court-image"
+                className={styles.input}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={(event) => {
+                  const file = event.target.files?.[0] ?? null;
+                  setImageFile(file);
+                  if (file) {
+                    const obj = URL.createObjectURL(file);
+                    setPreviewUrl(obj);
+                  } else {
+                    setPreviewUrl(
+                      court?.image_url
+                        ? court.image_url.startsWith('http')
+                          ? court.image_url
+                          : `${getApiUrl()}${court.image_url}`
+                        : null
+                    );
+                  }
+                }}
               />
-            )}
-          </div>
+              <div className={styles.helperText}>{t('courts.form_image_help') || ''}</div>
+              {previewUrl && (
+                <img src={previewUrl} alt="court-preview" className={styles.imagePreview} />
+              )}
+            </div>
+          </section>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="court-description">
-              {t('courts.form_description')}
-            </label>
-            <textarea
-              id="court-description"
-              className={styles.textarea}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </div>
+          <section className={styles.section}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="court-description">
+                {t('courts.form_description')}
+              </label>
+              <textarea
+                id="court-description"
+                className={styles.textarea}
+                placeholder={t('courts.form_description')}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              />
+            </div>
+          </section>
 
           <div className={styles.modalFooter}>
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>
