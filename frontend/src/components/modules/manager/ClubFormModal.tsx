@@ -128,103 +128,127 @@ export default function ClubFormModal({ isOpen, onClose, club, managerId }: Club
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>
-            {club ? t('manager.club_form_edit_title') : t('manager.club_form_new_title')}
-          </h2>
+          <div className={styles.modalHeaderInner}>
+            <h2 className={styles.modalTitle}>
+              {club ? t('manager.club_form_edit_title') : t('manager.club_form_new_title')}
+            </h2>
+            <p className={styles.modalSubtitle}>{t('manager.club_form_subtitle') || ''}</p>
+          </div>
           <button className={styles.closeBtn} onClick={onClose} type="button">
             ✕
           </button>
         </div>
         {formError && <p className={styles.errorMsg}>{formError}</p>}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="club-name">
-              {t('manager.club_form_name')}
-            </label>
-            <input
-              id="club-name"
-              className={styles.input}
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              required
-            />
-          </div>
+          <section className={styles.section} aria-labelledby="general-info">
+            <div className={styles.sectionTitle} id="general-info">
+              {t('manager.general') || ''}
+            </div>
+            <div className={styles.sectionGrid}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="club-name">
+                  {t('manager.club_form_name')}
+                </label>
+                <input
+                  id="club-name"
+                  className={styles.input}
+                  type="text"
+                  placeholder={t('manager.club_form_name')}
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  required
+                />
+                <div className={styles.helperText}>{t('manager.club_form_name_help') || ''}</div>
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="club-city">
-              {t('manager.club_form_city')}
-            </label>
-            <input
-              id="club-city"
-              className={styles.input}
-              type="text"
-              value={city}
-              onChange={(event) => setCity(event.target.value)}
-              required
-            />
-          </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="club-city">
+                  {t('manager.club_form_city')}
+                </label>
+                <input
+                  id="club-city"
+                  className={styles.input}
+                  type="text"
+                  placeholder={t('manager.club_form_city')}
+                  value={city}
+                  onChange={(event) => setCity(event.target.value)}
+                  required
+                />
+              </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="club-address">
-              {t('manager.club_form_address')}
-            </label>
-            <input
-              id="club-address"
-              className={styles.input}
-              type="text"
-              value={address}
-              onChange={(event) => setAddress(event.target.value)}
-              required
-            />
-          </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="club-address">
+                  {t('manager.club_form_address')}
+                </label>
+                <input
+                  id="club-address"
+                  className={styles.input}
+                  type="text"
+                  placeholder={t('manager.club_form_address')}
+                  value={address}
+                  onChange={(event) => setAddress(event.target.value)}
+                  required
+                />
+              </div>
+            </div>
+          </section>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="club-logo">
-              {t('manager.club_form_logo')}
-            </label>
-            <input
-              id="club-logo"
-              className={styles.input}
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              onChange={(event) => {
-                const file = event.target.files?.[0] ?? null;
-                setImageFile(file);
-                if (file) {
-                  const obj = URL.createObjectURL(file);
-                  setPreviewUrl(obj);
-                } else {
-                  setPreviewUrl(
-                    club?.logo_url
-                      ? club.logo_url.startsWith('http')
-                        ? club.logo_url
-                        : `${getApiUrl()}${club.logo_url}`
-                      : null
-                  );
-                }
-              }}
-            />
-            {previewUrl && (
-              <img
-                src={previewUrl}
-                alt="logo-preview"
-                style={{ width: '100%', maxHeight: '150px', objectFit: 'cover', marginTop: 8, borderRadius: 6 }}
+          <section className={styles.section} aria-labelledby="media-info">
+            <div className={styles.sectionTitle} id="media-info">
+              {t('manager.media') || ''}
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="club-logo">
+                {t('manager.club_form_logo')}
+              </label>
+              <input
+                id="club-logo"
+                className={styles.input}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={(event) => {
+                  const file = event.target.files?.[0] ?? null;
+                  setImageFile(file);
+                  if (file) {
+                    const obj = URL.createObjectURL(file);
+                    setPreviewUrl(obj);
+                  } else {
+                    setPreviewUrl(
+                      club?.logo_url
+                        ? club.logo_url.startsWith('http')
+                          ? club.logo_url
+                          : `${getApiUrl()}${club.logo_url}`
+                        : null
+                    );
+                  }
+                }}
               />
-            )}
-          </div>
+              <div className={styles.helperText}>{t('manager.club_form_logo_help') || ''}</div>
+              {previewUrl && (
+                <img
+                  src={previewUrl}
+                  alt="logo-preview"
+                  className={styles.imagePreview}
+                />
+              )}
+            </div>
+          </section>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="club-description">
-              {t('manager.club_form_description')}
-            </label>
-            <textarea
-              id="club-description"
-              className={styles.textarea}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </div>
+          <section className={styles.section}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="club-description">
+                {t('manager.club_form_description')}
+              </label>
+              <textarea
+                id="club-description"
+                className={styles.textarea}
+                placeholder={t('manager.club_form_description')}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              />
+              <div className={styles.helperText}>{t('manager.club_form_description_help') || ''}</div>
+            </div>
+          </section>
 
           <div className={styles.modalFooter}>
             <button type="button" className={styles.btnSecondary} onClick={onClose} disabled={submitting}>

@@ -117,8 +117,12 @@
     "error_user_not_found": "User not found"
   },
   "courts": {
-    "error_not_found": "Court not found"
+    "error_not_found": "Court not found",
+    "form_subtitle": "Configure court details and pricing.",
+    "pricing": "Pricing",
+    "form_image_help": "Upload a representative image for the court (jpg, png, webp)."
   },
+
   "clubs": {
     "error_not_found": "Club not found"
   },
@@ -640,6 +644,14 @@
     "club_form_address": "Address",
     "club_form_logo": "Logo URL",
     "club_form_description": "Description",
+    "club_form_description_help": "Short description of the club, opening hours or key info.",
+    "club_form_logo_help": "Recommended size: 800x400px. Max weight ~2MB.",
+    "club_form_name_help": "Public name of the club shown to users.",
+    "club_form_subtitle": "Create an attractive club with key info and a logo.",
+    "club_form_description_section": "Club description",
+    "general": "General",
+    "media": "Media",
+    "description": "Description",
     "club_form_save": "Save changes",
     "club_form_create": "Create club",
     "club_form_error_save": "Could not save the club",
@@ -765,6 +777,10 @@
     "form_price_120": "Price 120 min €",
     "form_min_unit": "Minimum unit",
     "form_image": "Image URL",
+    "form_image_help": "Recommended image: 800x400px. Max weight ~2MB.",
+    "form_subtitle": "Complete the court details so it appears correctly in the club.",
+    "configuration": "Configuration",
+    "pricing": "Pricing",
     "form_description": "Description",
     "form_cancel": "Cancel",
     "form_save": "Save changes",
