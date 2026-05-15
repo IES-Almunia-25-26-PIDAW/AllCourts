@@ -229,6 +229,50 @@ Para desarrollo local se incluye una migración de seed con un club demo, un man
 
 ---
 
+## 🧪 Testing
+
+El proyecto usa Jest en ambos paquetes. Los tests viven en `frontend/src/**/__tests__` y `backend/test`.
+
+### Ejecutar tests del backend
+
+```bash
+cd backend
+npm test
+```
+
+### Ejecutar tests del frontend
+
+```bash
+cd frontend
+npm test
+```
+
+### Generar coverage
+
+```bash
+cd backend
+npm run test:coverage
+
+cd ../frontend
+npm run test:coverage
+```
+
+### Ejemplos útiles con npm
+
+```bash
+cd backend
+npm run test:watch
+npm run test:coverage
+
+cd ../frontend
+npm run test:watch
+npm run test:coverage
+```
+
+Las salidas de coverage se generan en la carpeta `coverage/` de cada paquete.
+
+---
+
 ## 💳 Configurar Stripe
 
 ### 1. Crear cuenta
