@@ -38,6 +38,15 @@ const ClubCard = ({ club, href, courtCount, variant = 'default' }: ClubCardProps
   const { t } = useTranslation();
   const coverImage = resolveImageUrl(club.logo_url);
   const description = club.description || t('clubs.no_description');
+
+  const getArrayLen = (obj: unknown, key: string): number | undefined => {
+    const candidate = (obj as any)?.[key];
+    return Array.isArray(candidate) ? candidate.length : undefined;
+  };
+
+  const courtsCount =
+    getArrayLen(club, 'courts') ?? getArrayLen(club, 'tracks') ?? getArrayLen(club, 'pitches');
+  const showCourtsBadge = typeof courtsCount === 'number' && courtsCount >= 0;
   const CardContent = (
     <div className={`${styles.clubCard} ${variant === 'detail' ? styles.detailCard : ''}`}>
       <div className={`${styles.imageContainer} ${variant === 'detail' ? styles.detailImageContainer : ''}`}>
@@ -53,7 +62,23 @@ const ClubCard = ({ club, href, courtCount, variant = 'default' }: ClubCardProps
       </div>
 
       <div className={styles.body}>
-        <p className={styles.name}>{club.name}</p>
+        <div className={styles.nameRow}>
+          <p className={styles.name}>{club.name}</p>
+
+          {showCourtsBadge && (
+            <span className={styles.courtsBadge} aria-hidden>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.2" fill="none" />
+                <path d="M3 12h18" stroke="currentColor" strokeWidth="1.2" />
+                <circle cx="8" cy="12" r="1" fill="currentColor" />
+                <circle cx="16" cy="12" r="1" fill="currentColor" />
+              </svg>
+              {courtsCount === 1
+                ? t('clubs.courts_one', { count: courtsCount })
+                : t('clubs.courts_other', { count: courtsCount })}
+            </span>
+          )}
+        </div>
 
         <p className={styles.desc}>{description.length > 90 ? `${description.slice(0, 90)}...` : description}</p>
 
