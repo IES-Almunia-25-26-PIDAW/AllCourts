@@ -5,7 +5,10 @@
     "migrate:up": "dotenv -e ./.env -- db-migrate up --config ./src/db/database.json --migrations-dir ./src/db/migrations",
     "migrate:down": "dotenv -e ./.env -- db-migrate down --config ./src/db/database.json --migrations-dir ./src/db/migrations",
     "migrate:status": "dotenv -e ./.env -- db-migrate check --config ./src/db/database.json --migrations-dir ./src/db/migrations",
-    "migrate:create": "dotenv -e ./.env -- db-migrate create --config ./src/db/database.json --migrations-dir ./src/db/migrations"
+    "migrate:create": "dotenv -e ./.env -- db-migrate create --config ./src/db/database.json --migrations-dir ./src/db/migrations",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -23,7 +26,10 @@
     "stripe": "^22.1.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "dotenv-cli": "^8.0.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.1.4",
     "nodemon": "^3.1.14"
   }
 }

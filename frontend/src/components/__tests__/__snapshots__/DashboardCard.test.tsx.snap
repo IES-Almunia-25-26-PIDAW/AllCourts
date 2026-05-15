@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardCard renders the visible props and matches the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="card"
+  >
+    <div
+      class="inner"
+    >
+      <div
+        class="row"
+      >
+        <div>
+          <div
+            class="title"
+          >
+            Pistas disponibles
+          </div>
+          <div
+            class="value"
+          >
+            12
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="icon"
+        >
+          📊
+        </div>
+      </div>
+      <div
+        class="subtitle"
+      >
+        Actualizado hace 5 minutos
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
