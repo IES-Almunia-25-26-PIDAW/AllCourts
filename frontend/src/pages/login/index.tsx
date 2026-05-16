@@ -49,7 +49,8 @@ export default function Login() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await login({ identifier, password }, typeof from === 'string' ? from : undefined);
+    // Enviar requestPortal basado en el toggle de role seleccionado
+    await login({ identifier, password, requestPortal: role }, typeof from === 'string' ? from : undefined);
   };
 
   return (

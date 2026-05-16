@@ -126,4 +126,27 @@ describe('useAuth', () => {
     expect(mockDispatch).toHaveBeenCalledWith(clearAuth());
     consoleErrorSpy.mockRestore();
   });
+
+  it('sends requestPortal when provided', async () => {
+    (authApi.login as jest.Mock).mockResolvedValue({ user: { id: 'u1', name: 'X', username: 'x', email: 'x@e', role: 'manager', is_verified: true } });
+    const { result } = renderHook(() => useAuth());
+
+    await act(async () => {
+      await result.current.login({ identifier: 'x@e', password: 'p', requestPortal: 'manager' });
+    });
+
+    expect(authApi.login).toHaveBeenCalledWith({ identifier: 'x@e', password: 'p', requestPortal: 'manager' });
+  });
+
+  it('maps portal incorrect error from backend', async () => {
+    (authApi.login as jest.Mock).mockRejectedValue(new Error('manager debe iniciar sesión desde el portal de managers'));
+    const { result } = renderHook(() => useAuth());
+
+    await act(async () => {
+      await result.current.login({ identifier: 'x@e', password: 'p', requestPortal: 'player' });
+    });
+
+    // Debe mapear el error al key de i18n
+    expect(mockDispatch).toHaveBeenCalledWith(setAuthError('login.error_wrong_portal_manager'));
+  });
 });

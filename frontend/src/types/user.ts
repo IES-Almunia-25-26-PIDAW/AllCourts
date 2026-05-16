@@ -34,4 +34,5 @@ export interface UpdateUserDTO {
 export interface LoginCredentials {
   identifier: string;
   password: string;
+  requestPortal?: 'player' | 'manager';
 }

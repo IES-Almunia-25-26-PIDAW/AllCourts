@@ -36,6 +36,9 @@
     "subtitle": "Welcome back, please login.",
     "error_invalid_credentials": "Invalid credentials",
     "error_generic": "Login failed. Please try again.",
+    "error_wrong_portal": "Wrong portal. Please use the appropriate portal for your account.",
+    "error_wrong_portal_manager": "Login in the manager portal if you are a manager.",
+    "error_wrong_portal_player": "Login in the player portal if you are a player.",
     "registered_notice": "Registration complete. Check your email to verify your account.",
     "no_account": "Don't have an account?",
     "register": "Register here",
@@ -99,7 +102,6 @@
     "form_password_placeholder": "Create a password",
     "form_confirm_password": "Confirm Password",
     "form_confirm_password_placeholder": "Repeat your password",
-    "btn_register": "Register",
     "error_password_requirements": "Password does not meet requirements: it must be at least 8 characters and at most 128.",
     "error_generic": "Registration failed. Please try again.",
     "error_mismatch": "Passwords do not match.",
@@ -112,19 +114,6 @@
     "could_not_load": "Could not load information. Please try again.",
     "not_found": "Not found",
     "generic": "An error occurred. Please try again."
-  },
-  "profile": {
-    "error_user_not_found": "User not found"
-  },
-  "courts": {
-    "error_not_found": "Court not found",
-    "form_subtitle": "Configure court details and pricing.",
-    "pricing": "Pricing",
-    "form_image_help": "Upload a representative image for the court (jpg, png, webp)."
-  },
-
-  "clubs": {
-    "error_not_found": "Club not found"
   },
   "days": {
     "sunday": "Sunday",

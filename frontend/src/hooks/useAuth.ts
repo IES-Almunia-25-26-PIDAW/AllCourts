@@ -65,6 +65,12 @@ export function useAuth() {
     )
       return t('register.error_password_requirements');
     if (m.includes('token') && m.includes('no se encontró')) return t('resetPassword.error_token_missing');
+    // Mapeo de error por portal incorrecto enviado desde el backend
+    if (m.includes('portal incorrecto') || m.includes('manager debe') || m.includes('jugador debe')) {
+      if (m.includes('manager debe')) return t('login.error_wrong_portal_manager');
+      if (m.includes('jugador debe')) return t('login.error_wrong_portal_player');
+      return t('login.error_wrong_portal');
+    }
     return null;
   }
 
