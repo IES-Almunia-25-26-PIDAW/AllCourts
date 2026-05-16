@@ -9,7 +9,13 @@ import { createSubscription } from "@/api/stripeApi";
 import SubscriptionCheckoutForm from "@/components/modules/payments/SubscriptionCheckoutForm";
 import styles from "./index.module.scss";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+if (!stripeKey) {
+  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY no está definida');
+}
+
+const stripePromise = loadStripe(stripeKey);
 
 const PLAN_PRICE_IDS = {
 	basic: "price_1TWNBYQtE3XYjvG19wczmxdH",
