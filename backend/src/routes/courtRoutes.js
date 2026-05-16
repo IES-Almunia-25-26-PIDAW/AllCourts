@@ -103,12 +103,20 @@ router.put(
   '/:id',
   authMiddleware,
   roleMiddleware('manager'),
+  requireActiveManagerSubscription,
   requireManagerOwnCourt,
   ...courtBodyValidators,
   handleValidation,
   courtController.update
 );
-router.delete('/:id', authMiddleware, roleMiddleware('manager'), requireManagerOwnCourt, courtController.delete);
+router.delete(
+  '/:id',
+  authMiddleware,
+  roleMiddleware('manager'),
+  requireActiveManagerSubscription,
+  requireManagerOwnCourt,
+  courtController.delete
+);
 
 // Upload court image
 router.post('/upload', authMiddleware, roleMiddleware('manager'), uploadCourt.single('image'), (req, res) => {
