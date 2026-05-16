@@ -95,18 +95,13 @@ const Booking = {
         WHERE court_id = ? 
         AND date = ? 
         AND status != 'cancelled'
-        AND ((start_time < ? AND end_time > ?) 
-            OR (start_time < ? AND end_time > ?)
-            OR (start_time >= ? AND end_time <= ?))`;
+        AND start_time < ?
+        AND end_time > ?`;
     return pool.execute(sql, [
       courtId,
       date,
       endTime,
       startTime,
-      endTime,
-      endTime,
-      startTime,
-      endTime,
     ]);
   },
 
