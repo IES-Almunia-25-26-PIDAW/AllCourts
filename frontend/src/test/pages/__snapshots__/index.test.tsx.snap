@@ -231,142 +231,26 @@ exports[`Home page renders the main landing content 1`] = `
               home.players_text_3
             </p>
           </div>
-        </div>
-      </div>
-    </section>
-    <section
-      class="featuresSection"
-    >
-      <div
-        class="container"
-      >
-        <h2
-          class="sectionTitle sectionTitleLight"
-        >
-          home.feats_title
-        </h2>
-        <div
-          class="benefitsGrid"
-        >
           <div
-            class="benefitCard"
+            class="stepCard"
           >
             <div
-              class="benefitIcon"
+              class="stepNumber"
             >
-              ⚡
+              4
             </div>
             <h3>
-              home.feats_subtitle_1
+              home.players_subtitle_4
             </h3>
             <p>
-              home.feats_text_1
-            </p>
-          </div>
-          <div
-            class="benefitCard"
-          >
-            <div
-              class="benefitIcon"
-            >
-              💳
-            </div>
-            <h3>
-              home.feats_subtitle_2
-            </h3>
-            <p>
-              home.feats_text_2
-            </p>
-          </div>
-          <div
-            class="benefitCard"
-          >
-            <div
-              class="benefitIcon"
-            >
-              📍
-            </div>
-            <h3>
-              home.feats_subtitle_3
-            </h3>
-            <p>
-              home.feats_text_3
-            </p>
-          </div>
-          <div
-            class="benefitCard"
-          >
-            <div
-              class="benefitIcon"
-            >
-              🔔
-            </div>
-            <h3>
-              home.feats_subtitle_4
-            </h3>
-            <p>
-              home.feats_text_4
-            </p>
-          </div>
-          <div
-            class="benefitCard"
-          >
-            <div
-              class="benefitIcon"
-            >
-              📊
-            </div>
-            <h3>
-              home.feats_subtitle_5
-            </h3>
-            <p>
-              home.feats_text_5
-            </p>
-          </div>
-          <div
-            class="benefitCard"
-          >
-            <div
-              class="benefitIcon"
-            >
-              ⭐
-            </div>
-            <h3>
-              home.feats_subtitle_6
-            </h3>
-            <p>
-              home.feats_text_6
+              home.players_text_4
             </p>
           </div>
         </div>
       </div>
     </section>
     <section
-      class="managersSection"
-    >
-      <div
-        class="container"
-      >
-        <h2
-          class="sectionTitle"
-        >
-          home.manager_title
-        </h2>
-        <p
-          class="managersText"
-        >
-          home.manager_text
-        </p>
-        <a
-          class="learnMoreBtn"
-          href="/infomanager"
-        >
-          home.manager_button
-        </a>
-      </div>
-    </section>
-    <section
-      class="testimonialsSection"
+      class="reviewsSection"
     >
       <div
         class="container"
@@ -377,96 +261,88 @@ exports[`Home page renders the main landing content 1`] = `
           home.reviews_title
         </h2>
         <div
-          class="testimonialsGrid"
+          class="reviewsGrid"
         >
-          <div
-            class="testimonialCard"
+          <blockquote
+            class="reviewCard"
           >
-            <h4>
-              home.review_title_1
-            </h4>
-            <p
-              class="testimonialAuthor"
+            <div
+              class="reviewHeader"
             >
-              home.review_name_1
+              <img
+                alt="María González"
+                class="reviewAvatar"
+                height="64"
+                src="/review1.jpg"
+                width="64"
+              />
+              <div>
+                <h3>
+                  María González
+                </h3>
+                <p>
+                  Jugadora amateur
+                </p>
+              </div>
+            </div>
+            <p>
+              "Gracias a AllCourts pude encontrar compañeros de juego en minutos. La app es intuitiva y la reserva fue súper fácil."
             </p>
-            <p
-              class="testimonialText"
-            >
-              home.review_text_1
-            </p>
-          </div>
-          <div
-            class="testimonialCard"
+          </blockquote>
+          <blockquote
+            class="reviewCard"
           >
-            <h4>
-              home.review_title_2
-            </h4>
-            <p
-              class="testimonialAuthor"
+            <div
+              class="reviewHeader"
             >
-              home.review_name_2
+              <img
+                alt="Carlos Herrera"
+                class="reviewAvatar"
+                height="64"
+                src="/review2.jpg"
+                width="64"
+              />
+              <div>
+                <h3>
+                  Carlos Herrera
+                </h3>
+                <p>
+                  Capitán de equipo local
+                </p>
+              </div>
+            </div>
+            <p>
+              "Gestionamos los partidos del club y las reservas de pista sin complicaciones. Muy práctica para organizarnos cada semana."
             </p>
-            <p
-              class="testimonialText"
-            >
-              home.review_text_2
-            </p>
-          </div>
-          <div
-            class="testimonialCard"
+          </blockquote>
+          <blockquote
+            class="reviewCard"
           >
-            <h4>
-              home.review_title_3
-            </h4>
-            <p
-              class="testimonialAuthor"
+            <div
+              class="reviewHeader"
             >
-              home.review_name_3
+              <img
+                alt="Laura Díaz"
+                class="reviewAvatar"
+                height="64"
+                src="/review3.jpg"
+                width="64"
+              />
+              <div>
+                <h3>
+                  Laura Díaz
+                </h3>
+                <p>
+                  Propietaria de club deportivo
+                </p>
+              </div>
+            </div>
+            <p>
+              "Me ayudó a llenar horarios libres del club y a automatizar la gestión de reservas. Excelente experiencia de usuario."
             </p>
-            <p
-              class="testimonialText"
-            >
-              home.review_text_3
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section
-      class="ctaSection"
-    >
-      <div
-        class="container"
-      >
-        <h2
-          class="ctaTitle"
-        >
-          home.cta_title
-        </h2>
-        <p
-          class="ctaText"
-        >
-          home.cta_text
-        </p>
-        <div
-          class="ctaButtons"
-        >
-          <a
-            class="primaryBtn"
-            href="/register"
-          >
-            home.signup_button
-          </a>
-          <a
-            class="secondaryBtn"
-            href="/clubs"
-          >
-            home.explore_button
-          </a>
+          </blockquote>
         </div>
       </div>
     </section>
   </main>
-</DocumentFragment>
 `;
