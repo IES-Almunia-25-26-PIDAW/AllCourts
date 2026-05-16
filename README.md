@@ -485,6 +485,29 @@ La aplicación soporta múltiples idiomas:
 Los usuarios pueden cambiar el idioma desde la interfaz.
 
 ---
+## 📄 Documentación técnica
+
+La documentación se genera localmente a partir de los comentarios del código y no se incluye en el repositorio.
+
+### Backend (JSDoc)
+
+```bash
+cd backend
+npm run docs
+# Abre backend/docs/index.html en el navegador
+```
+
+### Frontend (TypeDoc)
+
+```bash
+cd frontend
+npm run docs
+# Abre frontend/docs/index.html en el navegador
+```
+
+---
+
+Y en ambos `.gitignore` (backend y frontend) añade:
 
 ## 📝 Scripts Disponibles
 
