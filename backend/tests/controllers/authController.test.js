@@ -236,6 +236,66 @@ describe('authController', () => {
     });
   });
 
+  it('permite login manager -> portal manager', async () => {
+    User.getByEmail.mockResolvedValueOnce([[{
+      id: 'mgr-1',
+      name: 'Manager One',
+      username: 'mgr',
+      email: 'mgr@example.com',
+      password: 'hashed-password',
+      role: 'manager',
+      is_verified: true,
+    }]]);
+
+    const req = {
+      body: {
+        identifier: 'mgr@example.com',
+        password: 'secret123',
+        requestPortal: 'manager',
+      },
+    };
+    const res = createRes();
+
+    await authController.login(req, res, jest.fn());
+
+    expect(res.status).not.toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ user: expect.objectContaining({ id: 'mgr-1' }) }));
+  });
+
+  it('bloquea login manager -> portal player con 403', async () => {
+    User.getByEmail.mockResolvedValueOnce([[{
+      id: 'mgr-2',
+      password: 'hashed-password',
+      role: 'manager',
+      is_verified: true,
+    }]]);
+
+    const req = { body: { identifier: 'mgr2@example.com', password: 'secret', requestPortal: 'player' } };
+    const res = createRes();
+
+    await authController.login(req, res, jest.fn());
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: 'manager debe iniciar sesión desde el portal de managers' });
+  });
+
+  it('bloquea login player -> portal manager con 403', async () => {
+    User.getByEmail.mockResolvedValueOnce([[{
+      id: 'ply-1',
+      password: 'hashed-password',
+      role: 'player',
+      is_verified: true,
+    }]]);
+
+    const req = { body: { identifier: 'ply@example.com', password: 'secret', requestPortal: 'manager' } };
+    const res = createRes();
+
+    await authController.login(req, res, jest.fn());
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: 'jugador debe iniciar sesión desde el portal de jugadores' });
+  });
+
   it('returns 401 when credentials are invalid', async () => {
     User.getByEmail.mockResolvedValueOnce([[{
       id: 'user-1',

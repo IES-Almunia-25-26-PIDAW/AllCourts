@@ -202,7 +202,7 @@ const authController = {
   //#region login
   login: async (req, res, next) => {
     try {
-      const { identifier, password } = req.body;
+      const { identifier, password, requestPortal } = req.body;
 
       const isEmail = identifier.includes('@');
       const [rows] = isEmail ? await User.getByEmail(identifier) : await User.getByUsername(identifier);
@@ -218,6 +218,18 @@ const authController = {
         return res.status(403).json({
           message: 'Verifica tu correo electrónico para poder iniciar sesión. Revisa tu bandeja de entrada o de spam'
         });
+
+      // Si el cliente indica desde qué portal intenta acceder, validamos
+      // que coincida con el rol real del usuario. Esto NO sustituye la
+      // lógica de permisos: el role del JWT sigue siendo la fuente de
+      // verdad. Aquí solo evitamos que un manager entre desde el portal
+      // de jugadores y viceversa mostrando un mensaje claro.
+      if (requestPortal && requestPortal !== user.role) {
+        const msg = user.role === 'manager'
+          ? 'manager debe iniciar sesión desde el portal de managers'
+          : 'jugador debe iniciar sesión desde el portal de jugadores';
+        return res.status(403).json({ message: msg });
+      }
 
       await User.updateLastLogin(user.id);
 
