@@ -196,6 +196,41 @@ describe('bookingController', () => {
     expect(res.json.mock.calls[0][0].slots.length).toBeGreaterThan(0);
   });
 
+  it('does not include slots that would end after closing time', async () => {
+    CourtSchedule.getByCourtAndDay.mockResolvedValueOnce([[
+      {
+        id: 4,
+        opening_time: '21:00:00',
+        closing_time: '22:00:00',
+        is_closed: false,
+      },
+    ]]);
+
+    const res = createRes();
+    await bookingController.getAvailability(
+      {
+        params: { courtId: '9' },
+        query: { date: '2099-06-10', duration_min: '60' },
+      },
+      res,
+      jest.fn(),
+    );
+
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      opening_time: '21:00:00',
+      closing_time: '22:00:00',
+    }));
+
+    const { slots } = res.json.mock.calls[0][0];
+    expect(slots).toEqual([
+      {
+        start_time: '21:00:00',
+        end_time: '22:00:00',
+        available: true,
+      },
+    ]);
+  });
+
   it('returns closed availability when the court schedule is closed', async () => {
     CourtSchedule.getByCourtAndDay.mockResolvedValueOnce([[{
       opening_time: '08:00:00',

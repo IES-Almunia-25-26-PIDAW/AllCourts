@@ -246,14 +246,12 @@ const bookingController = {
       const slots = [];
       for (
         let startMinutes = openingMinutes;
-        startMinutes <= closingMinutes;
+        startMinutes + durationMin <= closingMinutes;
         startMinutes += 30
       ) {
         const endMinutes = startMinutes + durationMin;
-        const fitsSchedule = endMinutes <= closingMinutes;
         const isPast = isToday && startMinutes < currentMinutes;
         const available =
-          fitsSchedule &&
           !isPast &&
           !activeBookings.some((booking) =>
             hasTimeOverlap(
