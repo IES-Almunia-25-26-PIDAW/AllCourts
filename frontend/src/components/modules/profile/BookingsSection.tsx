@@ -70,8 +70,11 @@ export default function BookingsSection({
     return localBookings.filter((booking) => {
       const bookingDate = new Date(`${booking.date}T00:00:00`);
       const isPastBooking = Number.isNaN(bookingDate.getTime()) || bookingDate < todayStart;
-      const isActive = booking.status !== 'cancelled' && !isPastBooking;
-      return variant === 'active' ? isActive : !isActive;
+      const isPending = booking.status === 'pending';
+      const isActive = isPending || (booking.status !== 'cancelled' && !isPastBooking);
+      const isPast = !isPending && (booking.status === 'cancelled' || isPastBooking);
+
+      return variant === 'active' ? isActive : isPast;
     });
   }, [localBookings, variant]);
 

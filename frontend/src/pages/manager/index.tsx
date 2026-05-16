@@ -36,6 +36,13 @@ import {
   type DashboardStatusDatum
 } from '../../utils/managerDashboard';
 
+function formatBookingPrice(value: number | string | null | undefined, locale: string): string {
+  const parsed = typeof value === 'number' ? value : Number(value ?? 0);
+  const safeValue = Number.isFinite(parsed) ? parsed : 0;
+
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(safeValue);
+}
+
 /**
  * @page Manager
  * Panel de control para managers con métricas y listados.
@@ -366,7 +373,7 @@ export default function ManagerPage() {
                             {t(BOOKING_STATUS_LABELS[b.status])}
                           </span>
                         </td>
-                        <td>{b.total_price}€</td>
+                        <td>{formatBookingPrice(b.total_price, currencyLocale)}</td>
                       </tr>
                     ))
                   ) : (

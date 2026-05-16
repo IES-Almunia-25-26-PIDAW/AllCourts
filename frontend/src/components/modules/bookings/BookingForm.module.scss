@@ -142,52 +142,92 @@
   font-size: 0.92rem;
 }
 
-.slotGrid {
+.slotPickerWrap {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
   gap: 10px;
 }
 
-.slotButton {
-  border: 1px solid #dbe1e7;
-  background: #ffffff;
+.slotSelect {
+  width: 100%;
+  border: 1px solid rgba(0, 89, 255, 0.16);
   border-radius: 14px;
-  padding: 11px 10px;
-  display: grid;
-  gap: 4px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-}
-
-.slotButton:hover:not(:disabled) {
-  border-color: rgba(0, 89, 255, 0.25);
-  box-shadow: 0 8px 14px rgba(15, 23, 42, 0.04);
-}
-
-.slotButton:disabled {
-  cursor: not-allowed;
-  background: #f3f4f6;
-  border-color: #e5e7eb;
-  color: #64748b;
-  opacity: 1;
-}
-
-.slotButtonActive {
-  background: #eef6ff;
-  border-color: #0059ff;
-  box-shadow: inset 0 0 0 1px rgba(0, 89, 255, 0.12);
+  background: #ffffff;
   color: #1d2939;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 12px 14px;
+  outline: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
 }
 
-.slotTime {
+.slotSelect:focus {
+  border-color: #0059ff;
+  box-shadow: 0 0 0 3px rgba(0, 89, 255, 0.12);
+}
+
+.slotPreviewRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f8f9fb;
+  border: 1px solid #e5e7eb;
+}
+
+.slotPreviewLabel {
+  color: #667085;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.slotPreviewValue {
+  color: #1d2939;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.bookingTopRow {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.bookingControls {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.controlCard {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.controlHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.controlTitle {
+  margin: 0;
+  color: #344054;
+  font-size: 0.95rem;
   font-weight: 800;
-  color: inherit;
 }
 
-.slotState {
+.controlHint {
+  margin: 0;
+  color: #667085;
   font-size: 0.84rem;
-  color: inherit;
 }
 
 .buttonRow {
@@ -247,7 +287,16 @@
     grid-template-columns: 1fr;
   }
 
+  .bookingTopRow {
+    grid-template-columns: 1fr;
+  }
+
   .slotsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .slotPreviewRow {
     flex-direction: column;
     align-items: flex-start;
   }

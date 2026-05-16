@@ -1,12 +1,58 @@
 .calendarCard {
-  padding: 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  background: rgba(255, 255, 255, 0.92);
+  width: min(100%, 340px);
+  justify-self: start;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(8px);
 }
 
 .picker {
   width: 100%;
+}
+
+.calendarCard :global(.rdp) {
+  --rdp-cell-size: 36px;
+  --rdp-accent-color: #0059ff;
+  --rdp-background-color: rgba(0, 89, 255, 0.1);
+  --rdp-accent-color-dark: #0042c2;
+  margin: 0;
+}
+
+.calendarCard :global(.rdp-months) {
+  justify-content: center;
+}
+
+.calendarCard :global(.rdp-caption_label) {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #1d2939;
+}
+
+.calendarCard :global(.rdp-nav_button) {
+  border-radius: 999px;
+  border: 1px solid rgba(0, 89, 255, 0.12);
+  background: #ffffff;
+}
+
+.calendarCard :global(.rdp-day) {
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.calendarCard :global(.rdp-day_selected) {
+  color: #ffffff;
+}
+
+.calendarCard :global(.rdp-day_disabled) {
+  opacity: 0.35;
+}
+
+@media (max-width: 720px) {
+  .calendarCard {
+    width: 100%;
+    justify-self: stretch;
+  }
 }

@@ -39,6 +39,10 @@ export default function BookingForm({ court }: BookingFormProps) {
     error: availabilityError
   } = useBookingAvailability(court.id, selectedDate, selectedDuration);
 
+  const slots = availability?.slots ?? [];
+  const availableSlots = useMemo(() => slots.filter((slot) => slot.available), [slots]);
+  const selectedSlotValue = selectedSlot ? `${selectedSlot.start_time}-${selectedSlot.end_time}` : '';
+
   const estimatedPrice = calculateEstimatedPrice(
     Number(court.price_60),
     Number(court.price_90),
@@ -54,9 +58,8 @@ export default function BookingForm({ court }: BookingFormProps) {
     setError(null);
   }, [court.id, durationOptions]);
 
-  const slots = availability?.slots ?? [];
   const selectedSlotIsAvailable = selectedSlot
-    ? slots.some(
+    ? availableSlots.some(
         (slot) =>
           slot.start_time === selectedSlot.start_time && slot.end_time === selectedSlot.end_time && slot.available
       )
@@ -143,32 +146,84 @@ export default function BookingForm({ court }: BookingFormProps) {
       </div>
 
       <div className={styles.grid}>
-        <BookingCalendar value={selectedDate} onChange={setSelectedDate} />
+        <div className={styles.bookingTopRow}>
+          <BookingCalendar value={selectedDate} onChange={setSelectedDate} />
 
-        <div className={styles.field}>
-          <div className={styles.slotsHeader}>
-            <div>
-              <p className={styles.label}>{t('booking.duration_label')}</p>
-              <p className={styles.hint}>
-                {t('booking.duration_hint', { min: formatDurationMinutes(court.min_unit_min) })}
-              </p>
-            </div>
-            <p className={styles.slotsMeta}>
-              {t('booking.estimated_price')}: {formatPrice(estimatedPrice)}
-            </p>
-          </div>
+          <div className={styles.bookingControls}>
+            <div className={styles.controlCard}>
+              <div className={styles.controlHeader}>
+                <div>
+                  <p className={styles.controlTitle}>{t('booking.duration_label')}</p>
+                  <p className={styles.controlHint}>{t('booking.duration_hint', { min: formatDurationMinutes(court.min_unit_min) })}</p>
+                </div>
+                <p className={styles.slotsMeta}>
+                  {t('booking.estimated_price')}: {formatPrice(estimatedPrice)}
+                </p>
+              </div>
 
-          <div className={styles.chipRow}>
-            {durationOptions.map((duration) => (
-              <button
-                key={duration}
-                type="button"
-                className={`${styles.chipButton} ${selectedDuration === duration ? styles.chipButtonActive : ''}`}
-                onClick={() => setSelectedDuration(duration)}
+              <select
+                className={styles.slotSelect}
+                value={String(selectedDuration)}
+                onChange={(event) => setSelectedDuration(Number(event.target.value))}
               >
-                {formatDurationMinutes(duration)}
-              </button>
-            ))}
+                {durationOptions.map((duration) => (
+                  <option key={duration} value={duration}>
+                    {formatDurationMinutes(duration)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.controlCard}>
+              <div className={styles.controlHeader}>
+                <div>
+                  <p className={styles.controlTitle}>{t('booking.available_hours')}</p>
+                  <p className={styles.controlHint}>{scheduleLabel}</p>
+                </div>
+                <p className={styles.slotsMeta}>
+                  {availability ? t('booking.slots_count', { count: availableSlots.length }) : t('booking.not_selected')}
+                </p>
+              </div>
+
+              {selectedDate && loadingAvailability ? <p className={styles.notice}>{t('booking.searching_slots')}</p> : null}
+
+              {selectedDate && availability && !availability.is_closed && availableSlots.length > 0 ? (
+                <div className={styles.slotPickerWrap}>
+                  <select
+                    className={styles.slotSelect}
+                    value={selectedSlotValue}
+                    onChange={(event) => {
+                      const chosenSlot = availableSlots.find(
+                        (slot) => `${slot.start_time}-${slot.end_time}` === event.target.value
+                      );
+                      setSelectedSlot(chosenSlot ?? null);
+                    }}
+                  >
+                    <option value="">{t('booking.not_selected')}</option>
+                    {availableSlots.map((slot) => (
+                      <option key={`${slot.start_time}-${slot.end_time}`} value={`${slot.start_time}-${slot.end_time}`}>
+                        {formatTimeRange(slot.start_time, slot.end_time)}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className={styles.slotPreviewRow}>
+                    <span className={styles.slotPreviewLabel}>{t('booking.summary.chosen_time')}</span>
+                    <strong className={styles.slotPreviewValue}>
+                      {selectedSlot ? formatTimeRange(selectedSlot.start_time, selectedSlot.end_time) : t('booking.summary.pending')}
+                    </strong>
+                  </div>
+                </div>
+              ) : null}
+
+              {selectedDate && availability && !availability.is_closed && availableSlots.length === 0 ? (
+                <p className={styles.notice}>{t('booking.no_reservations_possible')}</p>
+              ) : null}
+
+              {selectedDate && availability && availability.is_closed ? (
+                <p className={styles.notice}>{t('booking.no_reservations_possible')}</p>
+              ) : null}
+            </div>
           </div>
         </div>
 
@@ -189,48 +244,6 @@ export default function BookingForm({ court }: BookingFormProps) {
             <p className={styles.summaryLabel}>{t('booking.summary.total')}</p>
             <p className={styles.summaryValue}>{formatPrice(estimatedPrice)}</p>
           </div>
-        </div>
-
-        <div className={styles.field}>
-          <div className={styles.slotsHeader}>
-            <div>
-              <p className={styles.label}>{t('booking.available_hours')}</p>
-              <p className={styles.hint}>{scheduleLabel}</p>
-            </div>
-            <p className={styles.slotsMeta}>
-              {availability ? t('booking.slots_count', { count: slots.length }) : t('booking.not_selected')}
-            </p>
-          </div>
-
-          {selectedDate && loadingAvailability ? <p className={styles.notice}>{t('booking.searching_slots')}</p> : null}
-
-          {selectedDate && availability && !availability.is_closed ? (
-            <div className={styles.slotGrid}>
-              {slots.map((slot) => {
-                const isActive =
-                  selectedSlot?.start_time === slot.start_time && selectedSlot?.end_time === slot.end_time;
-
-                return (
-                  <button
-                    key={`${slot.start_time}-${slot.end_time}`}
-                    type="button"
-                    disabled={!slot.available}
-                    className={`${styles.slotButton} ${isActive ? styles.slotButtonActive : ''}`}
-                    onClick={() => setSelectedSlot(slot)}
-                  >
-                    <span className={styles.slotTime}>{formatTimeRange(slot.start_time, slot.end_time)}</span>
-                    <span className={styles.slotState}>
-                      {slot.available ? t('booking.slot_available') : t('booking.slot_unavailable')}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
-
-          {selectedDate && availability && availability.is_closed ? (
-            <p className={styles.notice}>{t('booking.no_reservations_possible')}</p>
-          ) : null}
         </div>
 
         {availabilityError ? <p className={styles.errorText}>{availabilityError}</p> : null}

@@ -56,6 +56,11 @@ function parseBookingDate(dateValue: string): Date | null {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
+function parseBookingPrice(price: number | string | null | undefined): number {
+  const parsed = typeof price === 'number' ? price : Number(price ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 export function getBookingStatusChartData(bookings: Booking[], t: Translate): DashboardStatusDatum[] {
   const counts = bookings.reduce<Record<BookingStatus, number>>(
     (acc, booking) => {
@@ -138,13 +143,14 @@ export function buildRevenueData(
     }
 
     const previousValue = revenueByMonth.get(key) ?? 0;
-    revenueByMonth.set(key, Number((previousValue + booking.total_price).toFixed(2)));
+    const bookingPrice = parseBookingPrice(booking.total_price);
+    revenueByMonth.set(key, Number((previousValue + bookingPrice).toFixed(2)));
   });
 
   const nonZeroMonths = Array.from(revenueByMonth.values()).filter((value) => value > 0).length;
 
   if (nonZeroMonths < 2) {
-    const derivedTotal = totalRevenue ?? bookings.reduce((acc, booking) => acc + booking.total_price, 0);
+    const derivedTotal = totalRevenue ?? bookings.reduce((acc, booking) => acc + parseBookingPrice(booking.total_price), 0);
     const baseMonthly = derivedTotal > 0 ? derivedTotal / monthKeys.length : 0;
 
     monthKeys.forEach((month, index) => {
