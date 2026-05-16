@@ -66,6 +66,8 @@ export default function ManagerPage() {
 
   const currencyLocale = i18n.language.startsWith('en') ? 'en-US' : 'es-ES';
 
+  const canCreateContent = Boolean(manager?.subscription_active);
+
   const bookingStatusData = useMemo<DashboardStatusDatum[]>(() => {
     return getBookingStatusChartData(bookings, t);
   }, [bookings, t]);
@@ -223,9 +225,11 @@ export default function ManagerPage() {
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
               <span className={styles.sectionTitle}>{t('manager.clubs_title')}</span>
-              <button className={styles.btnPrimary} onClick={() => setClubModal({ open: true })} type="button">
-                {t('manager.clubs_new')}
-              </button>
+              {canCreateContent && (
+                <button className={styles.btnPrimary} onClick={() => setClubModal({ open: true })} type="button">
+                  {t('manager.clubs_new')}
+                </button>
+              )}
             </div>
             <div className={styles.tableWrapper}>
               <table className={styles.table}>
@@ -275,9 +279,11 @@ export default function ManagerPage() {
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
               <span className={styles.sectionTitle}>{t('manager.courts_title')}</span>
-              <button className={styles.btnPrimary} onClick={() => setCourtModal({ open: true })} type="button">
-                {t('manager.courts_new')}
-              </button>
+              {canCreateContent && (
+                <button className={styles.btnPrimary} onClick={() => setCourtModal({ open: true })} type="button">
+                  {t('manager.courts_new')}
+                </button>
+              )}
             </div>
             <div className={styles.tableWrapper}>
               <table className={styles.table}>
