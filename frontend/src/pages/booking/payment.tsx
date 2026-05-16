@@ -11,7 +11,13 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './payment.module.scss';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+if (!stripeKey) {
+  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY no está definida');
+}
+
+const stripePromise = loadStripe(stripeKey);
 
 function firstValue(value: string | string[] | undefined): string {
   if (Array.isArray(value)) return value[0] ?? '';

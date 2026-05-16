@@ -5,9 +5,13 @@ import PaymentStatus from "@/components/modules/payments/PaymentStatus";
 import { useRouteQueryParam } from "@/hooks/useRouteQueryParam";
 import styles from "./payment-result.module.scss";
 
-const stripePromise = loadStripe(
-	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-);
+const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+if (!stripeKey) {
+  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY no está definida');
+}
+
+const stripePromise = loadStripe(stripeKey);
 
 /**
  * @page BookingPaymentResult
