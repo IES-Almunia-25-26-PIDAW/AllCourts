@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {
+	PaymentElement,
+	useElements,
+	useStripe,
+} from "@stripe/react-stripe-js";
 import { useTranslation } from "react-i18next";
 import { getSubscriptionStatus } from "@/api/stripeApi";
 import styles from "./SubscriptionCheckoutForm.module.scss";
@@ -9,7 +13,15 @@ type SubscriptionCheckoutFormProps = {
 	onBack: () => void;
 };
 
-export default function SubscriptionCheckoutForm({ onBack }: SubscriptionCheckoutFormProps) {
+/**
+ * @component SubscriptionCheckoutForm
+ * Formulario de Stripe para confirmar la suscripción seleccionada.
+ *
+ * @param onBack Callback para volver a la selección de plan.
+ */
+export default function SubscriptionCheckoutForm({
+	onBack,
+}: SubscriptionCheckoutFormProps) {
 	const stripe = useStripe();
 	const elements = useElements();
 	const router = useRouter();
@@ -54,8 +66,7 @@ export default function SubscriptionCheckoutForm({ onBack }: SubscriptionCheckou
 			) {
 				try {
 					await getSubscriptionStatus();
-				} catch {
-				}
+				} catch {}
 
 				setSuccessMessage(t("subscription.success"));
 				await router.push("/manager");
@@ -74,7 +85,11 @@ export default function SubscriptionCheckoutForm({ onBack }: SubscriptionCheckou
 		<form className={styles.checkoutForm} onSubmit={handleSubmit}>
 			<div className={styles.checkoutHeader}>
 				<h2>{t("subscription.payNow")}</h2>
-				<button type="button" className={styles.backBtn} onClick={onBack}>
+				<button
+					type="button"
+					className={styles.backBtn}
+					onClick={onBack}
+				>
 					{t("subscription.back")}
 				</button>
 			</div>
@@ -98,7 +113,9 @@ export default function SubscriptionCheckoutForm({ onBack }: SubscriptionCheckou
 				disabled={!stripe || !elements || isSubmitting}
 				className={styles.payNowBtn}
 			>
-				{isSubmitting ? t("subscription.processing") : t("subscription.payNow")}
+				{isSubmitting
+					? t("subscription.processing")
+					: t("subscription.payNow")}
 			</button>
 		</form>
 	);

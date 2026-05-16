@@ -3,12 +3,12 @@
  * Servicio de correo saliente de AllCourts.
  * Centraliza los emails de verificación, recuperación de contraseña y confirmación de reserva.
  */
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
-  port: Number(process.env.MAIL_PORT),
-  secure: false
+	host: process.env.MAIL_HOST,
+	port: Number(process.env.MAIL_PORT),
+	secure: false,
 });
 
 const buildEmailTemplate = (title, bodyHtml) => `
@@ -55,15 +55,15 @@ const buildEmailTemplate = (title, bodyHtml) => `
  * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
  */
 const sendVerificationEmail = (toEmail, token) => {
-  const verifyUrl = `${process.env.APP_URL}/auth/verify/${token}`;
+	const verifyUrl = `${process.env.APP_URL}/auth/verify/${token}`;
 
-  return transporter.sendMail({
-    from: `"AllCourts" <${process.env.MAIL_FROM}>`,
-    to: toEmail,
-    subject: 'Verifica tu cuenta de AllCourts',
-    html: buildEmailTemplate(
-      'Verifica tu cuenta',
-      `
+	return transporter.sendMail({
+		from: `"AllCourts" <${process.env.MAIL_FROM}>`,
+		to: toEmail,
+		subject: "Verifica tu cuenta de AllCourts",
+		html: buildEmailTemplate(
+			"Verifica tu cuenta",
+			`
         <p style="margin:0 0 18px;">Bienvenido a AllCourts. Para activar tu cuenta, confirma tu correo electrónico desde el siguiente botón.</p>
         <p style="margin:0 0 24px;text-align:center;">
           <a href="${verifyUrl}" style="display:inline-block;background-color:#0059ff;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:6px;box-shadow:0 8px 16px rgba(0,89,255,0.20);">Verificar email</a>
@@ -71,9 +71,9 @@ const sendVerificationEmail = (toEmail, token) => {
         <p style="margin:0 0 12px;word-break:break-word;">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
         <p style="margin:0;word-break:break-word;"><a href="${verifyUrl}" style="color:#0059ff;text-decoration:underline;">${verifyUrl}</a></p>
         <p style="margin:18px 0 0;">Este enlace expira en 24 horas.</p>
-      `
-    )
-  });
+      `,
+		),
+	});
 };
 
 /**
@@ -84,15 +84,15 @@ const sendVerificationEmail = (toEmail, token) => {
  * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
  */
 const sendPasswordResetEmail = (toEmail, token) => {
-  const resetUrl = `${process.env.APP_URL}/auth/reset-password/${token}`;
+	const resetUrl = `${process.env.APP_URL}/auth/reset-password/${token}`;
 
-  return transporter.sendMail({
-    from: `"AllCourts" <${process.env.MAIL_FROM}>`,
-    to: toEmail,
-    subject: 'Recupera tu contraseña de AllCourts',
-    html: buildEmailTemplate(
-      'Recuperación de contraseña',
-      `
+	return transporter.sendMail({
+		from: `"AllCourts" <${process.env.MAIL_FROM}>`,
+		to: toEmail,
+		subject: "Recupera tu contraseña de AllCourts",
+		html: buildEmailTemplate(
+			"Recuperación de contraseña",
+			`
         <p style="margin:0 0 18px;">Hemos recibido una solicitud para restablecer tu contraseña de AllCourts.</p>
         <p style="margin:0 0 24px;text-align:center;">
           <a href="${resetUrl}" style="display:inline-block;background-color:#0059ff;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:6px;box-shadow:0 8px 16px rgba(0,89,255,0.20);">Restablecer contraseña</a>
@@ -100,9 +100,9 @@ const sendPasswordResetEmail = (toEmail, token) => {
         <p style="margin:0 0 12px;word-break:break-word;">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
         <p style="margin:0;word-break:break-word;"><a href="${resetUrl}" style="color:#0059ff;text-decoration:underline;">${resetUrl}</a></p>
         <p style="margin:18px 0 0;">Este enlace expira en 1 hora.</p>
-      `
-    )
-  });
+      `,
+		),
+	});
 };
 
 /**
@@ -113,20 +113,20 @@ const sendPasswordResetEmail = (toEmail, token) => {
  * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
  */
 const sendBookingConfirmationEmail = (user, booking) => {
-  const bookingDate = booking.date;
-  const bookingTime = booking.start_time;
-  const amountPaid = booking.total_price;
-  const courtName = booking.court_name || "";
-  const clubAddress = booking.court_address || "";
-  const clubCity = booking.court_city || "";
+	const bookingDate = booking.date;
+	const bookingTime = booking.start_time;
+	const amountPaid = booking.total_price;
+	const courtName = booking.court_name || "";
+	const clubAddress = booking.court_address || "";
+	const clubCity = booking.court_city || "";
 
-  return transporter.sendMail({
-    from: `"AllCourts" <${process.env.MAIL_FROM}>`,
-    to: user.email,
-    subject: "Confirmacion de reserva en AllCourts",
-    html: buildEmailTemplate(
-      'Reserva confirmada',
-      `
+	return transporter.sendMail({
+		from: `"AllCourts" <${process.env.MAIL_FROM}>`,
+		to: user.email,
+		subject: "Confirmacion de reserva en AllCourts",
+		html: buildEmailTemplate(
+			"Reserva confirmada",
+			`
         <p style="margin:0 0 18px;">Hola ${user.name}, tu reserva ha sido confirmada correctamente.</p>
         <div style="margin:0 0 18px;padding:16px;border-radius:10px;background-color:#f8fbff;border:1px solid #dbe7ff;box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);">
           <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Pista:</strong> ${courtName}</p>
@@ -139,9 +139,9 @@ const sendBookingConfirmationEmail = (user, booking) => {
         <p style="margin:0;text-align:center;">
           <a href="${process.env.APP_URL}/profile" style="display:inline-block;background-color:#0059ff;color:#ffffff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;box-shadow:0 8px 16px rgba(0,89,255,0.20);">Ver mis reservas</a>
         </p>
-      `
-    ),
-  });
+      `,
+		),
+	});
 };
 
 /**
@@ -152,36 +152,42 @@ const sendBookingConfirmationEmail = (user, booking) => {
  * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
  */
 const sendBookingCancellationEmail = (user, booking) => {
-  const bookingDate = booking.date;
-  const bookingTime = booking.start_time;
-  const courtName = booking.court_name || '';
-  const clubAddress = booking.court_address || '';
-  const clubCity = booking.court_city || '';
-  const refundedAmount = booking.refund_amount ?? booking.refunded_amount ?? booking.amount_refunded;
-  const hasRefundedAmount = refundedAmount !== undefined && refundedAmount !== null && refundedAmount !== '';
+	const bookingDate = booking.date;
+	const bookingTime = booking.start_time;
+	const courtName = booking.court_name || "";
+	const clubAddress = booking.court_address || "";
+	const clubCity = booking.court_city || "";
+	const refundedAmount =
+		booking.refund_amount ??
+		booking.refunded_amount ??
+		booking.amount_refunded;
+	const hasRefundedAmount =
+		refundedAmount !== undefined &&
+		refundedAmount !== null &&
+		refundedAmount !== "";
 
-  return transporter.sendMail({
-    from: `"AllCourts" <${process.env.MAIL_FROM}>`,
-    to: user.email,
-    subject: 'Tu reserva ha sido cancelada – AllCourts',
-    html: buildEmailTemplate(
-      'Reserva cancelada',
-      `
+	return transporter.sendMail({
+		from: `"AllCourts" <${process.env.MAIL_FROM}>`,
+		to: user.email,
+		subject: "Tu reserva ha sido cancelada – AllCourts",
+		html: buildEmailTemplate(
+			"Reserva cancelada",
+			`
         <p style="margin:0 0 18px;">Hola ${user.name}, tu reserva ha sido cancelada correctamente.</p>
         <div style="margin:0 0 18px;padding:16px;border-radius:10px;background-color:#f8fbff;border:1px solid #dbe7ff;box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);">
           <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Pista:</strong> ${courtName}</p>
           <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Club:</strong> ${clubAddress} ${clubCity}</p>
           <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Fecha:</strong> ${bookingDate}</p>
           <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Hora:</strong> ${bookingTime}</p>
-          ${hasRefundedAmount ? `<p style="margin:0 0 8px;"><strong style="color:#0f172a;">Importe reembolsado:</strong> ${refundedAmount} EUR</p>` : ''}
+          ${hasRefundedAmount ? `<p style="margin:0 0 8px;"><strong style="color:#0f172a;">Importe reembolsado:</strong> ${refundedAmount} EUR</p>` : ""}
           <p style="margin:0;"><strong style="color:#0f172a;">Número de reserva:</strong> ${booking.id}</p>
         </div>
         <p style="margin:0;text-align:center;">
           <a href="${process.env.APP_URL}/courts" style="display:inline-block;background-color:#0059ff;color:#ffffff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;box-shadow:0 8px 16px rgba(0,89,255,0.20);">Hacer nueva reserva</a>
         </p>
-      `
-    ),
-  });
+      `,
+		),
+	});
 };
 
 /**
@@ -193,16 +199,20 @@ const sendBookingCancellationEmail = (user, booking) => {
  * @returns {Promise<import('nodemailer').SentMessageInfo>} Resultado del envío.
  */
 const sendSubscriptionActivationEmail = (user, planName, subscription) => {
-  const subscriptionStart = subscription.subscription_start || subscription.start_date || null;
-  const subscriptionEnd = subscription.subscription_end || subscription.current_period_end || null;
+	const subscriptionStart =
+		subscription.subscription_start || subscription.start_date || null;
+	const subscriptionEnd =
+		subscription.subscription_end ||
+		subscription.current_period_end ||
+		null;
 
-  return transporter.sendMail({
-    from: `"AllCourts" <${process.env.MAIL_FROM}>`,
-    to: user.email,
-    subject: "Tu suscripción de manager está activa – AllCourts",
-    html: buildEmailTemplate(
-      "Suscripción activada",
-      `
+	return transporter.sendMail({
+		from: `"AllCourts" <${process.env.MAIL_FROM}>`,
+		to: user.email,
+		subject: "Tu suscripción de manager está activa – AllCourts",
+		html: buildEmailTemplate(
+			"Suscripción activada",
+			`
         <p style="margin:0 0 18px;">Hola ${user.name}, ya tienes la suscripción de manager activa.</p>
         <div style="margin:0 0 18px;padding:16px;border-radius:10px;background-color:#f8fbff;border:1px solid #dbe7ff;box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);">
           <p style="margin:0 0 8px;"><strong style="color:#0f172a;">Plan:</strong> ${planName || "Manager"}</p>
@@ -212,15 +222,15 @@ const sendSubscriptionActivationEmail = (user, planName, subscription) => {
         <p style="margin:0;text-align:center;">
           <a href="${process.env.APP_URL}/manager" style="display:inline-block;background-color:#0059ff;color:#ffffff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;box-shadow:0 8px 16px rgba(0,89,255,0.20);">Ir al panel</a>
         </p>
-      `
-    ),
-  });
+      `,
+		),
+	});
 };
 
 module.exports = {
-  sendVerificationEmail,
-  sendPasswordResetEmail,
-  sendBookingConfirmationEmail,
-  sendBookingCancellationEmail,
-  sendSubscriptionActivationEmail,
+	sendVerificationEmail,
+	sendPasswordResetEmail,
+	sendBookingConfirmationEmail,
+	sendBookingCancellationEmail,
+	sendSubscriptionActivationEmail,
 };

@@ -1,144 +1,149 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 
-//#region MODULES
 .page {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 32px 20px 64px;
-  color: #2c3e50;
+	max-width: 1180px;
+	margin: 0 auto;
+	padding: 32px 20px 64px;
+	color: #2c3e50;
 }
 
 .backWrap {
-  margin-bottom: 12px;
+	margin-bottom: 12px;
 }
 
 .backLink {
-  color: $primary-color;
-  text-decoration: none;
-  font-weight: 600;
+	color: $primary-color;
+	text-decoration: none;
+	font-weight: 600;
 }
 
 .section {
-  margin-bottom: 24px;
+	margin-bottom: 24px;
 }
 
 .sectionTag {
-  margin: 0;
-  color: $primary-color;
-  font-weight: 700;
+	margin: 0;
+	color: $primary-color;
+	font-weight: 700;
 }
 
 .title {
-  margin: 8px 0 10px;
-  font-size: 2.4rem;
-  line-height: 1.15;
+	margin: 8px 0 10px;
+	font-size: 2.4rem;
+	line-height: 1.15;
 }
 
 .subtitle {
-  margin: 0;
-  color: #555;
-  max-width: 700px;
-  font-size: 1rem;
+	margin: 0;
+	color: #555;
+	max-width: 700px;
+	font-size: 1rem;
 }
 
 .searchBox {
-  margin-top: 18px;
-  width: 100%;
-  max-width: 520px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid #d9d9d9;
-  outline: none;
-  font-size: 16px;
-  background: $card-bg;
+	margin-top: 18px;
+	width: 100%;
+	max-width: 520px;
+	padding: 14px 16px;
+	border-radius: 12px;
+	border: 1px solid #d9d9d9;
+	outline: none;
+	font-size: 16px;
+	background: $card-bg;
 
-  &:focus {
-    border-color: $primary-color;
-    box-shadow: 0 0 0 3px $primary-soft-strong;
-  }
+	&:focus {
+		border-color: $primary-color;
+		box-shadow: 0 0 0 3px $primary-soft-strong;
+	}
 }
 
 .filtersBlock {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 16px;
 }
 
 .chip {
-  cursor: pointer;
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 2px solid #e5e7eb;
-  background: #fff;
-  font-size: 13px;
-  color: #0f172a;
-  font-weight: 500;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+	cursor: pointer;
+	padding: 6px 14px;
+	border-radius: 20px;
+	border: 2px solid #e5e7eb;
+	background: #fff;
+	font-size: 13px;
+	color: #0f172a;
+	font-weight: 500;
+	transition:
+		background 0.15s,
+		border-color 0.15s,
+		color 0.15s;
 
-  &:hover {
-    background: $surface-soft;
-    border-color: $primary-color;
-    color: $primary-color;
-  }
+	&:hover {
+		background: $surface-soft;
+		border-color: $primary-color;
+		color: $primary-color;
+	}
 
-  &:focus {
-    outline: none;
-  }
+	&:focus {
+		outline: none;
+	}
 
-  &:focus-visible {
-    outline: none;
-  }
+	&:focus-visible {
+		outline: none;
+	}
 }
 
 .chipActive {
-  cursor: pointer;
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 2px solid $primary-color;
-  background: $surface-soft;
-  font-size: 13px;
-  color: $primary-color;
-  font-weight: 600;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+	cursor: pointer;
+	padding: 6px 14px;
+	border-radius: 20px;
+	border: 2px solid $primary-color;
+	background: $surface-soft;
+	font-size: 13px;
+	color: $primary-color;
+	font-weight: 600;
+	transition:
+		background 0.15s,
+		border-color 0.15s,
+		color 0.15s;
 
-  &:focus {
-    outline: none;
-  }
+	&:focus {
+		outline: none;
+	}
 
-  &:focus-visible {
-    outline: none;
-  }
+	&:focus-visible {
+		outline: none;
+	}
 }
 
 .clearBtn {
-  margin-top: 12px;
-  cursor: pointer;
-  padding: 6px 16px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background: transparent;
-  color: #667085;
-  font-size: 13px;
+	margin-top: 12px;
+	cursor: pointer;
+	padding: 6px 16px;
+	border-radius: 8px;
+	border: 1px solid #e5e7eb;
+	background: transparent;
+	color: #667085;
+	font-size: 13px;
 
-  &:hover {
-    border-color: #c0c0c0;
-    color: #0f172a;
-  }
+	&:hover {
+		border-color: #c0c0c0;
+		color: #0f172a;
+	}
 }
 
 .status {
-  color: #666;
+	color: #666;
 }
 
 .errorText {
-  color: #c62828;
+	color: #c62828;
 }
 
 .resultsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 24px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 20px;
+	margin-top: 24px;
 }
 //#endregion

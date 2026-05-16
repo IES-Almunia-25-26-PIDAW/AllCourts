@@ -1,9 +1,6 @@
-//#region MODULES
-import { request } from '@/api/http';
-import type { CreateUserDTO, LoginCredentials, User } from '@/types/user';
-//#endregion
+import { request } from "@/api/http";
+import type { CreateUserDTO, LoginCredentials, User } from "@/types/user";
 
-//#region DOCUMENTATION
 /**
  * @module authApi
  * Cliente API de autenticación del frontend.
@@ -20,9 +17,6 @@ import type { CreateUserDTO, LoginCredentials, User } from '@/types/user';
  *   - No expone tokens JWT en JavaScript.
  *   - Devuelve respuestas tipadas para sincronizar Redux y localStorage.
  */
-//#endregion
-
-//#region FUNCTIONS
 /**
  * Obtiene el usuario autenticado usando la cookie httpOnly.
  * Se usa al arrancar la app para hidratar la sesión real del usuario.
@@ -30,7 +24,7 @@ import type { CreateUserDTO, LoginCredentials, User } from '@/types/user';
  * @returns {Promise<User>} Usuario autenticado.
  */
 export async function getCurrentUser(): Promise<User> {
-  return request<User>('/auth/me');
+	return request<User>("/auth/me");
 }
 
 /**
@@ -40,11 +34,13 @@ export async function getCurrentUser(): Promise<User> {
  * @param credentials Credenciales de acceso.
  * @returns {Promise<{ user: User }>} Respuesta con el usuario autenticado.
  */
-export async function login(credentials: LoginCredentials): Promise<{ user: User }> {
-  return request<{ user: User }>('/auth/login', {
-    method: 'POST',
-    body: JSON.stringify(credentials)
-  });
+export async function login(
+	credentials: LoginCredentials,
+): Promise<{ user: User }> {
+	return request<{ user: User }>("/auth/login", {
+		method: "POST",
+		body: JSON.stringify(credentials),
+	});
 }
 
 /**
@@ -53,11 +49,13 @@ export async function login(credentials: LoginCredentials): Promise<{ user: User
  * @param userData Datos del usuario a crear.
  * @returns {Promise<{ message: string }>} Mensaje de confirmación.
  */
-export async function register(userData: CreateUserDTO): Promise<{ message: string }> {
-  return request<{ message: string }>('/auth/register', {
-    method: 'POST',
-    body: JSON.stringify(userData)
-  });
+export async function register(
+	userData: CreateUserDTO,
+): Promise<{ message: string }> {
+	return request<{ message: string }>("/auth/register", {
+		method: "POST",
+		body: JSON.stringify(userData),
+	});
 }
 
 /**
@@ -67,7 +65,7 @@ export async function register(userData: CreateUserDTO): Promise<{ message: stri
  * @returns {Promise<void>} No devuelve contenido útil.
  */
 export async function logout(): Promise<void> {
-  await request<{ message: string }>('/auth/logout', { method: 'POST' });
+	await request<{ message: string }>("/auth/logout", { method: "POST" });
 }
 
 /**
@@ -77,7 +75,7 @@ export async function logout(): Promise<void> {
  * @returns {Promise<{ message: string }>} Mensaje del backend.
  */
 export async function verifyEmail(token: string): Promise<{ message: string }> {
-  return request<{ message: string }>(`/auth/verify/${token}`);
+	return request<{ message: string }>(`/auth/verify/${token}`);
 }
 
 /**
@@ -86,11 +84,13 @@ export async function verifyEmail(token: string): Promise<{ message: string }> {
  * @param email Correo del usuario.
  * @returns {Promise<{ message: string }>} Mensaje de confirmación.
  */
-export async function forgotPassword(email: string): Promise<{ message: string }> {
-  return request<{ message: string }>('/auth/forgot-password', {
-    method: 'POST',
-    body: JSON.stringify({ email })
-  });
+export async function forgotPassword(
+	email: string,
+): Promise<{ message: string }> {
+	return request<{ message: string }>("/auth/forgot-password", {
+		method: "POST",
+		body: JSON.stringify({ email }),
+	});
 }
 
 /**
@@ -100,11 +100,14 @@ export async function forgotPassword(email: string): Promise<{ message: string }
  * @param newPassword Nueva contraseña.
  * @returns {Promise<{ message: string }>} Mensaje de confirmación.
  */
-export async function resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
-  return request<{ message: string }>(`/auth/reset-password/${token}`, {
-    method: 'POST',
-    body: JSON.stringify({ newPassword })
-  });
+export async function resetPassword(
+	token: string,
+	newPassword: string,
+): Promise<{ message: string }> {
+	return request<{ message: string }>(`/auth/reset-password/${token}`, {
+		method: "POST",
+		body: JSON.stringify({ newPassword }),
+	});
 }
 
 /**
@@ -113,10 +116,11 @@ export async function resetPassword(token: string, newPassword: string): Promise
  * @param email Correo del usuario.
  * @returns {Promise<{ message: string }>} Mensaje de confirmación.
  */
-export async function resendVerification(email: string): Promise<{ message: string }> {
-  return request<{ message: string }>('/auth/resend-verification', {
-    method: 'POST',
-    body: JSON.stringify({ email })
-  });
+export async function resendVerification(
+	email: string,
+): Promise<{ message: string }> {
+	return request<{ message: string }>("/auth/resend-verification", {
+		method: "POST",
+		body: JSON.stringify({ email }),
+	});
 }
-//#endregion

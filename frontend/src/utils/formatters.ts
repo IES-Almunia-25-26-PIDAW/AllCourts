@@ -13,10 +13,10 @@
  * @returns {string} Precio formateado en EUR.
  */
 export const formatPrice = (price: number): string =>
-  new Intl.NumberFormat("es-ES", {
-    style: "currency",
-    currency: "EUR",
-  }).format(price);
+	new Intl.NumberFormat("es-ES", {
+		style: "currency",
+		currency: "EUR",
+	}).format(price);
 
 /**
  * Formatea un número como precio en una localización concreta.
@@ -26,54 +26,54 @@ export const formatPrice = (price: number): string =>
  * @returns {string} Precio formateado en la localización indicada.
  */
 export const formatPriceWithLocale = (
-  price: number,
-  locale = "es-ES",
+	price: number,
+	locale = "es-ES",
 ): string =>
-  new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: "EUR",
-  }).format(price);
+	new Intl.NumberFormat(locale, {
+		style: "currency",
+		currency: "EUR",
+	}).format(price);
 
-  /**
-   * Formatea un rango horario a partir de dos cadenas `HH:mm:ss`.
-   *
-   * @param startTime Hora de inicio.
-   * @param endTime Hora de fin.
-   * @returns {string} Rango en formato `HH:mm - HH:mm`.
-   */
+/**
+ * Formatea un rango horario a partir de dos cadenas `HH:mm:ss`.
+ *
+ * @param startTime Hora de inicio.
+ * @param endTime Hora de fin.
+ * @returns {string} Rango en formato `HH:mm - HH:mm`.
+ */
 export const formatTimeRange = (startTime: string, endTime: string): string =>
-  `${startTime.slice(0, 5)} - ${endTime.slice(0, 5)}`;
+	`${startTime.slice(0, 5)} - ${endTime.slice(0, 5)}`;
 
-  /**
-   * Convierte una fecha en formato Date a clave `YYYY-MM-DD`.
-   *
-   * @param date Fecha de referencia.
-   * @returns {string} Clave de fecha normalizada.
-   */
+/**
+ * Convierte una fecha en formato Date a clave `YYYY-MM-DD`.
+ *
+ * @param date Fecha de referencia.
+ * @returns {string} Clave de fecha normalizada.
+ */
 export const formatDateKey = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 };
 
-  /**
-   * Convierte una clave de fecha `YYYY-MM-DD` en un objeto Date.
-   *
-   * @param dateKey Clave de fecha a parsear.
-   * @returns {Date | undefined} Fecha resultante o `undefined` si es inválida.
-   */
+/**
+ * Convierte una clave de fecha `YYYY-MM-DD` en un objeto Date.
+ *
+ * @param dateKey Clave de fecha a parsear.
+ * @returns {Date | undefined} Fecha resultante o `undefined` si es inválida.
+ */
 export function parseDateKey(dateKey: string): Date | undefined {
-  if (!dateKey) {
-    return undefined;
-  }
+	if (!dateKey) {
+		return undefined;
+	}
 
-  const [year, month, day] = dateKey.split("-").map(Number);
-  if (!year || !month || !day) {
-    return undefined;
-  }
+	const [year, month, day] = dateKey.split("-").map(Number);
+	if (!year || !month || !day) {
+		return undefined;
+	}
 
-  return new Date(year, month - 1, day);
+	return new Date(year, month - 1, day);
 }
 
 /**
@@ -83,7 +83,7 @@ export function parseDateKey(dateKey: string): Date | undefined {
  * @returns {string} Clave `YYYY-MM-DD`.
  */
 export const getTodayDateKey = (referenceDate = new Date()): string =>
-  formatDateKey(referenceDate);
+	formatDateKey(referenceDate);
 
 /**
  * Formatea una duración en minutos.
@@ -92,12 +92,12 @@ export const getTodayDateKey = (referenceDate = new Date()): string =>
  * @returns {string} Texto legible con la duración.
  */
 export function formatDurationMinutes(value: string | number): string {
-  const minutes = String(value ?? "").trim();
-  if (!minutes) {
-    return "--";
-  }
+	const minutes = String(value ?? "").trim();
+	if (!minutes) {
+		return "--";
+	}
 
-  return `${minutes} min`;
+	return `${minutes} min`;
 }
 
 /**
@@ -107,11 +107,11 @@ export function formatDurationMinutes(value: string | number): string {
  * @returns {string} Texto con la primera letra en mayúscula.
  */
 function capitalize(value: string): string {
-  if (!value) {
-    return value;
-  }
+	if (!value) {
+		return value;
+	}
 
-  return value.charAt(0).toUpperCase() + value.slice(1);
+	return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 /**
@@ -123,28 +123,30 @@ function capitalize(value: string): string {
  * @returns {string} Fecha formateada o la etiqueta de respaldo.
  */
 export function formatLongDate(
-  dateValue: string,
-  locale: string,
-  fallbackLabel: string,
+	dateValue: string,
+	locale: string,
+	fallbackLabel: string,
 ): string {
-  if (!dateValue) {
-    return fallbackLabel;
-  }
+	if (!dateValue) {
+		return fallbackLabel;
+	}
 
-  const dateOnly = dateValue.includes("T") ? dateValue.split("T")[0] : dateValue;
-  const date = new Date(`${dateOnly}T12:00:00`);
-  if (Number.isNaN(date.getTime())) {
-    return fallbackLabel;
-  }
+	const dateOnly = dateValue.includes("T")
+		? dateValue.split("T")[0]
+		: dateValue;
+	const date = new Date(`${dateOnly}T12:00:00`);
+	if (Number.isNaN(date.getTime())) {
+		return fallbackLabel;
+	}
 
-  const formatted = new Intl.DateTimeFormat(locale, {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
+	const formatted = new Intl.DateTimeFormat(locale, {
+		weekday: "long",
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+	}).format(date);
 
-  return capitalize(formatted);
+	return capitalize(formatted);
 }
 
 /**
@@ -155,12 +157,12 @@ export function formatLongDate(
  * @returns {string} Texto con mes y año.
  */
 export function formatMonthYear(date: Date, locale: string): string {
-  const formatted = new Intl.DateTimeFormat(locale, {
-    month: "long",
-    year: "numeric",
-  }).format(date);
+	const formatted = new Intl.DateTimeFormat(locale, {
+		month: "long",
+		year: "numeric",
+	}).format(date);
 
-  return capitalize(formatted);
+	return capitalize(formatted);
 }
 
 /**
@@ -171,13 +173,13 @@ export function formatMonthYear(date: Date, locale: string): string {
  * @returns {string} Nombre corto del día.
  */
 export function formatWeekdayShort(date: Date, locale: string): string {
-  const formatted = new Intl.DateTimeFormat(locale, {
-    weekday: "short",
-  })
-    .format(date)
-    .replace(/\./g, "");
+	const formatted = new Intl.DateTimeFormat(locale, {
+		weekday: "short",
+	})
+		.format(date)
+		.replace(/\./g, "");
 
-  return capitalize(formatted);
+	return capitalize(formatted);
 }
 
 /**
@@ -187,9 +189,9 @@ export function formatWeekdayShort(date: Date, locale: string): string {
  * @returns {number[]} Lista ordenada de duraciones disponibles.
  */
 export function getDurationOptions(minDuration: number): number[] {
-  return Array.from(new Set([minDuration, 60, 90, 120]))
-    .filter((duration) => duration >= minDuration)
-    .sort((a, b) => a - b);
+	return Array.from(new Set([minDuration, 60, 90, 120]))
+		.filter((duration) => duration >= minDuration)
+		.sort((a, b) => a - b);
 }
 
 /**
@@ -202,14 +204,14 @@ export function getDurationOptions(minDuration: number): number[] {
  * @returns {number} Precio estimado.
  */
 export function calculateEstimatedPrice(
-  price60: number,
-  price90: number,
-  price120: number,
-  durationMin: number,
+	price60: number,
+	price90: number,
+	price120: number,
+	durationMin: number,
 ): number {
-  if (durationMin === 60) return Number(price60);
-  if (durationMin === 90) return Number(price90);
-  if (durationMin === 120) return Number(price120);
+	if (durationMin === 60) return Number(price60);
+	if (durationMin === 90) return Number(price90);
+	if (durationMin === 120) return Number(price120);
 
-  return Number(((Number(price60) / 60) * durationMin).toFixed(2));
+	return Number(((Number(price60) / 60) * durationMin).toFixed(2));
 }

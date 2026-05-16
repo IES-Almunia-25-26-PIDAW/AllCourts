@@ -1,25 +1,32 @@
-import { getApiUrl } from '@/utils/runtimeConfig';
+import { getApiUrl } from "@/utils/runtimeConfig";
 
-export function resolveImageUrl(imageUrl?: string | null, fallback = '/logoallcourts.png'): string {
-  if (!imageUrl) {
-    return fallback;
-  }
+/**
+ * Resuelve una URL de imagen absoluta o relativa a una URL segura para la UI.
+ *
+ * @param imageUrl URL recibida desde el backend o null/undefined.
+ * @param fallback Imagen por defecto cuando no hay URL válida.
+ * @returns {string} URL final lista para renderizar.
+ */
+export function resolveImageUrl(
+	imageUrl?: string | null,
+	fallback = "/logoallcourts.png",
+): string {
+	if (!imageUrl) {
+		return fallback;
+	}
 
-  if (imageUrl.startsWith('http')) {
-    return imageUrl;
-  }
+	if (imageUrl.startsWith("http")) {
+		return imageUrl;
+	}
 
-  if (imageUrl.startsWith('/uploads/')) {
-    try {
-      const apiUrl = getApiUrl();
-      return `${apiUrl}${imageUrl}`;
-    } catch (e) {
-      // If API URL isn't configured at runtime, fall back to the relative path so
-      // the browser can try loading it from the current origin. This keeps the
-      // app resilient in development when env isn't injected at build time.
-      return imageUrl;
-    }
-  }
+	if (imageUrl.startsWith("/uploads/")) {
+		try {
+			const apiUrl = getApiUrl();
+			return `${apiUrl}${imageUrl}`;
+		} catch (e) {
+			return imageUrl;
+		}
+	}
 
-  return imageUrl;
+	return imageUrl;
 }

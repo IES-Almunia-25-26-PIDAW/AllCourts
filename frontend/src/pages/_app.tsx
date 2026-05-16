@@ -1,4 +1,3 @@
-//#region TYPES
 import "@/styles/globals.scss";
 import "react-day-picker/style.css";
 import "@/config/i18n";
@@ -12,9 +11,7 @@ import LanguageDetector from "@/components/ui/LanguageDetector";
 import store from "@/store";
 import { setAuth, clearAuth, setAuthLoading } from "@/store/slices/authSlice";
 import { getCurrentUser } from "@/api/authApi";
-//#endregion
 
-//#region DOCUMENTATION
 /**
  * @page App
  * Punto de entrada principal de la aplicación Next.js.
@@ -40,9 +37,6 @@ import { getCurrentUser } from "@/api/authApi";
  *   1. Validar la sesión real en backend con la cookie httpOnly.
  *   2. Sincronizar Redux con el usuario devuelto por /auth/me si la sesión sigue siendo válida.
  */
-//#endregion
-
-//#region FUNCTIONS
 export default function App({ Component, pageProps }: AppProps) {
 	useEffect(() => {
 		store.dispatch(setAuthLoading(true));
@@ -71,4 +65,3 @@ export default function App({ Component, pageProps }: AppProps) {
 		</Provider>
 	);
 }
-//#endregion

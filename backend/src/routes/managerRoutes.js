@@ -1,10 +1,8 @@
-//#region MODULES
 const express = require("express");
 const managerController = require("../controllers/managerController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
 const { requireSameUserParam } = require("../middlewares/ownershipMiddleware");
-//#endregion
 
 /**
  * @module managerRouter
@@ -20,12 +18,52 @@ const { requireSameUserParam } = require("../middlewares/ownershipMiddleware");
  */
 const router = express.Router();
 
-router.get("/", authMiddleware, roleMiddleware("manager"), managerController.getAll);
-router.get("/user/:userId", authMiddleware, requireSameUserParam("userId"), managerController.getByUserId);
-router.get("/:id/courts", authMiddleware, roleMiddleware("manager"), requireSameUserParam("id"), managerController.getCourts);
-router.get("/:id/stats", authMiddleware, roleMiddleware("manager"), requireSameUserParam("id"), managerController.getStats);
-router.get("/:id", authMiddleware, roleMiddleware("manager"), requireSameUserParam("id"), managerController.getById);
-router.patch("/:id/subscription", authMiddleware, roleMiddleware("manager"), requireSameUserParam("id"), managerController.updateSubscription);
-router.delete("/:id", authMiddleware, roleMiddleware("manager"), requireSameUserParam("id"), managerController.delete);
+router.get(
+	"/",
+	authMiddleware,
+	roleMiddleware("manager"),
+	managerController.getAll,
+);
+router.get(
+	"/user/:userId",
+	authMiddleware,
+	requireSameUserParam("userId"),
+	managerController.getByUserId,
+);
+router.get(
+	"/:id/courts",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireSameUserParam("id"),
+	managerController.getCourts,
+);
+router.get(
+	"/:id/stats",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireSameUserParam("id"),
+	managerController.getStats,
+);
+router.get(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireSameUserParam("id"),
+	managerController.getById,
+);
+router.patch(
+	"/:id/subscription",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireSameUserParam("id"),
+	managerController.updateSubscription,
+);
+router.delete(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireSameUserParam("id"),
+	managerController.delete,
+);
 
 module.exports = router;

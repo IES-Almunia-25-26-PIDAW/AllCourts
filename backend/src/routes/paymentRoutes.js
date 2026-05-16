@@ -1,10 +1,12 @@
-//#region MODULES
 const express = require("express");
 const paymentController = require("../controllers/paymentController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
-const { requireSameUserParam, requirePaymentCreateAccess, requirePaymentAccessByParam } = require("../middlewares/ownershipMiddleware");
-//#endregion
+const {
+	requireSameUserParam,
+	requirePaymentCreateAccess,
+	requirePaymentAccessByParam,
+} = require("../middlewares/ownershipMiddleware");
 
 /**
  * @module paymentRouter
@@ -21,13 +23,56 @@ const { requireSameUserParam, requirePaymentCreateAccess, requirePaymentAccessBy
  */
 const router = express.Router();
 
-router.get("/", authMiddleware, roleMiddleware("manager"), paymentController.getAll);
-router.get("/booking/:bookingId", authMiddleware, requirePaymentAccessByParam("bookingId", "booking"), paymentController.getByBookingId);
-router.get("/user/:userId", authMiddleware, requireSameUserParam("userId"), paymentController.getByUserId);
-router.get("/manager/:managerId", authMiddleware, roleMiddleware("manager"), requireSameUserParam("managerId"), paymentController.getByManagerId);
-router.get("/:id", authMiddleware, requirePaymentAccessByParam("id", "payment"), paymentController.getById);
-router.post("/", authMiddleware, requirePaymentCreateAccess, paymentController.create);
-router.patch("/:id/status", authMiddleware, roleMiddleware("manager"), requirePaymentAccessByParam("id", "payment"), paymentController.updateStatus);
-router.delete("/:id", authMiddleware, roleMiddleware("manager"), requirePaymentAccessByParam("id", "payment"), paymentController.delete);
+router.get(
+	"/",
+	authMiddleware,
+	roleMiddleware("manager"),
+	paymentController.getAll,
+);
+router.get(
+	"/booking/:bookingId",
+	authMiddleware,
+	requirePaymentAccessByParam("bookingId", "booking"),
+	paymentController.getByBookingId,
+);
+router.get(
+	"/user/:userId",
+	authMiddleware,
+	requireSameUserParam("userId"),
+	paymentController.getByUserId,
+);
+router.get(
+	"/manager/:managerId",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireSameUserParam("managerId"),
+	paymentController.getByManagerId,
+);
+router.get(
+	"/:id",
+	authMiddleware,
+	requirePaymentAccessByParam("id", "payment"),
+	paymentController.getById,
+);
+router.post(
+	"/",
+	authMiddleware,
+	requirePaymentCreateAccess,
+	paymentController.create,
+);
+router.patch(
+	"/:id/status",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requirePaymentAccessByParam("id", "payment"),
+	paymentController.updateStatus,
+);
+router.delete(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requirePaymentAccessByParam("id", "payment"),
+	paymentController.delete,
+);
 
 module.exports = router;

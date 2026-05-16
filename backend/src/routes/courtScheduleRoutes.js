@@ -1,10 +1,11 @@
-//#region MODULES
 const express = require("express");
 const courtScheduleController = require("../controllers/courtScheduleController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
-const { requireManagerOwnCourt, requireManagerOwnCourtFromBody } = require("../middlewares/ownershipMiddleware");
-//#endregion
+const {
+	requireManagerOwnCourt,
+	requireManagerOwnCourtFromBody,
+} = require("../middlewares/ownershipMiddleware");
 
 /**
  * @module courtScheduleRouter
@@ -20,12 +21,45 @@ const { requireManagerOwnCourt, requireManagerOwnCourtFromBody } = require("../m
  */
 const router = express.Router();
 
-router.post("/bulk", authMiddleware, roleMiddleware("manager"), requireManagerOwnCourtFromBody, courtScheduleController.upsertBulk);
-router.post("/", authMiddleware, roleMiddleware("manager"), requireManagerOwnCourtFromBody, courtScheduleController.upsert);
+router.post(
+	"/bulk",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnCourtFromBody,
+	courtScheduleController.upsertBulk,
+);
+router.post(
+	"/",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnCourtFromBody,
+	courtScheduleController.upsert,
+);
 router.get("/court/:courtId", courtScheduleController.getByCourtId);
-router.get("/court/:courtId/day/:dayOfWeek", courtScheduleController.getByCourtAndDay);
-router.put("/:id", authMiddleware, roleMiddleware("manager"), requireManagerOwnCourt, courtScheduleController.update);
-router.delete("/:id", authMiddleware, roleMiddleware("manager"), requireManagerOwnCourt, courtScheduleController.delete);
-router.delete("/court/:courtId", authMiddleware, roleMiddleware("manager"), requireManagerOwnCourt, courtScheduleController.deleteByCourtId);
+router.get(
+	"/court/:courtId/day/:dayOfWeek",
+	courtScheduleController.getByCourtAndDay,
+);
+router.put(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnCourt,
+	courtScheduleController.update,
+);
+router.delete(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnCourt,
+	courtScheduleController.delete,
+);
+router.delete(
+	"/court/:courtId",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnCourt,
+	courtScheduleController.deleteByCourtId,
+);
 
 module.exports = router;

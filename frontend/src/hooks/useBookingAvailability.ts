@@ -8,6 +8,15 @@ import {
 	selectBookingLoading,
 } from "@/store/slices/bookingSlice";
 
+/**
+ * Carga la disponibilidad de una pista para una fecha y duración dadas.
+ * Limpia la disponibilidad cuando faltan parámetros para evitar mostrar datos obsoletos.
+ *
+ * @param courtId Identificador de la pista.
+ * @param date Fecha seleccionada.
+ * @param durationMin Duración seleccionada en minutos.
+ * @returns {object} Estado actual de la disponibilidad.
+ */
 export function useBookingAvailability(
 	courtId?: string | number,
 	date?: string,

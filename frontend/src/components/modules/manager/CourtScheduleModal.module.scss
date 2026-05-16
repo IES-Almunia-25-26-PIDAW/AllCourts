@@ -1,181 +1,181 @@
 .overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.45);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .modal {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
-  width: 100%;
-  max-width: 560px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  max-height: 90vh;
-  overflow-y: auto;
+	background: #ffffff;
+	border-radius: 12px;
+	padding: 24px;
+	width: 100%;
+	max-width: 560px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+	max-height: 90vh;
+	overflow-y: auto;
 }
 
 .modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
 }
 
 .modalTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: #111827;
+	margin: 0;
 }
 
 .closeBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #6b7280;
-  font-size: 1.1rem;
-  padding: 4px 8px;
-  border-radius: 6px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #6b7280;
+	font-size: 1.1rem;
+	padding: 4px 8px;
+	border-radius: 6px;
 
-  &:hover {
-    background: #f3f4f6;
-  }
+	&:hover {
+		background: #f3f4f6;
+	}
 }
 
 .tableWrapper {
-  overflow-x: auto;
-  margin-bottom: 20px;
+	overflow-x: auto;
+	margin-bottom: 20px;
 }
 
 .scheduleTable {
-  width: 100%;
-  border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 
-  th {
-    background: #f9fafb;
-    padding: 10px 12px;
-    text-align: left;
-    font-size: 0.75rem;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
+	th {
+		background: #f9fafb;
+		padding: 10px 12px;
+		text-align: left;
+		font-size: 0.75rem;
+		color: #6b7280;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
 
-  td {
-    padding: 8px 12px;
-    border-top: 1px solid #f3f4f6;
-    font-size: 0.875rem;
-    color: #111827;
-    vertical-align: middle;
-  }
+	td {
+		padding: 8px 12px;
+		border-top: 1px solid #f3f4f6;
+		font-size: 0.875rem;
+		color: #111827;
+		vertical-align: middle;
+	}
 }
 
 .rowClosed {
-  opacity: 0.45;
+	opacity: 0.45;
 }
 
 .dayLabel {
-  font-weight: 500;
-  min-width: 96px;
+	font-weight: 500;
+	min-width: 96px;
 }
 
 .timeInput {
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 5px 8px;
-  font-size: 0.875rem;
-  color: #111827;
-  outline: none;
-  font-family: inherit;
-  width: 120px;
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	padding: 5px 8px;
+	font-size: 0.875rem;
+	color: #111827;
+	outline: none;
+	font-family: inherit;
+	width: 120px;
 
-  &:focus {
-    border-color: #0059ff;
-  }
+	&:focus {
+		border-color: #0059ff;
+	}
 
-  &:disabled {
-    background: #f9fafb;
-    cursor: not-allowed;
-  }
+	&:disabled {
+		background: #f9fafb;
+		cursor: not-allowed;
+	}
 }
 
 .checkCell {
-  text-align: center;
+	text-align: center;
 
-  input[type='checkbox'] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    accent-color: #0059ff;
-  }
+	input[type="checkbox"] {
+		width: 16px;
+		height: 16px;
+		cursor: pointer;
+		accent-color: #0059ff;
+	}
 }
 
 .modalFooter {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 4px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 4px;
 }
 
 .btnPrimary {
-  background: #0059ff;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
+	background: #0059ff;
+	color: #ffffff;
+	border: none;
+	border-radius: 8px;
+	padding: 8px 20px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
 
-  &:hover:not(:disabled) {
-    background: #0047cc;
-  }
+	&:hover:not(:disabled) {
+		background: #0047cc;
+	}
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
 }
 
 .btnSecondary {
-  background: #f3f4f6;
-  color: #374151;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 20px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
+	background: #f3f4f6;
+	color: #374151;
+	border: none;
+	border-radius: 8px;
+	padding: 8px 20px;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
 
-  &:hover:not(:disabled) {
-    background: #e5e7eb;
-  }
+	&:hover:not(:disabled) {
+		background: #e5e7eb;
+	}
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
 }
 
 .errorMsg {
-  background: #fee2e2;
-  color: #991b1b;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.875rem;
-  margin: 0 0 12px;
+	background: #fee2e2;
+	color: #991b1b;
+	border-radius: 8px;
+	padding: 8px 12px;
+	font-size: 0.875rem;
+	margin: 0 0 12px;
 }
 
 .successMsg {
-  background: #d1fae5;
-  color: #065f46;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.875rem;
-  margin: 0 0 12px;
+	background: #d1fae5;
+	color: #065f46;
+	border-radius: 8px;
+	padding: 8px 12px;
+	font-size: 0.875rem;
+	margin: 0 0 12px;
 }

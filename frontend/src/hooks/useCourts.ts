@@ -3,12 +3,18 @@ import { getCourts } from "@/api/courtApi";
 import type { CourtWithClub } from "@/types/court";
 import { useAsyncResource } from "./useAsyncResource";
 
+/**
+ * Carga el listado general de pistas.
+ *
+ * @returns {object} Pistas, estado de carga y error.
+ */
 export function useCourts() {
 	const loadCourts = useCallback(async () => {
 		return getCourts();
 	}, []);
 
-	const { data, loading, error } = useAsyncResource<CourtWithClub[]>(loadCourts);
+	const { data, loading, error } =
+		useAsyncResource<CourtWithClub[]>(loadCourts);
 
 	return {
 		courts: data ?? [],

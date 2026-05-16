@@ -17,6 +17,12 @@ import {
 	selectManagerStats,
 } from "@/store/slices/managerSlice";
 
+/**
+ * Carga y expone los datos principales del panel de manager.
+ * Redirige a la vista de clubes si el usuario no tiene rol de manager.
+ *
+ * @returns {object} Estado y datos del dashboard de manager.
+ */
 export function useManagerDashboard() {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -49,7 +55,7 @@ export function useManagerDashboard() {
 					dispatch(fetchAllBookings()),
 				]);
 			} catch {
-				// handled by the slice state
+				return;
 			}
 		};
 

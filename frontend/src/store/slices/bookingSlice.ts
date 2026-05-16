@@ -1,7 +1,16 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import {
+	createSlice,
+	createAsyncThunk,
+	type PayloadAction,
+} from "@reduxjs/toolkit";
 import * as bookingApi from "@/api/bookingApi";
 import type { RootState } from "@/store";
-import type { Booking, CreateBookingDTO, CreateBookingResponse, CourtAvailabilityResponse } from "@/types/booking";
+import type {
+	Booking,
+	CreateBookingDTO,
+	CreateBookingResponse,
+	CourtAvailabilityResponse,
+} from "@/types/booking";
 
 type BookingState = {
 	bookings: Booking[];
@@ -84,7 +93,6 @@ const bookingSlice = createSlice({
 
 	extraReducers: (builder) => {
 		builder
-			// ── fetchUserBookings ──────────────────────────────
 			.addCase(fetchUserBookings.pending, (state) => {
 				state.loading = true;
 				state.error = null;
@@ -102,7 +110,6 @@ const bookingSlice = createSlice({
 					action.error?.message ?? "Error al cargar las reservas";
 			})
 
-			// ── createBooking ──────────────────────────────────
 			.addCase(createBooking.pending, (state) => {
 				state.loading = true;
 				state.error = null;
@@ -120,7 +127,6 @@ const bookingSlice = createSlice({
 					action.error?.message ?? "Error al crear la reserva";
 			})
 
-			// ── fetchCourtAvailability ─────────────────────────
 			.addCase(fetchCourtAvailability.pending, (state) => {
 				state.loading = true;
 				state.error = null;
@@ -139,7 +145,6 @@ const bookingSlice = createSlice({
 					"Error al consultar disponibilidad";
 			})
 
-			// ── cancelBooking ──────────────────────────────────
 			.addCase(cancelBooking.pending, (state) => {
 				state.loading = true;
 				state.error = null;

@@ -23,7 +23,14 @@ const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
 
-app.use((req, res, next) => {
+/**
+ * Configura CORS para el frontend y corta las preflight requests.
+ *
+ * @param {import('express').Request} req Petición HTTP.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @param {import('express').NextFunction} next Middleware siguiente.
+ */
+function corsMiddleware(req, res, next) {
 	const FRONTEND_URL = process.env.CORS_ORIGINAL || process.env.FRONTEND_URL;
 	res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
 	res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -39,14 +46,15 @@ app.use((req, res, next) => {
 		return res.sendStatus(204);
 	}
 	next();
-});
+}
 
-app.use(cookieParser());
-app.use("/stripe", stripeRoutes);
-app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
-app.get("/", (req, res) => {
+/**
+ * Devuelve un payload mínimo de estado del backend.
+ *
+ * @param {import('express').Request} req Petición HTTP.
+ * @param {import('express').Response} res Respuesta HTTP.
+ */
+function rootStatusHandler(req, res) {
 	res.json({
 		message: "AllCourts backend is running",
 		endpoints: [
@@ -61,7 +69,16 @@ app.get("/", (req, res) => {
 			"/users",
 		],
 	});
-});
+}
+
+app.use(corsMiddleware);
+
+app.use(cookieParser());
+app.use("/stripe", stripeRoutes);
+app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+app.get("/", rootStatusHandler);
 
 app.use("/health-check", healthRoutes);
 app.use("/auth", authRoutes);

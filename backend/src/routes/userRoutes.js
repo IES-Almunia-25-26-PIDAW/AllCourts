@@ -1,11 +1,9 @@
-//#region MODULES
-const express = require('express');
-const userController = require('../controllers/userController');
-const authMiddleware = require('../middlewares/authMiddleware');
-const roleMiddleware = require('../middlewares/roleMiddleware');
-const { requireSameUserParam } = require('../middlewares/ownershipMiddleware');
-const { uploadAvatar } = require('../middlewares/uploadMiddleware');
-//#endregion
+const express = require("express");
+const userController = require("../controllers/userController");
+const authMiddleware = require("../middlewares/authMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
+const { requireSameUserParam } = require("../middlewares/ownershipMiddleware");
+const { uploadAvatar } = require("../middlewares/uploadMiddleware");
 
 /**
  * @module userRouter
@@ -19,10 +17,36 @@ const { uploadAvatar } = require('../middlewares/uploadMiddleware');
  */
 const router = express.Router();
 
-router.get('/', authMiddleware, roleMiddleware('manager'), userController.getAll);
-router.get('/:id', authMiddleware, requireSameUserParam('id'), userController.getById);
-router.put('/:id', authMiddleware, requireSameUserParam('id'), uploadAvatar.single('avatar'), userController.update);
-router.patch('/:id/password', authMiddleware, requireSameUserParam('id'), userController.updatePassword);
-router.delete('/:id', authMiddleware, roleMiddleware('manager'), userController.delete);
+router.get(
+	"/",
+	authMiddleware,
+	roleMiddleware("manager"),
+	userController.getAll,
+);
+router.get(
+	"/:id",
+	authMiddleware,
+	requireSameUserParam("id"),
+	userController.getById,
+);
+router.put(
+	"/:id",
+	authMiddleware,
+	requireSameUserParam("id"),
+	uploadAvatar.single("avatar"),
+	userController.update,
+);
+router.patch(
+	"/:id/password",
+	authMiddleware,
+	requireSameUserParam("id"),
+	userController.updatePassword,
+);
+router.delete(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	userController.delete,
+);
 
 module.exports = router;

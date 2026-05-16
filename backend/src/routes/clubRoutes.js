@@ -1,13 +1,14 @@
-//#region MODULES
-const express = require('express');
-const { body } = require('express-validator');
-const clubController = require('../controllers/clubController');
-const authMiddleware = require('../middlewares/authMiddleware');
-const handleValidation = require('../middlewares/handleValidation');
-const roleMiddleware = require('../middlewares/roleMiddleware');
-const { requireManagerOwnClub, requireActiveManagerSubscription } = require('../middlewares/ownershipMiddleware');
-const { uploadClub } = require('../middlewares/uploadMiddleware');
-//#endregion
+const express = require("express");
+const { body } = require("express-validator");
+const clubController = require("../controllers/clubController");
+const authMiddleware = require("../middlewares/authMiddleware");
+const handleValidation = require("../middlewares/handleValidation");
+const roleMiddleware = require("../middlewares/roleMiddleware");
+const {
+	requireManagerOwnClub,
+	requireActiveManagerSubscription,
+} = require("../middlewares/ownershipMiddleware");
+const { uploadClub } = require("../middlewares/uploadMiddleware");
 
 /**
  * @module clubRouter
@@ -23,59 +24,78 @@ const { uploadClub } = require('../middlewares/uploadMiddleware');
  */
 const router = express.Router();
 
+/**
+ * Devuelve la respuesta estándar de subida de imagen para clubes.
+ *
+ * @param {import('express').Request} req Petición HTTP.
+ * @param {import('express').Response} res Respuesta HTTP.
+ */
+function sendClubUploadResponse(req, res) {
+	if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+	const url = "/uploads/clubs/" + req.file.filename;
+	const fullUrl = `${req.protocol}://${req.get("host")}${url}`;
+	res.json({ url, fullUrl });
+}
+
 const clubBodyValidators = [
-  body('name')
-    .notEmpty()
-    .withMessage('El nombre es obligatorio')
-    .trim()
-    .isLength({ max: 150 })
-    .withMessage('El nombre no puede superar 150 caracteres'),
-  body('address')
-    .optional({ nullable: true })
-    .trim()
-    .isLength({ max: 255 })
-    .withMessage('La dirección no puede superar 255 caracteres'),
-  body('city')
-    .optional({ nullable: true })
-    .trim()
-    .isLength({ max: 100 })
-    .withMessage('La ciudad no puede superar 100 caracteres'),
-  body('description')
-    .optional({ nullable: true })
-    .isLength({ max: 1000 })
-    .withMessage('La descripción no puede superar 1000 caracteres')
+	body("name")
+		.notEmpty()
+		.withMessage("El nombre es obligatorio")
+		.trim()
+		.isLength({ max: 150 })
+		.withMessage("El nombre no puede superar 150 caracteres"),
+	body("address")
+		.optional({ nullable: true })
+		.trim()
+		.isLength({ max: 255 })
+		.withMessage("La dirección no puede superar 255 caracteres"),
+	body("city")
+		.optional({ nullable: true })
+		.trim()
+		.isLength({ max: 100 })
+		.withMessage("La ciudad no puede superar 100 caracteres"),
+	body("description")
+		.optional({ nullable: true })
+		.isLength({ max: 1000 })
+		.withMessage("La descripción no puede superar 1000 caracteres"),
 ];
 
-router.get('/', clubController.getAll);
-router.get('/city/:city', clubController.getByCity);
-router.get('/manager/:managerId', clubController.getByManagerId);
-router.get('/:id', clubController.getById);
+router.get("/", clubController.getAll);
+router.get("/city/:city", clubController.getByCity);
+router.get("/manager/:managerId", clubController.getByManagerId);
+router.get("/:id", clubController.getById);
 router.post(
-  '/',
-  authMiddleware,
-  roleMiddleware('manager'),
-  requireActiveManagerSubscription,
-  ...clubBodyValidators,
-  handleValidation,
-  clubController.create
+	"/",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireActiveManagerSubscription,
+	...clubBodyValidators,
+	handleValidation,
+	clubController.create,
 );
 router.put(
-  '/:id',
-  authMiddleware,
-  roleMiddleware('manager'),
-  requireManagerOwnClub,
-  ...clubBodyValidators,
-  handleValidation,
-  clubController.update
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnClub,
+	...clubBodyValidators,
+	handleValidation,
+	clubController.update,
 );
-router.delete('/:id', authMiddleware, roleMiddleware('manager'), requireManagerOwnClub, clubController.delete);
+router.delete(
+	"/:id",
+	authMiddleware,
+	roleMiddleware("manager"),
+	requireManagerOwnClub,
+	clubController.delete,
+);
 
-// Upload club image
-router.post('/upload', authMiddleware, roleMiddleware('manager'), uploadClub.single('image'), (req, res) => {
-  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
-  const url = '/uploads/clubs/' + req.file.filename;
-  const fullUrl = `${req.protocol}://${req.get('host')}${url}`;
-  res.json({ url, fullUrl });
-});
+router.post(
+	"/upload",
+	authMiddleware,
+	roleMiddleware("manager"),
+	uploadClub.single("image"),
+	sendClubUploadResponse,
+);
 
 module.exports = router;

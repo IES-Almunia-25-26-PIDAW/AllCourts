@@ -4,135 +4,145 @@ $shadow-1: 0 6px 18px rgba(16, 23, 42, 0.06);
 $shadow-2: 0 12px 32px rgba(16, 23, 42, 0.08);
 
 .page {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 20px 24px 72px;
-  color: #102a43;
-  background: linear-gradient(180deg, rgba(0, 89, 255, 0.03) 0%, transparent 180px);
-  -webkit-font-smoothing: antialiased;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 20px 24px 72px;
+	color: #102a43;
+	background: linear-gradient(
+		180deg,
+		rgba(0, 89, 255, 0.03) 0%,
+		transparent 180px
+	);
+	-webkit-font-smoothing: antialiased;
 }
 
 .backLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: $primary-color;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(0, 89, 255, 0.06);
-  transition: transform 160ms ease, box-shadow 160ms ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: $primary-color;
+	text-decoration: none;
+	font-weight: 700;
+	padding: 8px 12px;
+	border-radius: 999px;
+	background: rgba(0, 89, 255, 0.06);
+	transition:
+		transform 160ms ease,
+		box-shadow 160ms ease;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: $shadow-1;
-  }
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: $shadow-1;
+	}
 }
 
 .detailNav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
 }
 
 .secondaryLink {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: #0f172a;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: #f3f4f6;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	color: #0f172a;
+	text-decoration: none;
+	font-weight: 700;
+	padding: 8px 12px;
+	border-radius: 999px;
+	background: #f3f4f6;
+	transition:
+		transform 160ms ease,
+		box-shadow 160ms ease;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: $shadow-1;
-  }
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: $shadow-1;
+	}
 }
 
 .status {
-  color: $text-secondary;
+	color: $text-secondary;
 }
 
 .errorText {
-  color: #b91c1c;
-  background: rgba(185, 28, 28, 0.04);
-  padding: 8px 12px;
-  border-radius: 8px;
+	color: #b91c1c;
+	background: rgba(185, 28, 28, 0.04);
+	padding: 8px 12px;
+	border-radius: 8px;
 }
 
 .detailSection {
-  margin-top: 12px;
-  margin-left: 0;
-  margin-right: 0;
+	margin-top: 12px;
+	margin-left: 0;
+	margin-right: 0;
 }
 
 .infoCard {
-  margin-top: 24px;
-  padding: 20px;
-  border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  background: #ffffff;
-  box-shadow: $shadow-2;
+	margin-top: 24px;
+	padding: 20px;
+	border-radius: 18px;
+	border: 1px solid rgba(148, 163, 184, 0.14);
+	background: #ffffff;
+	box-shadow: $shadow-2;
 }
 
 .infoCardTitle {
-  margin: 0 0 12px;
-  font-size: 1.05rem;
-  font-weight: 700;
+	margin: 0 0 12px;
+	font-size: 1.05rem;
+	font-weight: 700;
 }
 
 .allCourtsLink {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, $primary-color 0%, #0047cc 100%);
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  box-shadow: 0 10px 20px rgba(0, 89, 255, 0.12);
-  transition: transform 160ms ease, box-shadow 160ms ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 16px;
+	padding: 10px 14px;
+	border-radius: 999px;
+	background: linear-gradient(135deg, $primary-color 0%, #0047cc 100%);
+	color: #fff;
+	text-decoration: none;
+	font-weight: 700;
+	box-shadow: 0 10px 20px rgba(0, 89, 255, 0.12);
+	transition:
+		transform 160ms ease,
+		box-shadow 160ms ease;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px rgba(0, 89, 255, 0.14);
-  }
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 14px 30px rgba(0, 89, 255, 0.14);
+	}
 }
 
 .emptyState {
-  color: $text-secondary;
+	color: $text-secondary;
 }
 
 .courtsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 18px;
-  margin-top: 18px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 18px;
+	margin-top: 18px;
 }
 
 @media (max-width: 720px) {
-  .page {
-    padding: 16px 12px 48px;
-  }
+	.page {
+		padding: 16px 12px 48px;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .courtCard,
-  .backLink,
-  .allCourtsLink,
-  .courtLink {
-    transition: none !important;
-  }
+	.courtCard,
+	.backLink,
+	.allCourtsLink,
+	.courtLink {
+		transition: none !important;
+	}
 }

@@ -1,44 +1,46 @@
 @use "../../styles/variables" as *;
 
 .page {
-  width: 100%;
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 24px 20px 72px;
-  color: #2c3e50;
-  background: #fff;
-  display: grid;
-  gap: 20px;
+	width: 100%;
+	max-width: 1360px;
+	margin: 0 auto;
+	padding: 24px 20px 72px;
+	color: #2c3e50;
+	background: #fff;
+	display: grid;
+	gap: 20px;
 }
 
 .backLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: $primary-color;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #eef6ff;
-  transition: transform 120ms ease, background 120ms ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: $primary-color;
+	text-decoration: none;
+	font-weight: 700;
+	padding: 10px 14px;
+	border-radius: 999px;
+	background: #eef6ff;
+	transition:
+		transform 120ms ease,
+		background 120ms ease;
 
-  &:hover {
-    transform: translateY(-1px);
-    background: $primary-soft-strong;
-  }
+	&:hover {
+		transform: translateY(-1px);
+		background: $primary-soft-strong;
+	}
 }
 
 .contentStack {
-  display: grid;
-  gap: 20px;
-  width: 100%;
+	display: grid;
+	gap: 20px;
+	width: 100%;
 }
 
 .status {
-  color: #666;
+	color: #666;
 }
 
 .errorText {
-  color: #c62828;
+	color: #c62828;
 }

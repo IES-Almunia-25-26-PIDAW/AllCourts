@@ -146,7 +146,6 @@ describe('useAuth', () => {
       await result.current.login({ identifier: 'x@e', password: 'p', requestPortal: 'player' });
     });
 
-    // Debe mapear el error al key de i18n
     expect(mockDispatch).toHaveBeenCalledWith(setAuthError('login.error_wrong_portal_manager'));
   });
 });

@@ -18,7 +18,7 @@ import type { Booking } from "@/types/booking";
  * @returns {Promise<Manager>} Perfil de manager.
  */
 export async function getManagerByUserId(userId: string): Promise<Manager> {
-  return request<Manager>(`/managers/user/${userId}`);
+	return request<Manager>(`/managers/user/${userId}`);
 }
 
 /**
@@ -27,8 +27,10 @@ export async function getManagerByUserId(userId: string): Promise<Manager> {
  * @param managerId Identificador del manager.
  * @returns {Promise<ManagerStats>} Métricas agregadas.
  */
-export async function getManagerStats(managerId: string): Promise<ManagerStats> {
-  return request<ManagerStats>(`/managers/${managerId}/stats`);
+export async function getManagerStats(
+	managerId: string,
+): Promise<ManagerStats> {
+	return request<ManagerStats>(`/managers/${managerId}/stats`);
 }
 
 /**
@@ -38,7 +40,7 @@ export async function getManagerStats(managerId: string): Promise<ManagerStats> 
  * @returns {Promise<Court[]>} Lista de pistas.
  */
 export async function getManagerCourts(managerId: string): Promise<Court[]> {
-  return request<Court[]>(`/managers/${managerId}/courts`);
+	return request<Court[]>(`/managers/${managerId}/courts`);
 }
 
 /**
@@ -48,7 +50,7 @@ export async function getManagerCourts(managerId: string): Promise<Court[]> {
  * @returns {Promise<Club[]>} Lista de clubes.
  */
 export async function getManagerClubs(managerId: string): Promise<Club[]> {
-  return request<Club[]>(`/clubs/manager/${managerId}`);
+	return request<Club[]>(`/clubs/manager/${managerId}`);
 }
 
 /**
@@ -57,7 +59,7 @@ export async function getManagerClubs(managerId: string): Promise<Club[]> {
  * @returns {Promise<Booking[]>} Lista de reservas.
  */
 export async function getAllBookings(): Promise<Booking[]> {
-  return request<Booking[]>(`/bookings`);
+	return request<Booking[]>(`/bookings`);
 }
 
 /**
@@ -68,11 +70,11 @@ export async function getAllBookings(): Promise<Booking[]> {
  * @returns {Promise<void>} No devuelve contenido útil.
  */
 export async function updateSubscription(
-  managerId: string,
-  data: UpdateManagerDTO,
+	managerId: string,
+	data: UpdateManagerDTO,
 ): Promise<void> {
-  await request<void>(`/managers/${managerId}/subscription`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
+	await request<void>(`/managers/${managerId}/subscription`, {
+		method: "PATCH",
+		body: JSON.stringify(data),
+	});
 }

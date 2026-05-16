@@ -35,6 +35,12 @@ const ALLOWED_SUBSCRIPTION_STATUSES = new Set([
 	"paused",
 ]);
 
+/**
+ * Normaliza el estado de una suscripción Stripe a un valor admitido por la BD.
+ *
+ * @param {string|undefined|null} status Estado original de Stripe.
+ * @returns {string} Estado validado o `inactive` si no es reconocible.
+ */
 function normalizeSubscriptionStatus(status) {
 	if (!status) {
 		return "inactive";
@@ -43,21 +49,33 @@ function normalizeSubscriptionStatus(status) {
 	return ALLOWED_SUBSCRIPTION_STATUSES.has(status) ? status : "inactive";
 }
 
+/**
+ * Convierte los timestamps de Stripe en fechas legibles `YYYY-MM-DD`.
+ *
+ * @param {object} subscription Suscripción de Stripe.
+ * @returns {{subscriptionStart: string|null, subscriptionEnd: string|null}} Periodo normalizado.
+ */
 function mapSubscriptionPeriod(subscription) {
 	return {
 		subscriptionStart: subscription.current_period_start
 			? new Date(subscription.current_period_start * 1000)
-				.toISOString()
-				.slice(0, 10)
+					.toISOString()
+					.slice(0, 10)
 			: null,
 		subscriptionEnd: subscription.current_period_end
 			? new Date(subscription.current_period_end * 1000)
-				.toISOString()
-				.slice(0, 10)
+					.toISOString()
+					.slice(0, 10)
 			: null,
 	};
 }
 
+/**
+ * Resuelve el email asociado a una checkout session de Stripe.
+ *
+ * @param {object} session Checkout session de Stripe.
+ * @returns {Promise<string|null>} Email del cliente o `null` si no puede obtenerse.
+ */
 async function resolveCheckoutSessionEmail(session) {
 	const sessionEmail =
 		session.customer_details?.email ||
@@ -77,6 +95,13 @@ async function resolveCheckoutSessionEmail(session) {
 	return customer && !customer.deleted ? customer.email || null : null;
 }
 
+/**
+ * Sincroniza el estado de suscripción de un manager con la información recibida de Stripe.
+ *
+ * @param {object} subscription Suscripción de Stripe.
+ * @param {string|null} email Email del manager a localizar.
+ * @returns {Promise<object|null>} Manager actualizado o `null` si no existe coincidencia.
+ */
 async function syncManagerFromStripeSubscription(subscription, email) {
 	if (!email) {
 		return null;
@@ -89,7 +114,8 @@ async function syncManagerFromStripeSubscription(subscription, email) {
 
 	const manager = managerRows[0];
 	const wasActive = Boolean(manager.subscription_active);
-	const { subscriptionStart, subscriptionEnd } = mapSubscriptionPeriod(subscription);
+	const { subscriptionStart, subscriptionEnd } =
+		mapSubscriptionPeriod(subscription);
 	const status = normalizeSubscriptionStatus(subscription.status);
 	const isActiveSubscription = status === "active" || status === "trialing";
 
@@ -105,16 +131,23 @@ async function syncManagerFromStripeSubscription(subscription, email) {
 		subscriptionStatus: status,
 	});
 
-		if (isActiveSubscription && !wasActive) {
-			try {
-				await emailService.sendSubscriptionActivationEmail(manager, subscription.items.data[0]?.price.nickname || "Manager", {
+	if (isActiveSubscription && !wasActive) {
+		try {
+			await emailService.sendSubscriptionActivationEmail(
+				manager,
+				subscription.items.data[0]?.price.nickname || "Manager",
+				{
 					subscription_start: subscriptionStart,
 					subscription_end: subscriptionEnd,
-				});
-			} catch (emailError) {
-				console.error("Webhook: failed to send subscription activation email:", emailError);
-			}
+				},
+			);
+		} catch (emailError) {
+			console.error(
+				"Webhook: failed to send subscription activation email:",
+				emailError,
+			);
 		}
+	}
 
 	return manager;
 }
@@ -130,34 +163,16 @@ async function syncManagerFromStripeSubscription(subscription, email) {
  */
 
 const stripeController = {
-	/**
-	 * Crea un PaymentIntent de Stripe para una reserva existente.
-	 *
-	 * ¿Qué es un PaymentIntent?
-	 *   Es un objeto de Stripe que representa la intención de cobrar una cantidad.
-	 *   Stripe lo usa para gestionar el ciclo de vida del pago: creado → procesando
-	 *   → completado / fallido. Nos devuelve un `clientSecret` que entregamos al
-	 *   frontend para que Stripe Elements pueda autenticar y confirmar el pago
-	 *   sin que los datos sensibles de tarjeta pasen por nuestro servidor.
-	 *
-	 * Body esperado: { bookingId }
-	 *
-	 * Respuesta 200: { clientSecret, paymentIntentId, amount }
-	 * Respuesta 400: si la reserva no existe, ya está pagada, o falta bookingId
-	 */
 	createPaymentIntent: async (req, res, next) => {
 		try {
 			const { bookingId } = req.body;
 
-			// Validamos que el cliente nos envíe el ID de la reserva.
 			if (!bookingId) {
 				return res
 					.status(400)
 					.json({ message: "bookingId is required" });
 			}
 
-			// Buscamos la reserva en la BD para obtener el precio total.
-			// Si no existe, devolvemos 404.
 			const [bookingRows] = await Booking.getById(bookingId);
 			if (!bookingRows.length) {
 				return res.status(404).json({ message: "Booking not found" });
@@ -165,8 +180,6 @@ const stripeController = {
 
 			const booking = bookingRows[0];
 
-			// Comprobamos que la reserva no esté ya pagada o cancelada.
-			// No tiene sentido crear un PaymentIntent para una reserva cancelada.
 			if (booking.status === "confirmed") {
 				return res
 					.status(400)
@@ -178,18 +191,10 @@ const stripeController = {
 					.json({ message: "Booking is cancelled" });
 			}
 
-			// Stripe trabaja en céntimos, no en decimales.
-			// Multiplicamos el precio por 100 y redondeamos para evitar errores de coma flotante.
 			const amountInCents = Math.round(
 				parseFloat(booking.total_price) * 100,
 			);
 
-			// Creamos el PaymentIntent en Stripe.
-			// - amount: cantidad en céntimos
-			// - currency: "eur" porque trabajamos en euros
-			// - metadata: datos extras que Stripe guarda y que recibiremos en el webhook.
-			// - automatic_payment_methods: Stripe detecta automáticamente los métodos
-			//   disponibles (tarjeta, Bizum, etc.) sin que tengamos que configurar nada.
 			const paymentIntent = await stripe.paymentIntents.create({
 				amount: amountInCents,
 				currency: "eur",
@@ -203,9 +208,6 @@ const stripeController = {
 				},
 			});
 
-			// Respondemos al frontend con el clientSecret.
-			// El clientSecret es el único dato que necesita Stripe Elements para cobrar.
-			// NUNCA debemos compartir la clave secreta completa con el frontend.
 			res.json({
 				clientSecret: paymentIntent.client_secret,
 				paymentIntentId: paymentIntent.id,
@@ -268,7 +270,10 @@ const stripeController = {
 				items: [{ price: resolvedPriceId }],
 				payment_behavior: "default_incomplete",
 				collection_method: "charge_automatically",
-				expand: ["latest_invoice.payment_intent", "latest_invoice.confirmation_secret"],
+				expand: [
+					"latest_invoice.payment_intent",
+					"latest_invoice.confirmation_secret",
+				],
 			});
 
 			let paymentIntent = subscription.latest_invoice?.payment_intent;
@@ -278,19 +283,19 @@ const stripeController = {
 					: null;
 			let invoice = subscription.latest_invoice || null;
 
-			if (
-				!paymentIntent ||
-				typeof paymentIntent === "string"
-			) {
+			if (!paymentIntent || typeof paymentIntent === "string") {
 				const invoiceId =
 					typeof subscription.latest_invoice === "string"
 						? subscription.latest_invoice
 						: subscription.latest_invoice?.id;
 
 				if (invoiceId) {
-					const retrievedInvoice = await stripe.invoices.retrieve(invoiceId, {
-						expand: ["payment_intent", "confirmation_secret"],
-					});
+					const retrievedInvoice = await stripe.invoices.retrieve(
+						invoiceId,
+						{
+							expand: ["payment_intent", "confirmation_secret"],
+						},
+					);
 					invoice = retrievedInvoice;
 					paymentIntent = retrievedInvoice.payment_intent;
 					clientSecret =
@@ -299,17 +304,19 @@ const stripeController = {
 						clientSecret;
 
 					if (!clientSecret && retrievedInvoice.status === "draft") {
-						const finalizedInvoice = await stripe.invoices.finalizeInvoice(
-							invoiceId,
-							{
-								expand: ["payment_intent", "confirmation_secret"],
-							},
-						);
+						const finalizedInvoice =
+							await stripe.invoices.finalizeInvoice(invoiceId, {
+								expand: [
+									"payment_intent",
+									"confirmation_secret",
+								],
+							});
 						invoice = finalizedInvoice;
 						paymentIntent = finalizedInvoice.payment_intent;
 						clientSecret =
 							finalizedInvoice.payment_intent?.client_secret ||
-							finalizedInvoice.confirmation_secret?.client_secret ||
+							finalizedInvoice.confirmation_secret
+								?.client_secret ||
 							clientSecret;
 					}
 				}
@@ -338,7 +345,9 @@ const stripeController = {
 			await Manager.updateStripeSubscriptionData(manager.id, {
 				stripeCustomerId,
 				stripeSubscriptionId: subscription.id,
-				subscriptionStatus: normalizeSubscriptionStatus(subscription.status),
+				subscriptionStatus: normalizeSubscriptionStatus(
+					subscription.status,
+				),
 			});
 
 			return res.status(201).json({
@@ -374,13 +383,13 @@ const stripeController = {
 			if (subscription) {
 				const subscriptionStart = subscription.current_period_start
 					? new Date(subscription.current_period_start * 1000)
-						.toISOString()
-						.slice(0, 10)
+							.toISOString()
+							.slice(0, 10)
 					: null;
 				const subscriptionEnd = subscription.current_period_end
 					? new Date(subscription.current_period_end * 1000)
-						.toISOString()
-						.slice(0, 10)
+							.toISOString()
+							.slice(0, 10)
 					: null;
 
 				await Manager.updateSubscription(manager.id, {
@@ -392,7 +401,9 @@ const stripeController = {
 				await Manager.updateStripeSubscriptionData(manager.id, {
 					stripeCustomerId: manager.stripe_customer_id,
 					stripeSubscriptionId: subscription.id,
-					subscriptionStatus: normalizeSubscriptionStatus(subscription.status),
+					subscriptionStatus: normalizeSubscriptionStatus(
+						subscription.status,
+					),
 				});
 			}
 
@@ -412,7 +423,7 @@ const stripeController = {
 	 *   Cuando Stripe completa (o falla) un pago, envía una petición POST a
 	 *   nuestra URL /stripe/webhook con un JSON que describe el evento.
 	 *   Para garantizar que la petición viene realmente de Stripe,
-     *   verificamos la firma usando STRIPE_WEBHOOK_SECRET.
+	 *   verificamos la firma usando STRIPE_WEBHOOK_SECRET.
 	 *
 	 * IMPORTANTE: Esta ruta NO puede usar express.json() porque necesita el
 	 *   body en RAW (Buffer), no parseado. Por eso en app.js la registramos
@@ -423,7 +434,6 @@ const stripeController = {
 	 *   - payment_intent.payment_failed → pago fallido → pago "failed"
 	 */
 	webhook: async (req, res) => {
-		// Leemos la firma que Stripe incluye en el header de la petición.
 		const sig = req.headers["stripe-signature"];
 		let event;
 
@@ -431,21 +441,22 @@ const stripeController = {
 			const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 			if (webhookSecret) {
-				// constructEvent verifica criptográficamente que la petición viene de Stripe.
-				// Si la firma no coincide, lanza un error y evitamos procesar datos falsos.
 				event = stripe.webhooks.constructEvent(
 					req.body,
 					sig,
 					webhookSecret,
 				);
 			} else if (process.env.NODE_ENV !== "production") {
-				console.warn("Webhook secret missing, accepting Stripe webhook without signature verification in non-production mode");
+				console.warn(
+					"Webhook secret missing, accepting Stripe webhook without signature verification in non-production mode",
+				);
 				event = JSON.parse(req.body.toString("utf8"));
 			} else {
-				throw new Error("STRIPE_WEBHOOK_SECRET is required in production");
+				throw new Error(
+					"STRIPE_WEBHOOK_SECRET is required in production",
+				);
 			}
 		} catch (err) {
-			// Si la verificación falla, rechazamos la petición con 400.
 			console.error(
 				"Webhook signature verification failed:",
 				err.message,
@@ -455,8 +466,6 @@ const stripeController = {
 				.json({ message: `Webhook Error: ${err.message}` });
 		}
 
-		// Procesamos el evento según su tipo.
-		// Usamos un switch para manejar distintos tipos de eventos de Stripe.
 		try {
 			switch (event.type) {
 				case "checkout.session.completed": {
@@ -469,7 +478,8 @@ const stripeController = {
 						break;
 					}
 
-					const sessionEmail = await resolveCheckoutSessionEmail(session);
+					const sessionEmail =
+						await resolveCheckoutSessionEmail(session);
 					if (!sessionEmail) {
 						console.warn(
 							"Webhook: checkout session without email, cannot sync manager subscription",
@@ -478,7 +488,9 @@ const stripeController = {
 					}
 
 					const subscription = session.subscription
-						? await stripe.subscriptions.retrieve(session.subscription)
+						? await stripe.subscriptions.retrieve(
+								session.subscription,
+							)
 						: null;
 
 					if (!subscription) {
@@ -512,7 +524,10 @@ const stripeController = {
 					const customer = subscription.customer
 						? await stripe.customers.retrieve(subscription.customer)
 						: null;
-					const email = customer && !customer.deleted ? customer.email || null : null;
+					const email =
+						customer && !customer.deleted
+							? customer.email || null
+							: null;
 
 					const manager = await syncManagerFromStripeSubscription(
 						subscription,
@@ -537,7 +552,10 @@ const stripeController = {
 					const customer = subscription.customer
 						? await stripe.customers.retrieve(subscription.customer)
 						: null;
-					const email = customer && !customer.deleted ? customer.email || null : null;
+					const email =
+						customer && !customer.deleted
+							? customer.email || null
+							: null;
 
 					if (!email) {
 						break;
@@ -558,7 +576,9 @@ const stripeController = {
 					await Manager.updateStripeSubscriptionData(manager.id, {
 						stripeCustomerId: subscription.customer,
 						stripeSubscriptionId: subscription.id,
-						subscriptionStatus: normalizeSubscriptionStatus(subscription.status),
+						subscriptionStatus: normalizeSubscriptionStatus(
+							subscription.status,
+						),
 					});
 
 					console.log(
@@ -567,11 +587,9 @@ const stripeController = {
 					break;
 				}
 
-				// Pago completado → actualizamos el estado de la reserva y del pago en nuestra BD.
 				case "payment_intent.succeeded": {
 					const paymentIntent = event.data.object;
 
-					// Recuperamos el bookingId que guardamos en los metadatos al crear el PaymentIntent.
 					const bookingId = paymentIntent.metadata?.bookingId;
 
 					if (!bookingId) {
@@ -581,9 +599,6 @@ const stripeController = {
 						break;
 					}
 
-					// IDEMPOTENCIA: antes de actualizar, comprobamos si ya existe un pago
-					// para esta reserva con status "success". Si ya existe, no hacemos nada.
-					// Esto evita duplicados si Stripe envía el evento más de una vez.
 					const [existingPayments] =
 						await Payment.getByBookingId(bookingId);
 					const alreadyPaid = existingPayments.some(
@@ -597,24 +612,19 @@ const stripeController = {
 						break;
 					}
 
-					// Actualizamos el estado de la reserva a "confirmed" (pagada).
 					await Booking.updateStatus(bookingId, "confirmed");
 
-					// Buscamos si ya hay un registro de pago en "pending" para esta reserva.
-					// Si existe, lo actualizamos. Si no, lo creamos.
 					if (existingPayments.length > 0) {
-						// Ya existe un pago pendiente → actualizamos su estado a "success".
 						await Payment.updateStatus(
 							existingPayments[0].id,
 							"success",
 						);
 					} else {
-						// No existe ningún pago → creamos uno nuevo con todos los datos.
 						await Payment.create({
 							booking_id: bookingId,
-							amount: paymentIntent.amount / 100, 
+							amount: paymentIntent.amount / 100,
 							status: "success",
-							method: "card", // Stripe Elements usa tarjeta por defecto
+							method: "card",
 							stripe_payment_intent_id: paymentIntent.id,
 						});
 					}
@@ -635,7 +645,9 @@ const stripeController = {
 						};
 
 						if (!user.email) {
-							const [userRows] = await User.getById(booking.user_id);
+							const [userRows] = await User.getById(
+								booking.user_id,
+							);
 							if (!userRows.length) {
 								console.warn(
 									`Webhook: user ${booking.user_id} not found for email`,
@@ -645,7 +657,10 @@ const stripeController = {
 							user = userRows[0];
 						}
 
-						await emailService.sendBookingConfirmationEmail(user, booking);
+						await emailService.sendBookingConfirmationEmail(
+							user,
+							booking,
+						);
 					} catch (emailError) {
 						console.error(
 							"Webhook: failed to send booking confirmation email:",
@@ -659,14 +674,12 @@ const stripeController = {
 					break;
 				}
 
-				// PAGO FALLIDO
 				case "payment_intent.payment_failed": {
 					const paymentIntent = event.data.object;
 					const bookingId = paymentIntent.metadata?.bookingId;
 
 					if (!bookingId) break;
 
-					// Si existe un pago pendiente para esta reserva, lo marcamos como fallido.
 					const [existingPayments] =
 						await Payment.getByBookingId(bookingId);
 					if (existingPayments.length > 0) {
@@ -686,13 +699,9 @@ const stripeController = {
 					console.log(`Webhook: unhandled event type ${event.type}`);
 			}
 		} catch (err) {
-			// Si hay un error procesando el evento, lo logueamos pero respondemos 200
-			// para que Stripe no reintente el evento indefinidamente.
 			console.error("Webhook processing error:", err);
 		}
 
-		// Siempre respondemos 200 a Stripe para confirmar que recibimos el evento.
-		// Si respondemos cualquier otro código, Stripe reintentará el envío.
 		res.json({ received: true });
 	},
 };

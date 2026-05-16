@@ -1,7 +1,5 @@
-//#region MODULES
 import { useEffect } from "react";
 import i18n from "@/config/i18n";
-//#endregion
 
 /**
  * @component LanguageDetector
@@ -18,28 +16,25 @@ import i18n from "@/config/i18n";
  */
 
 export default function LanguageDetector() {
-  useEffect(() => {
-    // Intenta leer el idioma: primero localStorage, luego cookie, navigator.language, y si todo falla, 'es' por defecto.
-    // El guard de window evita errores en SSR
-    const cached =
-      typeof window !== "undefined" &&
-      (localStorage.getItem("i18nextLng") ||
-        document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("i18nextLng="))
-          ?.split("=")[1]);
+	useEffect(() => {
+		const cached =
+			typeof window !== "undefined" &&
+			(localStorage.getItem("i18nextLng") ||
+				document.cookie
+					.split("; ")
+					.find((row) => row.startsWith("i18nextLng="))
+					?.split("=")[1]);
 
-    const nav =
-      typeof navigator !== "undefined" && navigator.language?.split("-")[0];
+		const nav =
+			typeof navigator !== "undefined" &&
+			navigator.language?.split("-")[0];
 
-    // Si ninguna fuente indica inglés, usa español como reserva.
-    const newLang = (cached || nav || "es").startsWith("en") ? "en" : "es";
+		const newLang = (cached || nav || "es").startsWith("en") ? "en" : "es";
 
-    // Solo cambia el idioma si es distinto al activo, evitando re-renders innecesarios
-    if (i18n.language !== newLang) {
-      i18n.changeLanguage(newLang);
-    }
-  }, []);
+		if (i18n.language !== newLang) {
+			i18n.changeLanguage(newLang);
+		}
+	}, []);
 
-  return null;
+	return null;
 }

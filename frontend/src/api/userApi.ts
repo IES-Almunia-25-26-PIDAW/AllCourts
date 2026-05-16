@@ -1,19 +1,13 @@
-//#region MODULES
 import { request } from "@/api/http";
 import type { UpdateUserDTO, User } from "@/types/user";
 import { getApiUrl } from "@/utils/runtimeConfig";
-//#endregion
 
-//#region DOCUMENTATION
 /**
  * @module userApi
  * Cliente API para operaciones de usuario.
  * Se usa principalmente desde la página de perfil para actualizar datos
  * básicos y el avatar.
  */
-//#endregion
-
-//#region FUNCTIONS
 /**
  * Obtiene un usuario por ID.
  * Se usa en pantallas de perfil y mantenimiento de datos de usuario.
@@ -56,14 +50,11 @@ export async function updateUserForm(
 	formData: FormData,
 ): Promise<User> {
 	const apiUrl = getApiUrl();
-	const response = await fetch(
-		`${apiUrl}/users/${id}`,
-		{
-			method: "PUT",
-			credentials: "include",
-			body: formData,
-		},
-	);
+	const response = await fetch(`${apiUrl}/users/${id}`, {
+		method: "PUT",
+		credentials: "include",
+		body: formData,
+	});
 
 	const payload = await response.json();
 
@@ -106,4 +97,3 @@ export async function deleteUser(id: string): Promise<{ message: string }> {
 		method: "DELETE",
 	});
 }
-//#endregion

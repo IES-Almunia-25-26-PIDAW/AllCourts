@@ -1,10 +1,12 @@
-//#region MODULES
-import { request } from '@/api/http';
-import type { Court, CourtWithClub, CreateCourtDTO, UpdateCourtDTO } from '@/types/court';
-import { getApiUrl } from '@/utils/runtimeConfig';
-//#endregion
+import { request } from "@/api/http";
+import type {
+	Court,
+	CourtWithClub,
+	CreateCourtDTO,
+	UpdateCourtDTO,
+} from "@/types/court";
+import { getApiUrl } from "@/utils/runtimeConfig";
 
-//#region DOCUMENTATION
 /**
  * @module courtApi
  * Cliente API para consultar pistas desde el backend.
@@ -19,13 +21,10 @@ import { getApiUrl } from '@/utils/runtimeConfig';
  *   - Reutiliza el helper request para mantener cookies y errores uniformes.
  *   - Devuelve tipos compartidos del dominio para no duplicar contratos.
  */
-//#endregion
-
-//#region FUNCTIONS
 export interface CourtFilters {
-  sport?: Court['sport'];
-  surface_type?: Court['surface_type'];
-  is_indoor?: boolean;
+	sport?: Court["sport"];
+	surface_type?: Court["surface_type"];
+	is_indoor?: boolean;
 }
 
 /**
@@ -34,27 +33,33 @@ export interface CourtFilters {
  *
  * @returns {Promise<CourtWithClub[]>} Lista de pistas.
  */
-export async function getCourts(filters?: CourtFilters): Promise<CourtWithClub[]> {
-  const params = new URLSearchParams();
+export async function getCourts(
+	filters?: CourtFilters,
+): Promise<CourtWithClub[]> {
+	const params = new URLSearchParams();
 
-  if (filters?.sport !== undefined) {
-    params.set('sport', filters.sport);
-  }
+	if (filters?.sport !== undefined) {
+		params.set("sport", filters.sport);
+	}
 
-  if (filters?.surface_type !== undefined) {
-    params.set('surface_type', filters.surface_type);
-  }
+	if (filters?.surface_type !== undefined) {
+		params.set("surface_type", filters.surface_type);
+	}
 
-  if (filters?.is_indoor !== undefined) {
-    params.set('is_indoor', String(filters.is_indoor));
-  }
+	if (filters?.is_indoor !== undefined) {
+		params.set("is_indoor", String(filters.is_indoor));
+	}
 
-  const queryString = params.toString();
-  return request<CourtWithClub[]>(`/courts${queryString ? `?${queryString}` : ''}`);
+	const queryString = params.toString();
+	return request<CourtWithClub[]>(
+		`/courts${queryString ? `?${queryString}` : ""}`,
+	);
 }
 
-export async function getCourtsByClubId(clubId: string | number): Promise<CourtWithClub[]> {
-  return request<CourtWithClub[]>(`/courts/club/${clubId}`);
+export async function getCourtsByClubId(
+	clubId: string | number,
+): Promise<CourtWithClub[]> {
+	return request<CourtWithClub[]>(`/courts/club/${clubId}`);
 }
 
 /**
@@ -64,39 +69,53 @@ export async function getCourtsByClubId(clubId: string | number): Promise<CourtW
  * @param id Identificador de la pista
  * @returns {Promise<CourtWithClub>} Detalle de la pista
  */
-export async function getCourtById(id: string | number): Promise<CourtWithClub> {
-  return request<CourtWithClub>(`/courts/${id}`);
+export async function getCourtById(
+	id: string | number,
+): Promise<CourtWithClub> {
+	return request<CourtWithClub>(`/courts/${id}`);
 }
 
 export async function createCourt(data: CreateCourtDTO): Promise<Court> {
-  return request<Court>('/courts', { method: 'POST', body: JSON.stringify(data) });
+	return request<Court>("/courts", {
+		method: "POST",
+		body: JSON.stringify(data),
+	});
 }
 
-export async function updateCourt(id: number, data: UpdateCourtDTO): Promise<Court> {
-  return request<Court>(`/courts/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+export async function updateCourt(
+	id: number,
+	data: UpdateCourtDTO,
+): Promise<Court> {
+	return request<Court>(`/courts/${id}`, {
+		method: "PUT",
+		body: JSON.stringify(data),
+	});
 }
 
 export async function deleteCourt(id: number): Promise<void> {
-  return request<void>(`/courts/${id}`, { method: 'DELETE' });
+	return request<void>(`/courts/${id}`, { method: "DELETE" });
 }
 
-export async function uploadCourtImage(file: File): Promise<{ url: string; fullUrl: string }> {
-  const formData = new FormData();
-  formData.append('image', file);
+export async function uploadCourtImage(
+	file: File,
+): Promise<{ url: string; fullUrl: string }> {
+	const formData = new FormData();
+	formData.append("image", file);
 
-  const res = await fetch(`${getApiUrl()}/courts/upload`, {
-    method: 'POST',
-    credentials: 'include',
-    body: formData
-  });
+	const res = await fetch(`${getApiUrl()}/courts/upload`, {
+		method: "POST",
+		credentials: "include",
+		body: formData,
+	});
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Upload failed: ${res.status} ${text}`);
-  }
+	if (!res.ok) {
+		const text = await res.text();
+		throw new Error(`Upload failed: ${res.status} ${text}`);
+	}
 
-  const body = (await res.json()) as { url: string; fullUrl?: string };
-  const url = body.url;
-  const fullUrl = body.fullUrl || (url.startsWith('http') ? url : `${getApiUrl()}${url}`);
-  return { url, fullUrl };
+	const body = (await res.json()) as { url: string; fullUrl?: string };
+	const url = body.url;
+	const fullUrl =
+		body.fullUrl || (url.startsWith("http") ? url : `${getApiUrl()}${url}`);
+	return { url, fullUrl };
 }

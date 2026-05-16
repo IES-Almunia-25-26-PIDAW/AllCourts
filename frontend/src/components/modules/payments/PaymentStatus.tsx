@@ -18,7 +18,9 @@ export default function PaymentStatus({ bookingId }: PaymentStatusProps) {
 	const stripe = useStripe();
 	const [status, setStatus] = useState<string>("loading");
 	const [message, setMessage] = useState<string>("");
-	const { ready, value: clientSecret } = useRouteQueryParam("payment_intent_client_secret");
+	const { ready, value: clientSecret } = useRouteQueryParam(
+		"payment_intent_client_secret",
+	);
 
 	useEffect(() => {
 		if (!stripe || !ready) return;
@@ -29,31 +31,39 @@ export default function PaymentStatus({ bookingId }: PaymentStatusProps) {
 			return;
 		}
 
-		void stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-			if (!paymentIntent) {
-				setStatus("unknown");
-				setMessage("No se pudo obtener el estado del pago.");
-				return;
-			}
-
-			switch (paymentIntent.status) {
-				case "succeeded":
-					setStatus("succeeded");
-					setMessage("¡Pago completado con éxito! Tu reserva está confirmada.");
-					break;
-				case "processing":
-					setStatus("processing");
-					setMessage("Tu pago está siendo procesado. Te notificaremos cuando se confirme.");
-					break;
-				case "requires_payment_method":
-					setStatus("failed");
-					setMessage("El pago no pudo procesarse. Por favor, inténtalo con otro método de pago.");
-					break;
-				default:
+		void stripe
+			.retrievePaymentIntent(clientSecret)
+			.then(({ paymentIntent }) => {
+				if (!paymentIntent) {
 					setStatus("unknown");
-					setMessage("Estado del pago desconocido.");
-			}
-		});
+					setMessage("No se pudo obtener el estado del pago.");
+					return;
+				}
+
+				switch (paymentIntent.status) {
+					case "succeeded":
+						setStatus("succeeded");
+						setMessage(
+							"¡Pago completado con éxito! Tu reserva está confirmada.",
+						);
+						break;
+					case "processing":
+						setStatus("processing");
+						setMessage(
+							"Tu pago está siendo procesado. Te notificaremos cuando se confirme.",
+						);
+						break;
+					case "requires_payment_method":
+						setStatus("failed");
+						setMessage(
+							"El pago no pudo procesarse. Por favor, inténtalo con otro método de pago.",
+						);
+						break;
+					default:
+						setStatus("unknown");
+						setMessage("Estado del pago desconocido.");
+				}
+			});
 	}, [stripe, ready, clientSecret]);
 
 	if (status === "loading") {

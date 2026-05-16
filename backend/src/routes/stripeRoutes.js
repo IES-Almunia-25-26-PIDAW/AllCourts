@@ -22,8 +22,8 @@ const roleMiddleware = require("../middlewares/roleMiddleware");
 const router = express.Router();
 router.post(
 	"/create-payment-intent",
-	express.json(), 
-	authMiddleware, 
+	express.json(),
+	authMiddleware,
 	stripeController.createPaymentIntent,
 );
 
@@ -44,7 +44,7 @@ router.get(
 
 router.post(
 	"/webhook",
-	express.raw({ type: "application/json" }), 
+	express.raw({ type: "application/json" }),
 	stripeController.webhook,
 );
 

@@ -1,10 +1,8 @@
-//#region MODULES
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import es from "./locales/es.json";
 import en from "./locales/en.json";
-//#endregion
 
 /**
  * @module i18n
@@ -22,30 +20,23 @@ import en from "./locales/en.json";
  *   t('clave.anidada')
  */
 
-i18n
-  // Conecta i18next con React para exponer hooks y componentes de traducción
-  .use(initReactI18next)
-  .init({
-    // Archivos de traducción indexados por código de idioma.
-    // Cada JSON contiene pares clave-valor con los textos de la interfaz.
-    resources: {
-      es: { translation: es },
-      en: { translation: en },
-    },
+i18n.use(initReactI18next).init({
+	resources: {
+		es: { translation: es },
+		en: { translation: en },
+	},
 
-    // Idioma activo al arrancar la aplicación
-    lng: "es",
+	lng: "es",
 
-    // Si una clave no existe en el idioma activo, fallbackLng indica el idioma de reserva.
-    fallbackLng: "es",
+	fallbackLng: "es",
 
-    interpolation: {
-      escapeValue: false,
-    },
+	interpolation: {
+		escapeValue: false,
+	},
 
-    react: {
-      useSuspense: false,
-    },
-  });
+	react: {
+		useSuspense: false,
+	},
+});
 
 export default i18n;

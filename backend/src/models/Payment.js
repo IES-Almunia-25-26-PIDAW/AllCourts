@@ -1,6 +1,4 @@
-//#region MODULES
 const { pool } = require("../config/db");
-//#endregion
 
 /**
  * @module Payment
@@ -17,7 +15,21 @@ const { pool } = require("../config/db");
  *   courts   → clubs     (c.club_id     = cl.id)
  *   clubs    → managers  (cl.manager_id = m.id)
  */
+/**
+ * Payment model: operaciones sobre la tabla `payments`.
+ */
 const Payment = {
+	/**
+	 * Create a payment record.
+	 * @param {Object} payment
+	 * @param {number} payment.booking_id
+	 * @param {number} payment.amount
+	 * @param {string|null} [payment.payment_date]
+	 * @param {string} [payment.status='pending']
+	 * @param {string} payment.method
+	 * @param {string|null} [payment.stripe_payment_intent_id]
+	 * @returns {Promise} Promise resolving to the insert result.
+	 */
 	create: (payment) => {
 		const sql = `INSERT INTO payments 
         (booking_id, amount, payment_date, status, method, stripe_payment_intent_id) 
@@ -28,10 +40,15 @@ const Payment = {
 			payment.payment_date || null,
 			payment.status || "pending",
 			payment.method,
-			payment.stripe_payment_intent_id || null, 
+			payment.stripe_payment_intent_id || null,
 		]);
 	},
 
+	/**
+	 * Get all payments for a manager.
+	 * @param {number} managerId
+	 * @returns {Promise} Promise resolving to payments.
+	 */
 	getAll: (managerId) => {
 		const sql = `SELECT p.*, 
             b.date as booking_date, b.start_time, b.end_time,
@@ -47,6 +64,11 @@ const Payment = {
 		return pool.execute(sql, [managerId]);
 	},
 
+	/**
+	 * Get a payment by id.
+	 * @param {number} id
+	 * @returns {Promise} Promise resolving to the payment.
+	 */
 	getById: (id) => {
 		const sql = `SELECT p.*, 
             b.date as booking_date, b.start_time, b.end_time,
@@ -60,11 +82,21 @@ const Payment = {
 		return pool.execute(sql, [id]);
 	},
 
+	/**
+	 * Get payments for a booking.
+	 * @param {number} bookingId
+	 * @returns {Promise} Promise resolving to payments.
+	 */
 	getByBookingId: (bookingId) => {
 		const sql = "SELECT * FROM payments WHERE booking_id = ?";
 		return pool.execute(sql, [bookingId]);
 	},
 
+	/**
+	 * Get payments made by a user.
+	 * @param {number} userId
+	 * @returns {Promise} Promise resolving to payments.
+	 */
 	getByUserId: (userId) => {
 		const sql = `SELECT p.*, 
             b.date as booking_date, b.start_time, b.end_time,
@@ -77,6 +109,11 @@ const Payment = {
 		return pool.execute(sql, [userId]);
 	},
 
+	/**
+	 * Get payments for a manager.
+	 * @param {number} managerId
+	 * @returns {Promise} Promise resolving to payments.
+	 */
 	getByManagerId: (managerId) => {
 		const sql = `SELECT p.*, 
             b.date as booking_date, b.start_time, b.end_time,
@@ -92,11 +129,22 @@ const Payment = {
 		return pool.execute(sql, [managerId]);
 	},
 
+	/**
+	 * Update payment status.
+	 * @param {number} id
+	 * @param {string} status
+	 * @returns {Promise} Promise resolving to update result.
+	 */
 	updateStatus: (id, status) => {
 		const sql = "UPDATE payments SET status = ? WHERE id = ?";
 		return pool.execute(sql, [status, id]);
 	},
 
+	/**
+	 * Delete a payment.
+	 * @param {number} id
+	 * @returns {Promise} Promise resolving to delete result.
+	 */
 	delete: (id) => {
 		const sql = "DELETE FROM payments WHERE id = ?";
 		return pool.execute(sql, [id]);

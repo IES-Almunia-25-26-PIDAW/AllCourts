@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {
+	PaymentElement,
+	useElements,
+	useStripe,
+} from "@stripe/react-stripe-js";
 import styles from "./CheckoutForm.module.scss";
 
 type CheckoutFormProps = {
@@ -36,7 +40,8 @@ export default function CheckoutForm({ returnUrl }: CheckoutFormProps) {
 
 			if (error) {
 				setErrorMessage(
-					error.message ?? "Ha ocurrido un error al procesar el pago.",
+					error.message ??
+						"Ha ocurrido un error al procesar el pago.",
 				);
 			}
 		} catch {
@@ -68,7 +73,8 @@ export default function CheckoutForm({ returnUrl }: CheckoutFormProps) {
 			</button>
 
 			<p className={styles.securityNote}>
-				🔒 Pago seguro con Stripe. Tus datos bancarios nunca llegan a nuestros servidores.
+				🔒 Pago seguro con Stripe. Tus datos bancarios nunca llegan a
+				nuestros servidores.
 			</p>
 		</form>
 	);

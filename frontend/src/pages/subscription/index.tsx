@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "@/store/hooks";
-import { selectAuthLoading, selectIsAuthenticated, selectUser } from "@/store/slices/authSlice";
+import {
+	selectAuthLoading,
+	selectIsAuthenticated,
+	selectUser,
+} from "@/store/slices/authSlice";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { createSubscription } from "@/api/stripeApi";
@@ -12,7 +16,7 @@ import styles from "./index.module.scss";
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 if (!stripeKey) {
-  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY no está definida');
+	throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY no está definida");
 }
 
 const stripePromise = loadStripe(stripeKey);
@@ -35,11 +39,6 @@ type Plan = {
 	featured?: boolean;
 };
 
-/**
- * Estado del checkout inline.
- * - null → mostrando la cuadrícula de planes
- * - { plan, clientSecret } → mostrando el formulario de pago de Stripe
- */
 type CheckoutState = {
 	plan: Plan;
 	clientSecret: string;
@@ -65,17 +64,10 @@ export default function SubscriptionPage() {
 	const isAuthenticated = useSelector(selectIsAuthenticated);
 	const authLoading = useSelector(selectAuthLoading);
 
-	/** Qué plan está en proceso de carga (mientras llamamos al backend) */
 	const [loadingPlanKey, setLoadingPlanKey] = useState<PlanKey | null>(null);
 
-	/** Error de red al crear la suscripción */
 	const [pageError, setPageError] = useState<string | null>(null);
 
-	/**
-	 * checkout es null cuando estamos en la pantalla de selección de plan.
-	 * Cuando el usuario elige un plan y el backend responde con el clientSecret,
-	 * guardamos aquí el plan elegido y ese secret para montar Elements.
-	 */
 	const [checkout, setCheckout] = useState<CheckoutState>(null);
 
 	const stripeAppearance = {
@@ -154,7 +146,9 @@ export default function SubscriptionPage() {
 			setCheckout({ plan, clientSecret });
 		} catch (error) {
 			setPageError(
-				error instanceof Error ? error.message : t("subscription.error"),
+				error instanceof Error
+					? error.message
+					: t("subscription.error"),
 			);
 		} finally {
 			setLoadingPlanKey(null);
@@ -182,13 +176,17 @@ export default function SubscriptionPage() {
 		return (
 			<main className={styles.container}>
 				<header className={styles.header}>
-					<p className={styles.eyebrow}>{t("subscription.selectPlan")}</p>
+					<p className={styles.eyebrow}>
+						{t("subscription.selectPlan")}
+					</p>
 					<h1>{t("subscription.choosePlan")}</h1>
 				</header>
 
 				<div className={styles.checkoutWrapper}>
 					<div className={styles.subscriptionSummary}>
-						<p className={styles.summaryLabel}>{checkout.plan.badge}</p>
+						<p className={styles.summaryLabel}>
+							{checkout.plan.badge}
+						</p>
 						<h2>{checkout.plan.title}</h2>
 						<p className={styles.summaryPrice}>
 							{checkout.plan.price}{" "}
@@ -237,14 +235,19 @@ export default function SubscriptionPage() {
 					{plans.map((plan) => (
 						<article key={plan.key} className={styles.planCard}>
 							<div className={styles.planCardHeader}>
-								<span className={styles.planBadge}>{plan.badge}</span>
+								<span className={styles.planBadge}>
+									{plan.badge}
+								</span>
 								{plan.featured ? (
-									<span className={styles.featuredTag}>Most popular</span>
+									<span className={styles.featuredTag}>
+										Most popular
+									</span>
 								) : null}
 							</div>
 							<h2 className={styles.planTitle}>{plan.title}</h2>
 							<p className={styles.planCard__price}>
-								{plan.price} <span>/{t("subscription.monthly")}</span>
+								{plan.price}{" "}
+								<span>/{t("subscription.monthly")}</span>
 							</p>
 							<ul className={styles.planCard__features}>
 								{plan.features.map((feature) => (

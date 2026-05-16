@@ -1,50 +1,50 @@
 @use "sass:color";
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 70vh;
-    padding: 2rem;
-    text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 70vh;
+	padding: 2rem;
+	text-align: center;
 
-    .title {
-        font-size: 8rem;
-        font-weight: 700;
-        color: #0059ff;
-        margin: 0;
-        line-height: 1;
-    }
+	.title {
+		font-size: 8rem;
+		font-weight: 700;
+		color: #0059ff;
+		margin: 0;
+		line-height: 1;
+	}
 
-    .subtitle {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #333;
-        margin: 1rem 0;
-    }
+	.subtitle {
+		font-size: 2rem;
+		font-weight: 600;
+		color: #333;
+		margin: 1rem 0;
+	}
 
-    .message {
-        font-size: 1.125rem;
-        color: #666;
-        margin: 1rem 0 2rem;
-        max-width: 500px;
-    }
+	.message {
+		font-size: 1.125rem;
+		color: #666;
+		margin: 1rem 0 2rem;
+		max-width: 500px;
+	}
 
-    .homeLink {
-        display: inline-block;
-        padding: 0.75rem 2rem;
-        background-color: #0059ff;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 500;
-        transition: all 0.3s ease;
+	.homeLink {
+		display: inline-block;
+		padding: 0.75rem 2rem;
+		background-color: #0059ff;
+		color: white;
+		text-decoration: none;
+		border-radius: 8px;
+		font-weight: 500;
+		transition: all 0.3s ease;
 
-        &:hover {
-            background-color: color.scale(#0059ff, $lightness: -10%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(#0059ff, 0.3);
-        }
-    }
+		&:hover {
+			background-color: color.scale(#0059ff, $lightness: -10%);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(#0059ff, 0.3);
+		}
+	}
 }
