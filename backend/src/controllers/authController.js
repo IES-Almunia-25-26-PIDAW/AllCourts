@@ -313,7 +313,7 @@ const authController = {
     try {
       const [rows] = await User.getById(req.user.id);
       if (rows.length === 0) return res.status(404).json({ message: 'User not found' });
-      res.json(rows[0]);
+      res.json(stripSensitiveUser(rows[0]));
     } catch (err) {
       next(err);
     }

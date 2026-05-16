@@ -328,6 +328,9 @@ describe('authController', () => {
         name: 'Ana Player',
         username: 'anaplayer',
         email: 'ana@example.com',
+        password: 'hashed-password',
+        verification_token: 'secret-token',
+        token_expires_at: new Date('2026-06-01T00:00:00.000Z'),
       },
     ]]);
 
