@@ -15,10 +15,27 @@ export default function VerifyEmailPage() {
 	const { ready, value: token } = useRouteQueryParam("token");
 	const [message, setMessage] = useState<string | null>(t("verify.checking"));
 	const [loading, setLoading] = useState(true);
+	const processedTokenKey =
+		typeof token === "string" && token
+			? `verify-email:${token}`
+			: null;
 
 	useEffect(() => {
+		if (!ready) {
+			return;
+		}
+
 		if (typeof token !== "string" || !token) {
 			setMessage(t("verify.token_missing"));
+			setLoading(false);
+			return;
+		}
+
+		if (
+			processedTokenKey &&
+			window.sessionStorage.getItem(processedTokenKey) === "1"
+		) {
+			setMessage(t("verify.success"));
 			setLoading(false);
 			return;
 		}
@@ -26,6 +43,9 @@ export default function VerifyEmailPage() {
 		const verify = async () => {
 			try {
 				await verifyEmail(token);
+				if (processedTokenKey) {
+					window.sessionStorage.setItem(processedTokenKey, "1");
+				}
 				setMessage(t("verify.success"));
 			} catch (error) {
 				setMessage(
@@ -39,7 +59,7 @@ export default function VerifyEmailPage() {
 		};
 
 		void verify();
-	}, [ready, token, verifyEmail]);
+	}, [ready, token, verifyEmail, processedTokenKey, t]);
 
 	return (
 		<div className={styles.container}>

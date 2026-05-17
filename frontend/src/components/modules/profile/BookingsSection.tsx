@@ -91,16 +91,11 @@ export default function BookingsSection({
 
 	const visibleBookings = useMemo(() => {
 		const now = new Date();
-		const todayStart = new Date(
-			now.getFullYear(),
-			now.getMonth(),
-			now.getDate(),
-		);
+		const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
 		return localBookings.filter((booking) => {
-			const bookingDate = new Date(`${booking.date}T00:00:00`);
-			const isPastBooking =
-				Number.isNaN(bookingDate.getTime()) || bookingDate < todayStart;
+			const bookingDateKey = String(booking.date).slice(0, 10);
+			const isPastBooking = !bookingDateKey || bookingDateKey < todayKey;
 			const isPending = booking.status === "pending";
 			const isActive =
 				isPending || (booking.status !== "cancelled" && !isPastBooking);
